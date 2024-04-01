@@ -4,7 +4,7 @@ package com.example.sumrak.ui.battle
 
 class BattleManager(
     val items: MutableList<BattleItem> = mutableListOf(), // Список элементов Боя
-    val expandedStateMap: MutableMap<Int, Boolean> = mutableMapOf() // Соответствие id элемента и его состояния (раскрыт или свернут),
+    private val expandedStateMap: MutableMap<Int, Boolean> = mutableMapOf() // Соответствие id элемента и его состояния (раскрыт или свернут),
 ) {
 
     // Метод для добавления нового элемента в инвентарь
@@ -43,7 +43,7 @@ class BattleManager(
         return pos
     }
 
-    fun getIdToName(name: String): Int{
+    private fun getIdToName(name: String): Int{
         var id = -1
         for (i in items.indices){
             if (items[i].type == name){

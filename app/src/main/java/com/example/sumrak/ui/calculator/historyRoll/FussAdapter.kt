@@ -4,16 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sumrak.Lists.HistoryRoll
+import com.example.sumrak.lists.HistoryRoll
 import com.example.sumrak.Player
 import com.example.sumrak.R
 import com.example.sumrak.databinding.RecyclerHistoryRollFussBinding
-import com.example.sumrak.ui.calculator.CalculatorViewModel
 
-class FussAdapter(private val clickListener: HirstoryCalculatorFragment) : DelegateAdapterH<HistoryRoll,FussAdapter.FussViewHolder>(){
+class FussAdapter(private val clickListener: HistoryCalculatorFragment) : DelegateAdapterH<HistoryRoll,FussAdapter.FussViewHolder>(){
 
 
-    override fun onCreateViewHolder(parent: ViewGroup): FussAdapter.FussViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup): FussViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_history_roll_fuss, parent, false)
         return FussViewHolder(view)
     }
@@ -23,24 +22,26 @@ class FussAdapter(private val clickListener: HirstoryCalculatorFragment) : Deleg
     }
 
     class FussViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val b = RecyclerHistoryRollFussBinding.bind(itemView)
+        val viewBinding = RecyclerHistoryRollFussBinding.bind(itemView)
 
 
-        fun bind(historyRoll: HistoryRoll, position: Int, clickListener: HirstoryCalculatorFragment) {
-            val resultFuss = historyRoll.text_roll.trim('[', ']').split(',').map { it.trim().toInt() }
+        fun bind(historyRoll: HistoryRoll, position: Int, clickListener: HistoryCalculatorFragment) {
+            val resultFuss = historyRoll.textRoll.trim('[', ']').split(',').map { it.trim().toInt() }
             val oneCubFuss = resultFuss[0]
             val twoCubFuss = resultFuss[1]
-            b.tvResultSummRoll.text = "[$oneCubFuss]:[$twoCubFuss]"
-            b.tvColorCheck.setBackgroundResource(get_color_result_fuss(oneCubFuss, twoCubFuss))
-            b.tvNamePers.text = Player.getInstance().getPlayerToId(historyRoll.player).name_player
-            b.tvPersCheck.text = historyRoll.mode
-            b.tvResultFuss.text = get_result_fuss(oneCubFuss, twoCubFuss)
+            viewBinding.apply {
+                tvResultSummRoll.text = "[$oneCubFuss]:[$twoCubFuss]"
+                tvColorCheck.setBackgroundResource(getColorResultFuss(oneCubFuss, twoCubFuss))
+                tvNamePers.text = Player.getInstance().getPlayerToId(historyRoll.player).namePlayer
+                tvPersCheck.text = historyRoll.mode
+                tvResultFuss.text = getResultFuss(oneCubFuss, twoCubFuss)
 
-            b.btnReroll.setOnClickListener { clickListener.onRecyclerViewItemClick(position) }
+                btnReroll.setOnClickListener { clickListener.onRecyclerViewItemClick(position) }
+            }
 
         }
 
-        private fun get_color_result_fuss(oneCub: Int, twoCub: Int) : Int{
+        private fun getColorResultFuss(oneCub: Int, twoCub: Int) : Int{
             var color: Int = (R.color.white)
             if (oneCub == twoCub){
                 when (oneCub){
@@ -56,9 +57,9 @@ class FussAdapter(private val clickListener: HirstoryCalculatorFragment) : Deleg
             return color
         }
 
-        private fun get_result_fuss(oneCub: Int, twoCub: Int) : String{
-            if (oneCub == twoCub){
-                return when(oneCub){
+        private fun getResultFuss(oneCub: Int, twoCub: Int) : String{
+            return if (oneCub == twoCub){
+                when(oneCub){
                     1-> "Светлая суета"
                     2-> "Светлая суета"
                     3-> "Сумрачная суета"
@@ -67,9 +68,8 @@ class FussAdapter(private val clickListener: HirstoryCalculatorFragment) : Deleg
                     6-> "Темная суета"
                     else ->""
                 }
-            }
-            else{
-                return ""
+            } else{
+                ""
             }
         }
 

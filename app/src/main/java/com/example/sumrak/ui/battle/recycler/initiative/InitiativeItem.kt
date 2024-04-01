@@ -5,6 +5,4 @@ data class InitiativeItem(
     var resultRoll: Int,
     var resultInitiative: Int,
     var step : Int
-) {
-
-}
+)

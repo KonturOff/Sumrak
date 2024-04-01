@@ -2,7 +2,7 @@ package com.example.sumrak.ui.calculator.historyRoll
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sumrak.Lists.HistoryRoll
+import com.example.sumrak.lists.HistoryRoll
 
 abstract class DelegateAdapterH<T : HistoryRoll,  VH : RecyclerView.ViewHolder> {
     abstract fun onCreateViewHolder(parent: ViewGroup): VH

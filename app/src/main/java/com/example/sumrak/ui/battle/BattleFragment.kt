@@ -19,14 +19,13 @@ import com.example.sumrak.ui.battle.recycler.initiative.Initiative
 import com.example.sumrak.ui.battle.recycler.initiative.InititiveAdapter
 import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 
-class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, DamageAdapter.buttonClick {
-
+class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, DamageAdapter.ButtonClick {
 
     companion object {
         fun newInstance() = BattleFragment()
     }
 
-    private lateinit var b: FragmentBattleBinding
+    private lateinit var viewBinding: FragmentBattleBinding
     private lateinit var myInterface: Interface
     private lateinit var viewModel: BattleViewModel
     private lateinit var equipmentViewModel: EquipmentViewModel
@@ -45,7 +44,7 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
         savedInstanceState: Bundle?
     ): View? {
 
-        b = FragmentBattleBinding.inflate(layoutInflater)
+        viewBinding = FragmentBattleBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this).get(BattleViewModel::class.java)
         equipmentViewModel = ViewModelProvider(this).get(EquipmentViewModel::class.java)
 
@@ -56,31 +55,36 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
         //equipmentViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
 
         val layoutManager = LinearLayoutManager(context)
-        b.recBattle.layoutManager = layoutManager
+        viewBinding.recBattle.layoutManager = layoutManager
 
-        val items = listOf(
-            Information(),
-            Damage(),
-            Initiative())
+//        val items = listOf(
+//            Information(),
+//            Damage(),
+//            Initiative())
 
-        val battleAdapter = BattleAdapter(battleManager, viewLifecycleOwner, requireContext(), viewModel , this, equipmentViewModel)
-        b.recBattle.adapter = battleAdapter
+        val battleAdapter =
+            BattleAdapter(
+                battleManager,
+                viewLifecycleOwner,
+                requireContext(),
+                viewModel ,
+                this,
+                equipmentViewModel
+            )
+        viewBinding.recBattle.adapter = battleAdapter
 
         val itemTouchHelperCallback = BattleItemTouchHelper(battleAdapter, requireContext())
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-        itemTouchHelper.attachToRecyclerView(b.recBattle)
+        itemTouchHelper.attachToRecyclerView(viewBinding.recBattle)
 
-        return b.root
+        return viewBinding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-
-
     }
 
-    fun loadBattleView(battleManager: BattleManager) {
+    private fun loadBattleView(battleManager: BattleManager) {
         battleManager.clearList()
         battleManager.addItem(BattleItem(1,1,"Информация", 0,true, Information()))
         battleManager.addItem(BattleItem(1,1,"Получение Урона", 1,true, Damage()))

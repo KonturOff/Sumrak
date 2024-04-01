@@ -4,62 +4,63 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sumrak.Lists.HistoryRoll
+import com.example.sumrak.lists.HistoryRoll
 import com.example.sumrak.Player
 import com.example.sumrak.R
 import com.example.sumrak.databinding.RecyclerHistoryRollBinding
 
-class OtherAdapter(private val clickListener: HirstoryCalculatorFragment) : DelegateAdapterH<HistoryRoll, OtherAdapter.OtherViewHolder>() {
-
-
+// TODO передавать фрагмент в конструктор какого0либо класса - очень плохая идея.
+//  Лучше использовать коллбэки или прослойки в виде интерфейсов
+//  Вот тут пример реализации
+class OtherAdapter(
+    private val clickListener: HistoryCalculatorClickListener
+) : DelegateAdapterH<HistoryRoll, OtherAdapter.OtherViewHolder>() {
 
     //interface RecyclerViewClickListener {
     //    fun onRecyclerViewItemClick(view: View, position: Int)
     //    fun getInfoHistoryCard(view: View, position: Int)
     //}
 
-
-    override fun onCreateViewHolder(parent: ViewGroup): OtherAdapter.OtherViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup): OtherViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.recycler_history_roll, parent, false)
-        return OtherViewHolder(view, clickListener)
+        return OtherViewHolder(view)
     }
-
-
 
     override fun onBindViewHolder(holder: OtherViewHolder, item: HistoryRoll, position: Int) {
         holder.bind(item, position, clickListener)
     }
 
-    class OtherViewHolder(itemView: View, clickListener: HirstoryCalculatorFragment) : RecyclerView.ViewHolder(itemView) {
+    class OtherViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
-        val b = RecyclerHistoryRollBinding.bind(itemView)
+        val viewBinding = RecyclerHistoryRollBinding.bind(itemView)
         fun bind(
             historyRoll: HistoryRoll,
             position: Int,
-            clickListener: HirstoryCalculatorFragment
+            clickListener: HistoryCalculatorClickListener
         ) {
-            b.resultSumRoll.text = historyRoll.result_roll
-            b.textResultCube.text = get_result_text(historyRoll.parameter, historyRoll.result_roll)
+            viewBinding.apply {
+                resultSumRoll.text = historyRoll.resultRoll
+                textResultCube.text = getResultText(historyRoll.parameter, historyRoll.resultRoll)
 
-            b.textNamePers.text = Player.getInstance().getPlayerToId(historyRoll.player).name_player
-            if (historyRoll.mode.contains("Убывающий Тест")){
-                b.textParametr.text = "Критерий успеха: ${historyRoll.parameter}"
-                b.textPersCheck.text = "Убывающий Тест"
-                b.textResultCube.text = "Предмет: " + historyRoll.mode.substring(14)
+                textNamePers.text = Player.getInstance().getPlayerToId(historyRoll.player).namePlayer
+                if (historyRoll.mode.contains("Убывающий Тест")){
+                    textParametr.text = "Критерий успеха: ${historyRoll.parameter}"
+                    textPersCheck.text = "Убывающий Тест"
+                    textResultCube.text = "Предмет: " + historyRoll.mode.substring(14)
+                }
+                else{
+                    textParametr.text= ""
+                    textPersCheck.text = historyRoll.mode
+                }
+                colorCheck.setBackgroundResource(getColorCheck(historyRoll.parameter, historyRoll.resultRoll))
+                colorRecyclerRoll.setBackgroundResource(getColorCube(historyRoll.maxCube))
+
+                btnReroll.setOnClickListener {clickListener.onRecyclerViewItemClick(position) }
+                resultSumRoll.setOnClickListener { println(historyRoll) }
             }
-            else{
-                b.textParametr.text= ""
-                b.textPersCheck.text = historyRoll.mode
-            }
-            b.colorCheck.setBackgroundResource(get_color_check(historyRoll.parameter, historyRoll.result_roll))
-            b.colorRecyclerRoll.setBackgroundResource(get_color_cube(historyRoll.max_cube))
-
-            b.btnReroll.setOnClickListener {clickListener.onRecyclerViewItemClick(position) }
-            b.resultSumRoll.setOnClickListener { println(historyRoll) }
-
         }
 
-        private fun get_result_text(value: Int, resultRoll: String): String{
+        private fun getResultText(value: Int, resultRoll: String): String{
             return if (resultRoll.toInt() <= value){
                 "Степени успеха: ${value - resultRoll.toInt()}"
             }
@@ -68,28 +69,22 @@ class OtherAdapter(private val clickListener: HirstoryCalculatorFragment) : Dele
             }
         }
 
-        private fun get_color_check(value: Int, resultRoll: String): Int {
-
-            val color: Int
-            if (value == -1){
-                color = (R.color.d3)
+        private fun getColorCheck(value: Int, resultRoll: String): Int {
+            return when {
+                value == -1 -> {
+                    (R.color.d3)
+                }
+                resultRoll.toInt() <= value -> {
+                    (R.color.d10)
+                }
+                else -> {
+                    (R.color.d4)
+                }
             }
-            else if(resultRoll.toInt()<= value){
-                color = (R.color.d10)
-            }
-            else{
-                color = (R.color.d4)
-            }
-
-            return color
-
-
         }
 
-
-
-        private fun get_color_cube(max_cube: String?): Int {
-            return when (max_cube){
+        private fun getColorCube(maxCube: String?): Int {
+            return when (maxCube){
                 "3" -> (R.color.d3)
                 "4" -> (R.color.d4)
                 "5" -> (R.color.d5)
@@ -102,6 +97,5 @@ class OtherAdapter(private val clickListener: HirstoryCalculatorFragment) : Dele
                 else -> (R.color.d20)
             }
         }
-
     }
 }

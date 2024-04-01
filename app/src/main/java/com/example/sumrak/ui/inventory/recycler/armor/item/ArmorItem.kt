@@ -1,6 +1,6 @@
 package com.example.sumrak.ui.inventory.recycler.armor.item
 
-import com.example.sumrak.Data.inventory.armor.ArmorDbEntity
+import com.example.sumrak.data.inventory.armor.ArmorDbEntity
 
 data class ArmorItem(
     var id : Int,

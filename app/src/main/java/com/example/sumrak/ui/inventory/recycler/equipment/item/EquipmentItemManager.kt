@@ -27,6 +27,9 @@ class EquipmentItemManager private constructor(){
         equipmentItemList.add(equipmentItem)
     }
 
+    // TODO Использование notifyDataSetChanged стоит избегать, так как это затратная для
+    //  телефона операция. Также может экран рябить при вызове этой
+    //  функции (так как происходит ПОЛНАЯ переррисовка списка). Лучше искать альтернативы
     fun updateItem(equipmentItem: EquipmentItem){
         val pos = getPosItemToId(equipmentItem.id)
         equipmentItemList[pos] = equipmentItem
@@ -52,7 +55,7 @@ class EquipmentItemManager private constructor(){
         return result
     }
 
-    fun getPosItemToId(id: Int) : Int{
+    private fun getPosItemToId(id: Int) : Int{
         var result = 0
         for (i in 0..<equipmentItemList.size){
             if (id == equipmentItemList[i].id){

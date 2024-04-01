@@ -1,22 +1,18 @@
 package com.example.sumrak
 
-import com.example.sumrak.Data.playerdb.DaoPlayerDb
-import com.example.sumrak.Data.playerdb.PlayerViewModel
-import com.example.sumrak.Lists.DataPlayer
-import com.example.sumrak.Lists.PlayerVariable
-import com.example.sumrak.ui.home.HomeFragment
-import com.example.sumrak.ui.home.HomeViewModel
+import com.example.sumrak.lists.DataPlayer
+import com.example.sumrak.lists.PlayerVariable
 import kotlin.collections.ArrayList
 import kotlin.random.Random
 
 
 class Player private constructor(){
 
-    lateinit var playerEntity : PlayerVariable
+    var playerEntity : PlayerVariable? = null
     private val playerList = ArrayList<DataPlayer>()
-    var activPosPlayer = 0
+    var activePosPlayer = 0
 
-    lateinit var random : Random
+//    var random : Random
 
 
     //очищаем список персонажей
@@ -56,7 +52,7 @@ class Player private constructor(){
     }
 
     //Получаем экземпляр персонажа
-    fun getPlayer(position: Int): DataPlayer {
+    private fun getPlayer(position: Int): DataPlayer {
         return playerList[position]
     }
     //Получаем экземпляр персонажа по id
@@ -66,7 +62,7 @@ class Player private constructor(){
 
     //Получаем экземпляр Активного персонажа
     fun getActivePlayer(): DataPlayer{
-        return playerList[activPosPlayer]
+        return playerList[activePosPlayer]
     }
 
     //Получаем о количестве перснажей в листе
@@ -76,24 +72,22 @@ class Player private constructor(){
 
     // Получить Имя активного персонажа
     fun getNamePlayer() : String{
-        return playerList[activPosPlayer].name_player
+        return playerList[activePosPlayer].namePlayer
     }
 
     //получаем id активного игрока по Позиции
     fun getIdActivePlayer() : Int{
-        if (playerList[activPosPlayer].id == null){
-            return 0
+        return if (playerList[activePosPlayer].id == null){
+            0
+        } else{
+            playerList[activePosPlayer].id!!
         }
-        else{
-            return playerList[activPosPlayer].id!!
-        }
-
     }
 
     // получем позицию игрока по Id 
     fun getPosPlayer(id : Int): Int {
         var t : Int = 0
-        for (i in 0..playerList.size-1){
+        for (i in 0..< playerList.size){
             if (playerList[i].id == id){
                 t = i
                 return t
@@ -103,7 +97,7 @@ class Player private constructor(){
     }
 
     fun getIdPlayerToPlayerList(): ArrayList<Int> {
-        var idList = ArrayList<Int>()
+        val idList = ArrayList<Int>()
         for (i in playerList.indices){
             idList.add(playerList[i].id!!)
         }
@@ -111,13 +105,13 @@ class Player private constructor(){
     }
 
     fun getRandomText() : String{
-        val list = listOf<String>("Кубы правду знают", "Удача отвернулась от тебя" , "Хрюкни, если хочешь единицу",
+        val list = listOf("Кубы правду знают", "Удача отвернулась от тебя" , "Хрюкни, если хочешь единицу",
             "Тебя фантом искал, обосрался?", "Кубодроч не создавай", "Ну сейчас точно единица!", "Критический кто?", "Важно не то, как часто ты кидаешь единицы, а то как долго ты выдерживаешь двадцатки",
             "Рерола не будет", "Кидай инициативу, сука!", "Не взывай, так не суетим будешь")
         return list[Random.nextInt(0,list.size)]
     }
 
-    fun getPlayerParametr(id: Int, mode: String): Int{
+    fun getPlayerParameter(id: Int, mode: String): Int{
         val player = getPlayerToId(id)
         return when(mode){
             "Проверка Дальнего боя" -> player.db
@@ -135,13 +129,6 @@ class Player private constructor(){
         }
     }
 
-
-
-
-
-
-
-
     companion object {
         private val instance = Player()
 
@@ -150,76 +137,73 @@ class Player private constructor(){
             return instance
         }
 
-
-        fun roll_cube(cube: String): ArrayList<String> {
+        // TODO какой-то дикий вложенный в 3(!) раза цикл. Таких конструкций нужно избегать.
+        fun rollCube(cube: String): ArrayList<String> {
             // инициализируем перменные в которых будем считать результат и записывать расчеты
-            var result_roll = ""
-            var text_roll = ""
-            var max_cube = 0
+            var resultRoll = ""
+            var textRoll = ""
+            var maxCube = 0
 
             // делим строку cube на массив строк по разделителю "+"
-            var split_plus = cube.split("+").toMutableList()
-            for (i in 0..split_plus.size - 1) {
+            val splitPlus = cube.split("+").toMutableList()
+            for (i in 0..< splitPlus.size) {
                 // инициализируем переменную для внесения записей при переборе массива split_plus
-                var text_roll_minus = ""
+                var textRollMinus = ""
                 // делим строку split_plus[i] на массив строк по разделителю "-"
-                var split_minus = split_plus[i].split("-").toMutableList()
-                for (j in 0..split_minus.size - 1) {
+                val splitMinus = splitPlus[i].split("-").toMutableList()
+                for (j in 0..< splitMinus.size) {
                     //если в строке split_minus[j] присутствует d делим на массив с разделителем d
-                    if (split_minus[j].contains("d")) {
+                    if (splitMinus[j].contains("d")) {
                         // инициализируем временную переменную для записей результата броска кубиков
                         // в общей сложности получится [n, n+1, n+2,...] где n результат броска
-                        var text_roll_d = "["
-                        var n_roll = 0
-                        var split_d = split_minus[j].split("d").toMutableList()
-                        if (split_d[0] == "") {
-                            split_d[0] = "1"
+                        var textRollD = "["
+                        var nRoll = 0
+                        val splitD = splitMinus[j].split("d").toMutableList()
+                        if (splitD[0] == "") {
+                            splitD[0] = "1"
                         }
                         // проверяем какой индекс куба записан в переменную max_cube
                         // если текущий куб больше, записываем его
-                        if (split_d[1].toInt() > max_cube) {
-                            max_cube = split_d[1].toInt()
+                        if (splitD[1].toInt() > maxCube) {
+                            maxCube = splitD[1].toInt()
                         }
-                        for (k in 0..split_d[0].toInt() - 1) {
-                            var cube_roll = Random.nextInt(split_d[1].toInt()) + 1
-                            n_roll = n_roll + cube_roll
-                            if (k != split_d[0].toInt() - 1) {
-                                text_roll_d = "$text_roll_d$cube_roll, "
-                            } else text_roll_d = "$text_roll_d$cube_roll]"
+                        for (k in 0..< splitD[0].toInt()) {
+                            val cubeRoll = Random.nextInt(splitD[1].toInt()) + 1
+                            nRoll += cubeRoll
+                            textRollD = if (k != splitD[0].toInt() - 1) {
+                                "$textRollD$cubeRoll, "
+                            } else "$textRollD$cubeRoll]"
                         }
-                        split_minus[j] = n_roll.toString()
+                        splitMinus[j] = nRoll.toString()
                         if (j == 0) {
-                            split_plus[i] = split_minus[j]
-                            text_roll_minus = text_roll_d
+                            splitPlus[i] = splitMinus[j]
+                            textRollMinus = textRollD
                         } else {
-                            split_plus[i] =
-                                (split_plus[i].toInt() - split_minus[j].toInt()).toString()
-                            text_roll_minus = text_roll_minus + "-" + text_roll_d
+                            splitPlus[i] =
+                                (splitPlus[i].toInt() - splitMinus[j].toInt()).toString()
+                            textRollMinus = "$textRollMinus-$textRollD"
                         }
                     } else {
                         if (j == 0) {
-                            split_plus[i] = split_minus[j]
-                            text_roll_minus = split_minus[j]
+                            splitPlus[i] = splitMinus[j]
+                            textRollMinus = splitMinus[j]
                         } else {
-                            split_plus[i] =
-                                (split_plus[i].toInt() - split_minus[j].toInt()).toString()
-                            text_roll_minus = text_roll_minus + "-" + split_minus[j]
+                            splitPlus[i] =
+                                (splitPlus[i].toInt() - splitMinus[j].toInt()).toString()
+                            textRollMinus = "$textRollMinus-${splitMinus[j]}"
                         }
                     }
                 }
                 if (i == 0) {
-                    result_roll = split_plus[i]
-                    text_roll = text_roll_minus
+                    resultRoll = splitPlus[i]
+                    textRoll = textRollMinus
                 } else {
-                    result_roll = (result_roll.toInt() + split_plus[i].toInt()).toString()
-                    text_roll = text_roll + "+" + text_roll_minus
+                    resultRoll = (resultRoll.toInt() + splitPlus[i].toInt()).toString()
+                    textRoll = "$textRoll+$textRollMinus"
                 }
             }
 
-            return arrayListOf<String>(cube, result_roll, text_roll, max_cube.toString())
+            return arrayListOf(cube, resultRoll, textRoll, maxCube.toString())
         }
-
-
     }
-
 }

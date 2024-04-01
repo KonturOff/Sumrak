@@ -17,21 +17,23 @@ import com.example.sumrak.ui.inventory.recycler.armor.Armor
 import com.example.sumrak.ui.inventory.recycler.armor.ArmorViewModel
 import com.example.sumrak.ui.inventory.recycler.arsenal.Arsenal
 import com.example.sumrak.ui.inventory.recycler.consumables.Consumbles
-import com.example.sumrak.ui.inventory.recycler.consumables.ConsumblesViewModel
+import com.example.sumrak.ui.inventory.recycler.consumables.ConsumablesViewModel
 import com.example.sumrak.ui.inventory.recycler.effects.Effects
 import com.example.sumrak.ui.inventory.recycler.effects.EffectsViewModel
 import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 
+// TODO Золотое правило: один фрагмент или активити - одна вьюмоделька для него.
+//  остальное выносится в другие слои по CleanArchitecture
 class InventoryFragment : Fragment() {
 
-    private lateinit var b: FragmentInventoryBinding
-    private lateinit var consumblesViewModel: ConsumblesViewModel
+    private var viewBinding: FragmentInventoryBinding? = null
+    private lateinit var consumablesViewModel: ConsumablesViewModel
     private lateinit var effectsViewModel: EffectsViewModel
     private lateinit var armorViewModel: ArmorViewModel
     private lateinit var inventoryViewModel: InventoryViewModel
     private lateinit var equipmentViewModel : EquipmentViewModel
 
-    private lateinit var myInterface : Interface
+    private var myInterface : Interface? = null
 
     companion object {
         private val instance = InventoryFragment()
@@ -51,23 +53,23 @@ class InventoryFragment : Fragment() {
         fun get_result_roll(text: String, player: Int, mode : String, param: Int,position: Int?)
     }
 
-    private lateinit var viewModel: InventoryViewModel
+    private var viewModel: InventoryViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        b = FragmentInventoryBinding.inflate(layoutInflater)
+        viewBinding = FragmentInventoryBinding.inflate(layoutInflater)
 
         val idPlayer = Player.getInstance().getIdActivePlayer()
 
         val inventoryManager = InventoryManager.getInstance()
 
         val layoutManager = LinearLayoutManager(context)
-        b.recyclerInventory.layoutManager = layoutManager
+        viewBinding?.recyclerInventory?.layoutManager = layoutManager
 
         effectsViewModel = ViewModelProvider(this).get(EffectsViewModel::class.java)
-        consumblesViewModel = ViewModelProvider(this).get(ConsumblesViewModel::class.java)
+        consumablesViewModel = ViewModelProvider(this).get(ConsumablesViewModel::class.java)
         armorViewModel = ViewModelProvider(this).get(ArmorViewModel::class.java)
         inventoryViewModel = ViewModelProvider(this).get(InventoryViewModel::class.java)
         equipmentViewModel = ViewModelProvider(this).get(EquipmentViewModel::class.java)
@@ -85,7 +87,7 @@ class InventoryFragment : Fragment() {
         val viewModels: Map<Int, ViewModel> = mapOf(
             R.layout.maket_inventory_effects to effectsViewModel,
             //R.layout.maket_inventory_arsenal to arsenalViewModel,
-            R.layout.maket_inventory_consumables to consumblesViewModel,
+            R.layout.maket_inventory_consumables to consumablesViewModel,
             R.layout.maket_inventory_armor to armorViewModel,
             R.layout.maket_inventory_equipment to equipmentViewModel
         )
@@ -97,37 +99,29 @@ class InventoryFragment : Fragment() {
         //)
         // Создание и установка адаптера с передачей списка элементов и Map с ViewModel
         val inventoryAdapter = InventoryAdapter(inventoryManager, viewModels, viewLifecycleOwner, requireContext(), inventoryViewModel, this)
-        b.recyclerInventory.adapter = inventoryAdapter
+        viewBinding?.recyclerInventory?.adapter = inventoryAdapter
 
         val itemTouchHelperCallback = InventoryItemTouchHelper(inventoryAdapter, requireContext())
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
-        itemTouchHelper.attachToRecyclerView(b.recyclerInventory)
+        itemTouchHelper.attachToRecyclerView(viewBinding?.recyclerInventory)
 
-
-
-
-        return b.root
+        return viewBinding?.root
     }
 
     fun useEquipment(mode: String, param : Int){
-        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), mode, param,null)
+        myInterface?.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), mode, param,null)
     }
 
     private fun load(idPlayer: Int) {
-        consumblesViewModel.getCosumablesToPlayerId(idPlayer)
+        consumablesViewModel.getConsumablesToPlayerId(idPlayer)
         effectsViewModel.getEffectsToPlayerId(idPlayer)
         armorViewModel.getArmorToPlayer(idPlayer)
         inventoryViewModel.getInventoryItemToPlayer(idPlayer)
         equipmentViewModel.getEquipmentToIdPlayer(idPlayer)
     }
 
-
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel = ViewModelProvider(this).get(InventoryViewModel::class.java)
-
     }
-
-
-
 }

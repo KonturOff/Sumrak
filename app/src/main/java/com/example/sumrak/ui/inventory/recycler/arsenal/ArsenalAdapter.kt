@@ -18,7 +18,7 @@ class ArsenalAdapter : DelegateAdapter<Arsenal, ArsenalAdapter.ArsenalViewHolder
         // ...
     }
     class ArsenalViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(arsenal: Arsenal){
+        fun bind(arsenal: Arsenal) {
 
         }
     }

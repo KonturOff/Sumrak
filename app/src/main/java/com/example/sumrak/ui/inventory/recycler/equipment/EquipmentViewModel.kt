@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.sumrak.Data.DataBase
-import com.example.sumrak.Data.inventory.equipment.EquipmentDbEntity
-import com.example.sumrak.Data.inventory.equipment.EquipmentRepository
+import com.example.sumrak.data.DataBase
+import com.example.sumrak.data.inventory.equipment.EquipmentDbEntity
+import com.example.sumrak.data.inventory.equipment.EquipmentRepository
 import com.example.sumrak.Player
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItem
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItemManager
@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class EquipmentViewModel(application: Application) : AndroidViewModel(application) {
+
     private val equipmentManager = EquipmentItemManager.getInstance()
 
     private val repository: EquipmentRepository
@@ -26,7 +27,8 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     var activeIdItemRepair = 0
     val modeSettings = MutableLiveData<Int>()
 
-    fun addEquipmentDb(equipmentDbEntity: EquipmentDbEntity):Long{
+    // TODO runBlocking - опасная команда, лучше искать альтернативы
+    private fun addEquipmentDb(equipmentDbEntity: EquipmentDbEntity) : Long {
         return runBlocking {
             val result = CoroutineScope(Dispatchers.IO).async{
                 repository.addEquipment(equipmentDbEntity)
@@ -35,19 +37,19 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun updateEquipmentDb(equipmentDbEntity: EquipmentDbEntity){
+    private fun updateEquipmentDb(equipmentDbEntity: EquipmentDbEntity){
        viewModelScope.launch(Dispatchers.IO) {
            repository.updateEquipment(equipmentDbEntity)
        }
     }
 
-    fun updatechargeEquipmentDb(id: Int, change: Int){
+    private fun updatechargeEquipmentDb(id: Int, change: Int){
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateChargeEquipment(id, change)
         }
     }
 
-    fun deleteEquipmentDb(id: Int){
+    private fun deleteEquipmentDb(id: Int){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteEquipmentToId(id)
         }
@@ -68,12 +70,12 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun updateEquipmentItem(equipmentItem: EquipmentItem){
-        updateEquipmentDb(equipmentItem.ToEquipmentDbEntity())
+        updateEquipmentDb(equipmentItem.toEquipmentDbEntity())
         equipmentManager.updateItem(equipmentItem)
     }
 
     fun updateChargeEquipment(id: Int, change: Int){
-        var item = equipmentManager.getItemToId(id)
+        val item = equipmentManager.getItemToId(id)
         item.charge = item.charge + change
         if (item.charge<0) item.charge = 0
         equipmentManager.updateItem(item)
@@ -86,7 +88,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun replaceChangeEquipment(id: Int){
-        var item = equipmentManager.getItemToId(id)
+        val item = equipmentManager.getItemToId(id)
         item.charge = item.maxCharge
         equipmentManager.updateItem(item)
         updatechargeEquipmentDb(id, item.charge)
@@ -94,7 +96,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun useEquipmentChange(id: Int){
-        var item = equipmentManager.getItemToId(id)
+        val item = equipmentManager.getItemToId(id)
         updateChargeEquipment(item.id, -item.step)
     }
 

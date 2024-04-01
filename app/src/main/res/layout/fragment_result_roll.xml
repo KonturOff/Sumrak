@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/d20"
-    tools:context=".ui.other_fragments.Result_roll">
+    tools:context=".ui.other_fragments.ResultRoll">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -19,7 +19,7 @@
             android:gravity="center"
             android:text="20"
             android:textColor="@color/white"
-            android:textSize="50dp" />
+            android:textSize="50sp" />
 
         <LinearLayout
             android:id="@+id/modeOne"

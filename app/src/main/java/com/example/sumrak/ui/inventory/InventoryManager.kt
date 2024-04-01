@@ -44,7 +44,7 @@ data class InventoryManager(
         return pos
     }
 
-    fun getIdToName(name: String): Int{
+    private fun getIdToName(name: String): Int{
         var id = -1
         for (i in items.indices){
             if (items[i].type == name){

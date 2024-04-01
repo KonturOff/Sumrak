@@ -22,7 +22,9 @@ class EffectsItemAdapter(private val viewModel: EffectsViewModel
         parent: ViewGroup,
         viewType: Int
     ): EffectsItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.maket_inventory_effects_rec, parent, false)
+        val view = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.maket_inventory_effects_rec, parent, false)
         return EffectsItemViewHolder(view)
     }
 
@@ -32,33 +34,37 @@ class EffectsItemAdapter(private val viewModel: EffectsViewModel
 
     override fun onBindViewHolder(holder: EffectsItemViewHolder, position: Int) {
         val item = effItemManager.getItem(position)
-        holder.bind(item, position, viewModel)
+        holder.bind(
+            item,
+//            position,
+            viewModel
+        )
     }
 
-
     class EffectsItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        val b = MaketInventoryEffectsRecBinding.bind(itemView)
+        val viewBinding = MaketInventoryEffectsRecBinding.bind(itemView)
 
 
-        fun bind(item: EffectsItem, position: Int, viewModel: EffectsViewModel) {
-            b.checkBoxItemEffects.text = item.name
-            b.checkBoxItemEffects.isChecked = item.isActive==1
+        fun bind(
+            item: EffectsItem,
+//            position: Int,
+            viewModel: EffectsViewModel
+        ) {
+            viewBinding.apply {
+                checkBoxItemEffects.text = item.name
+                checkBoxItemEffects.isChecked = item.isActive == 1
 
-            b.btnSettingsEffects.setOnClickListener { viewModel.updateMode(item.id) }
-            b.btnDeleteEffects.setOnClickListener { viewModel.deleteEffect(item.id) }
-            b.checkBoxItemEffects.setOnCheckedChangeListener { buttonView, isChecked ->
-                if (isChecked){
-                    viewModel.updateCheckEffectsToPosition(item.id, 1)
-                }
-                else{
-                    viewModel.updateCheckEffectsToPosition(item.id, 0)
+                btnSettingsEffects.setOnClickListener { viewModel.updateMode(item.id) }
+                btnDeleteEffects.setOnClickListener { viewModel.deleteEffect(item.id) }
+                checkBoxItemEffects.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) {
+                        viewModel.updateCheckEffectsToPosition(item.id, 1)
+                    } else {
+                        viewModel.updateCheckEffectsToPosition(item.id, 0)
+                    }
                 }
             }
         }
 
     }
-
-
 }
-
-

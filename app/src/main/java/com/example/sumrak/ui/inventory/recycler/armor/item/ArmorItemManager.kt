@@ -10,11 +10,12 @@ class ArmorItemManager private constructor(){
 
     fun addItem(armorItem: ArmorItem){
         armorItemList.add(armorItem)
-        armorItemAdapter?.let {
-            it.notifyItemInserted(armorItemList.size)
-        }
+        armorItemAdapter?.notifyItemInserted(armorItemList.size)
     }
 
+    // TODO использование notifyDataSetChanged стоит избегать, так как это
+    //  затратная для телефона операция. Также может экран рябить при вызове этой
+    //  функции (так как происходит ПОЛНАЯ переррисовка списка). Лучше искать альтернативы
     fun deleteItem(id: Int){
         val position = getPosItemToId(id)
         armorItemList.removeAt(position)

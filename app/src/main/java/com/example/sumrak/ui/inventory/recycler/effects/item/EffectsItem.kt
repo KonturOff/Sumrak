@@ -1,6 +1,6 @@
 package com.example.sumrak.ui.inventory.recycler.effects.item
 
-import com.example.sumrak.Data.inventory.effects.EffectsDbEntity
+import com.example.sumrak.data.inventory.effects.EffectsDbEntity
 
 
 data class EffectsItem(

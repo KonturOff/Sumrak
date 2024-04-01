@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -39,13 +40,11 @@ class ArmorAdapter(
         context: Context,
         inventoryViewModel: InventoryViewModel
     ) : RecyclerView.ViewHolder(itemView) {
-        private val b = MaketInventoryArmorBinding.bind(itemView)
+        private val viewBinding = MaketInventoryArmorBinding.bind(itemView)
 
         init {
             inventoryViewModel.armorVisibility.observe(lifecycleOwner) {
-                if (it) {
-                    b.armorVisible.visibility = View.VISIBLE
-                } else b.armorVisible.visibility = View.GONE
+                viewBinding.armorVisible.isVisible = it
             }
             viewModel.modeSettings.observe(lifecycleOwner) {
                 when(it){
@@ -56,8 +55,10 @@ class ArmorAdapter(
                 }
             }
             viewModel.repairProgress.observe(lifecycleOwner) {
-                b.progressEnduranceArmor.setProgress(it, true)
-                b.tvEnduranceArmor.text = it.toString()
+                viewBinding.apply {
+                    progressEnduranceArmor.setProgress(it, true)
+                    tvEnduranceArmor.text = it.toString()
+                }
             }
         }
 
@@ -67,94 +68,101 @@ class ArmorAdapter(
             lifecycleOwner: LifecycleOwner,
             context: Context,
             inventoryViewModel: InventoryViewModel
-        ){
+        ) {
             inventoryViewModel.getVisibleView(armor.name)
+            viewBinding.apply {
+                armorRecView.layoutManager = LinearLayoutManager(context)
+                armorRecView.adapter = ArmorItemAdapter(viewModel, lifecycleOwner)
 
-            b.armorRecView.layoutManager = LinearLayoutManager(context)
-            b.armorRecView.adapter = ArmorItemAdapter(viewModel, lifecycleOwner)
+                tvArmors.setOnClickListener { inventoryViewModel.updateVisibleView(armor.name) }
+                addBtnArmor.setOnClickListener { viewModel.modeAddArmor(true) }
+                btnEcsSettingsArmor.setOnClickListener { viewModel.modeAddArmor(false) }
+                btnSaveArmor.setOnClickListener { saveArmor(viewModel) }
 
-            b.tvArmors.setOnClickListener { inventoryViewModel.updateVisbleView(armor.name) }
-            b.addBtnArmor.setOnClickListener { viewModel.modeAddArmor(true) }
-            b.btnEcsSettingsArmor.setOnClickListener { viewModel.modeAddArmor(false) }
-            b.btnSaveArmor.setOnClickListener { saveArmor(viewModel) }
+                btnAddRepairArmor.setOnClickListener { viewModel.updateArmorToRepair(1) }
+                btnRemRepairArmor.setOnClickListener { viewModel.updateArmorToRepair(-1) }
 
-            b.btnAddRepairArmor.setOnClickListener { viewModel.updateArmorToRepair(1) }
-            b.btnRemRepairArmor.setOnClickListener { viewModel.updateArmorToRepair(-1) }
-
-            b.rgBtnGroup.setOnCheckedChangeListener { _, checkedId ->
-                when(checkedId){
-                    b.rBtnLight.id -> viewModel.setClassArmor("Легкая")
-                    b.rBtnMedium.id -> viewModel.setClassArmor("Средняя")
-                    b.rBtnHard.id -> viewModel.setClassArmor("Тяжелая")
+                rgBtnGroup.setOnCheckedChangeListener { _, checkedId ->
+                    when (checkedId) {
+                        rBtnLight.id -> viewModel.setClassArmor("Легкая")
+                        rBtnMedium.id -> viewModel.setClassArmor("Средняя")
+                        rBtnHard.id -> viewModel.setClassArmor("Тяжелая")
+                    }
                 }
+
+                btnDeleteArmor.setOnClickListener { viewModel.deleteArmor() }
             }
 
-            b.btnDeleteArmor.setOnClickListener { viewModel.deleteArmor()}
-
-            }
+        }
 
         private fun saveArmor(viewModel: ArmorViewModel){
             if (viewModel.armorItem.classArmor != ""){
                 try {
-                    val name = b.editNameArmor.text.toString()
-                    val params = b.editParamsArmor.text.toString().toInt()
-                    val endurance = b.editEnduranceArmor.text.toString().toInt()
-                    val features = b.editFeaturesArmor.text.toString()
-                    if (viewModel.armorItem.id == 0){
-                        viewModel.addArmor(name, params, endurance, features)
-                    }
-                    else{
-                        viewModel.updateArmor(name, params, endurance, features)
+                    viewBinding.apply {
+                        val name = editNameArmor.text.toString()
+                        val params = editParamsArmor.text.toString().toInt()
+                        val endurance = editEnduranceArmor.text.toString().toInt()
+                        val features = editFeaturesArmor.text.toString()
+                        if (viewModel.armorItem.id == 0) {
+                            viewModel.addArmor(name, params, endurance, features)
+                        } else {
+                            viewModel.updateArmor(name, params, endurance, features)
+                        }
                     }
                 }
                 catch (e: Exception){
-                    Snackbar.make(b.root, "Не заполнены значения Параметра и/или Прочности брони!", Snackbar.LENGTH_SHORT).show()
+                    Snackbar.make(viewBinding.root, "Не заполнены значения Параметра и/или Прочности брони!", Snackbar.LENGTH_SHORT).show()
                 }
 
             }
-            else Snackbar.make(b.root, "Не выбран класс брони!", Snackbar.LENGTH_SHORT).show()
+            else Snackbar.make(viewBinding.root, "Не выбран класс брони!", Snackbar.LENGTH_SHORT).show()
         }
 
-        private fun modeRepair(viewModel: ArmorViewModel){
-            b.tvModeSettingsArmor.text = "Ремонт брони"
-            b.addBtnArmor.visibility = View.GONE
-            b.addModeArmor.visibility = View.VISIBLE
-            b.btnDeleteArmor.visibility = View.GONE
-            b.repairModeArmor.visibility = View.VISIBLE
-            b.settingsMode.visibility = View.GONE
-            val item = viewModel.armorItem
-            b.tvRepairClassArmor.text = item.classArmor
-            b.tvRepairNameArmor.text = item.name
-            b.tvEnduranceArmor.text = item.endurance.toString()
-            b.progressEnduranceArmor.max = item.enduranceMax
+        private fun modeRepair(viewModel: ArmorViewModel) {
+            viewBinding.apply {
+                tvModeSettingsArmor.text = "Ремонт брони"
+                addBtnArmor.isVisible = false
+                addModeArmor.isVisible = true
+                btnDeleteArmor.isVisible = false
+                repairModeArmor.isVisible = true
+                settingsMode.isVisible = false
+                val item = viewModel.armorItem
+                tvRepairClassArmor.text = item.classArmor
+                tvRepairNameArmor.text = item.name
+                tvEnduranceArmor.text = item.endurance.toString()
+                progressEnduranceArmor.max = item.enduranceMax
+            }
         }
 
         private fun modeAdd(){
-            b.tvModeSettingsArmor.text = "Добавить броню"
-            b.addBtnArmor.visibility = View.GONE
-            b.addModeArmor.visibility = View.VISIBLE
-            b.btnDeleteArmor.visibility = View.GONE
-            b.repairModeArmor.visibility = View.GONE
-            b.settingsMode.visibility = View.VISIBLE
+            viewBinding.apply {
+                tvModeSettingsArmor.text = "Добавить броню"
+                addBtnArmor.isVisible = false
+                addModeArmor.isVisible = true
+                btnDeleteArmor.isVisible = false
+                repairModeArmor.isVisible = false
+                settingsMode.isVisible = true
+            }
         }
         private fun modeSettings(viewModel: ArmorViewModel) {
-            b.tvModeSettingsArmor.text = "Редактировать броню"
-            b.addBtnArmor.visibility = View.GONE
-            b.repairModeArmor.visibility = View.GONE
-            b.addModeArmor.visibility = View.VISIBLE
-            b.btnDeleteArmor.visibility = View.VISIBLE
-            b.settingsMode.visibility = View.VISIBLE
-            val item = viewModel.armorItem
-            b.editNameArmor.setText(item.name)
-            b.editEnduranceArmor.setText(item.enduranceMax.toString())
-            b.editFeaturesArmor.setText(item.features)
-            b.editParamsArmor.setText(item.params.toString())
-            when(item.classArmor){
-                "Легкая"-> b.rBtnLight.isChecked = true
-                "Средняя"-> b.rBtnMedium.isChecked = true
-                "Тяжелая" -> b.rBtnHard.isChecked = true
+            viewBinding.apply {
+                tvModeSettingsArmor.text = "Редактировать броню"
+                addBtnArmor.isVisible = false
+                repairModeArmor.isVisible = false
+                addModeArmor.isVisible = true
+                btnDeleteArmor.isVisible = true
+                settingsMode.isVisible = true
+                val item = viewModel.armorItem
+                editNameArmor.setText(item.name)
+                editEnduranceArmor.setText(item.enduranceMax.toString())
+                editFeaturesArmor.setText(item.features)
+                editParamsArmor.setText(item.params.toString())
+                when (item.classArmor) {
+                    "Легкая" -> rBtnLight.isChecked = true
+                    "Средняя" -> rBtnMedium.isChecked = true
+                    "Тяжелая" -> rBtnHard.isChecked = true
+                }
             }
-
         }
         private fun modeEsc(context: Context) {
             val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
@@ -162,13 +170,15 @@ class ArmorAdapter(
                 // Закрываем клавиатуру
                 imm.hideSoftInputFromWindow(itemView.windowToken, 0)
             }
-            b.addBtnArmor.visibility = View.VISIBLE
-            b.addModeArmor.visibility = View.GONE
-            b.editEnduranceArmor.text.clear()
-            b.editNameArmor.text.clear()
-            b.editFeaturesArmor.text.clear()
-            b.editParamsArmor.text.clear()
-            b.rgBtnGroup.clearCheck()
+            viewBinding.apply {
+                addBtnArmor.isVisible = true
+                addModeArmor.isVisible = false
+                editEnduranceArmor.text.clear()
+                editNameArmor.text.clear()
+                editFeaturesArmor.text.clear()
+                editParamsArmor.text.clear()
+                rgBtnGroup.clearCheck()
+            }
         }
 
     }
