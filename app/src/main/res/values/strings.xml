@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">Sumrak</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="nav_calculator">Кубы</string>
+    <string name="nav_inventory">Инвентарь</string>
+    <string name="nav_home">Персонаж</string>
+    <string name="nav_battle">Бой</string>
+    <string name="nav_profile">Досье</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+</resources>

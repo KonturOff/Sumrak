@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_home">
+
+    <fragment
+        android:id="@+id/navigation_home"
+        android:name="com.example.sumrak.ui.home.HomeFragment"
+        android:label="@string/title_home"
+        tools:layout="@layout/fragment_home" />
+    <fragment
+        android:id="@+id/navigation_battle"
+        android:name="com.example.sumrak.ui.battle.BattleFragment"
+        android:label="fragment_battle"
+        tools:layout="@layout/fragment_battle" />
+    <fragment
+        android:id="@+id/navigation_calculator"
+        android:name="com.example.sumrak.ui.calculator.calculator.CalculatorFragment"
+        android:label="fragment_calculator"
+        tools:layout="@layout/fragment_calculator" />
+    <fragment
+        android:id="@+id/navigation_inventory"
+        android:name="com.example.sumrak.ui.inventory.InventoryFragment"
+        android:label="fragment_inventory"
+        tools:layout="@layout/fragment_inventory" />
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.example.sumrak.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_addPlayer2"
+            app:destination="@id/addPlayer"
+            app:popUpTo="@id/navigation_profile" />
+        <action
+            android:id="@+id/action_navigation_profile_to_updatePlayer"
+            app:destination="@id/updatePlayer" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainCalculatorFragment"
+        android:name="com.example.sumrak.ui.calculator.MainCalculatorFragment"
+        android:label="fragment_main_calculator"
+        tools:layout="@layout/fragment_main_calculator" />
+    <fragment
+        android:id="@+id/addPlayer"
+        android:name="com.example.sumrak.ui.profile.AddPlayer"
+        android:label="fragment_add_player"
+        tools:layout="@layout/fragment_add_player" >
+        <action
+            android:id="@+id/action_addPlayer_to_navigation_profile"
+            app:destination="@id/navigation_profile"
+            app:exitAnim="@android:anim/slide_out_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/updatePlayer"
+        android:name="com.example.sumrak.ui.profile.UpdatePlayer"
+        android:label="UpdatePlayer" >
+        <action
+            android:id="@+id/action_updatePlayer_to_navigation_profile"
+            app:destination="@id/navigation_profile" />
+    </fragment>
+
+</navigation>

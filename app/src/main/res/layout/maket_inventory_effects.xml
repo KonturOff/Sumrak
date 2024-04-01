@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvEffects"
+                android:layout_width="match_parent"
+                android:layout_height="30sp"
+                android:background="#7986CB"
+                android:gravity="center|left"
+                android:text="  Эффекты"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/effectsVisible"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:visibility="visible">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/effectsRecView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageButton
+                    android:id="@+id/addBtnEffects"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/add" />
+
+                <LinearLayout
+                    android:id="@+id/EffectsSetingsVisibile"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#E8EAF6"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#C5CAE9"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/btnEscSettingsEffects"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/clear" />
+
+                        <TextView
+                            android:id="@+id/tvSettingsEffects"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Добавить эффект"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView28"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="10dp"
+                            android:text="Имя: "
+                            android:textSize="16sp" />
+
+                        <EditText
+                            android:id="@+id/editNameEffects"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:ems="10"
+                            android:hint="Имя эффекта"
+                            android:inputType="text" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <RadioGroup
+                            android:id="@+id/rBtnGroup1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <RadioButton
+                                android:id="@+id/rBtnDB"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Дальний бой: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnPower"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Сила: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnVolition"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Воля: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnIntelect"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Интелект: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnObservation"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Наблюдательность: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnAllParams"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Все Характеристики" />
+
+                            <RadioButton
+                                android:id="@+id/rBtnBonusPower"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Бонус Силы:
+" />
+
+                        </RadioGroup>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvDb"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvPower"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvVolition"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvIntelect"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvObservation"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp" />
+
+                            <TextView
+                                android:id="@+id/tvBonusPower"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                        </LinearLayout>
+
+                        <RadioGroup
+                            android:id="@+id/rBtnGroup2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent">
+
+                            <RadioButton
+                                android:id="@+id/rBtnBB"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Ближний бой: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnDexterity"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Ловкость: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnEndurance"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Стойковсть: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnInsihgt"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Сообразительность: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnChsarisma"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Харизма: " />
+
+                            <RadioButton
+                                android:id="@+id/radioButton14"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="RadioButton"
+                                android:visibility="invisible" />
+
+                            <RadioButton
+                                android:id="@+id/rBtnBonusEndurance"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:text="Бонус Устойчивости: " />
+
+                        </RadioGroup>
+
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvBb"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvDexterity"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvEndurance"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvInsihgt"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvChsarisma"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <Space
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp" />
+
+                            <TextView
+                                android:id="@+id/tvBonusEndurance"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/textView26"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:gravity="center|left"
+                            android:text="  Параметр: "
+                            android:textSize="16sp" />
+
+                        <ImageButton
+                            android:id="@+id/btnRemValueEffects"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/remove" />
+
+                        <TextView
+                            android:id="@+id/tvValueParamEffects"
+                            android:layout_width="40dp"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="0"
+                            android:textSize="20sp" />
+
+                        <ImageButton
+                            android:id="@+id/btnAddValueEffects"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:src="@drawable/add" />
+
+                        <Space
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="2" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1" />
+
+                        <Button
+                            android:id="@+id/btnSaveEffects"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:drawableRight="@drawable/check"
+                            android:text="Сохранить" />
+
+                        <Space
+                            android:layout_width="5dp"
+                            android:layout_height="wrap_content" />
+                    </LinearLayout>
+
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
