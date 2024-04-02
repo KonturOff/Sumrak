@@ -32,6 +32,7 @@ class EquipmentItemManager private constructor(){
     //  функции (так как происходит ПОЛНАЯ переррисовка списка). Лучше искать альтернативы
     fun updateItem(equipmentItem: EquipmentItem){
         val pos = getPosItemToId(equipmentItem.id)
+        println(pos)
         equipmentItemList[pos] = equipmentItem
         equipmentItemAdapter?.notifyDataSetChanged()
         equipmentBItemAdapter?.notifyDataSetChanged()

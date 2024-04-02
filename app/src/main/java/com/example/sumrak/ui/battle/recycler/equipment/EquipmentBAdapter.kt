@@ -28,6 +28,11 @@ class EquipmentBAdapter(
         val viewHolder = EquipmentBViewHolder(view)
         viewHolder.viewBinding.rvBEquipment.layoutManager = LinearLayoutManager(context)
         viewHolder.viewBinding.rvBEquipment.adapter = EquipmentBItemAdapter(equipmentViewModel)//, lifecycleOwner)
+//        viewHolder.b.rvBEquipment.adapter = EquipmentBItemAdapter(
+//            equipmentViewModel,
+//            lifecycleOwner,
+//            battleFragment
+//        )
         return viewHolder
     }
 
@@ -60,6 +65,7 @@ class EquipmentBAdapter(
             viewBinding.apply {
                 rvBEquipment.layoutManager = LinearLayoutManager(context)
                 rvBEquipment.adapter = EquipmentBItemAdapter(equipmentViewModel)//,lifecycleOwner)
+//                rvBEquipment.adapter = EquipmentBItemAdapter(equipmentViewModel,lifecycleOwner,battleFragment)
             }
 
         }

@@ -14,12 +14,14 @@ import com.example.sumrak.databinding.FragmentBattleBinding
 import com.example.sumrak.ui.battle.recycler.damage.Damage
 import com.example.sumrak.ui.battle.recycler.damage.DamageAdapter
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentB
+import com.example.sumrak.ui.battle.recycler.equipment.item.EquipmentBItemAdapter
 import com.example.sumrak.ui.battle.recycler.information.Information
 import com.example.sumrak.ui.battle.recycler.initiative.Initiative
 import com.example.sumrak.ui.battle.recycler.initiative.InititiveAdapter
 import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 
-class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, DamageAdapter.ButtonClick {
+class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, DamageAdapter.ButtonClick, EquipmentBItemAdapter.equipmentRollClick {
+
 
     companion object {
         fun newInstance() = BattleFragment()
@@ -109,6 +111,10 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
 
     override fun rollParryingActivePlayer(){
         myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), "Проверка Парирования", 0,null)
+    }
+
+    override fun rollEquipmentTest(mode: String, param: Int) {
+        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), mode, param, null)
     }
 
 }
