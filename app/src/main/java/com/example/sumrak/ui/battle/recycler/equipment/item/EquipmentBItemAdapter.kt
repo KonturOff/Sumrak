@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.Player
 import com.example.sumrak.R
 import com.example.sumrak.databinding.MaketBattleEquipmentRecBinding
-import com.example.sumrak.ui.battle.BattleFragment
 import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItem
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItemManager
@@ -44,8 +43,13 @@ class EquipmentBItemAdapter(
         position: Int
     ) {
         val item = equipmentItemManager.getItemToPos(position)
-        holder.bind(item, equipmentViewModel)//, lifecycleOwner)
-        //        holder.bind(item, equipmentViewModel, lifecycleOwner, battleFragment)
+//        holder.bind(item, equipmentViewModel)//, lifecycleOwner)
+        holder.bind(
+            item,
+            equipmentViewModel,
+//            lifecycleOwner,
+            battleFragment
+        )
     }
 
     override fun getItemCount(): Int {

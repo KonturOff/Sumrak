@@ -59,7 +59,7 @@ class BattleAdapter(
 //                    battleViewModel,
 //                    lifecycleOwner,
                     context = context,
-//                    battleFragment,
+                    battleFragment = battleFragment,
                     equipmentViewModel = equipmentViewModel
                 ).onCreateViewHolder(parent)
             else -> throw UnsupportedOperationException("ViewType not supported")
@@ -102,7 +102,7 @@ class BattleAdapter(
 //                        battleViewModel,
 //                        lifecycleOwner,
                         context = context,
-//                        battleFragment,
+                        battleFragment = battleFragment,
                         equipmentViewModel = equipmentViewModel
                     )
         }
