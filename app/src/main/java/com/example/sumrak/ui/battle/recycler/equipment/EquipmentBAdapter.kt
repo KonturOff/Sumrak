@@ -29,7 +29,11 @@ class EquipmentBAdapter(
         val view = LayoutInflater.from(parent.context).inflate(R.layout.maket_battle_equipment, parent, false)
         val viewHolder = EquipmentBViewHolder(view)
         viewHolder.b.rvBEquipment.layoutManager = LinearLayoutManager(context)
-        viewHolder.b.rvBEquipment.adapter = EquipmentBItemAdapter(equipmentViewModel, lifecycleOwner)
+        viewHolder.b.rvBEquipment.adapter = EquipmentBItemAdapter(
+            equipmentViewModel,
+            lifecycleOwner,
+            battleFragment
+        )
         return viewHolder
     }
 
@@ -60,10 +64,10 @@ class EquipmentBAdapter(
             battleFragment: BattleFragment,
             equipmentViewModel: EquipmentViewModel
         ) {
-            equipmentViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
+
 
             b.rvBEquipment.layoutManager = LinearLayoutManager(context)
-            b.rvBEquipment.adapter = EquipmentBItemAdapter(equipmentViewModel,lifecycleOwner)
+            b.rvBEquipment.adapter = EquipmentBItemAdapter(equipmentViewModel,lifecycleOwner,battleFragment)
 
         }
 

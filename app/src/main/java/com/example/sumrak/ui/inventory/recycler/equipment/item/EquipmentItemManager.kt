@@ -29,6 +29,7 @@ class EquipmentItemManager private constructor(){
 
     fun updateItem(equipmentItem: EquipmentItem){
         val pos = getPosItemToId(equipmentItem.id)
+        println(pos)
         equipmentItemList[pos] = equipmentItem
         equipmentItemAdapter?.notifyDataSetChanged()
         equipmentBItemAdapter?.notifyDataSetChanged()
