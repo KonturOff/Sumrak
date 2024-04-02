@@ -3,6 +3,7 @@ package com.example.sumrak.lists
 
 import com.example.sumrak.ui.battle.recycler.initiative.InitiativeItem
 
+// TODO класс работай давай
 data class HistoryRoll(
     val cube:String,
     val resultRoll: String,
