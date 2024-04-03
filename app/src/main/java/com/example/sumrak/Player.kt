@@ -12,9 +12,6 @@ class Player private constructor(){
     private val playerList = ArrayList<DataPlayer>()
     var activePosPlayer = 0
 
-//    var random : Random
-
-
     //очищаем список персонажей
     fun clearPlayerList(){
         playerList.clear()
