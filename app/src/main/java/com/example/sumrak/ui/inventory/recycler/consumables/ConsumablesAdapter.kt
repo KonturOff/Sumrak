@@ -91,7 +91,8 @@ class ConsumablesAdapter(
                         null,
                         Player.getInstance().getIdActivePlayer(),
                         editConsumables.text.toString(),
-                        0
+                        0,
+                        false
                     )
                     viewModel.addItem(itemEntity)
                     editConsumables.text.clear()

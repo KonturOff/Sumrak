@@ -136,23 +136,51 @@
                                 android:inputType="number" />
                         </LinearLayout>
 
+                        <CheckBox
+                            android:id="@+id/cBoxTest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:freezesText="false"
+                            android:text="Применять убывающий тест" />
+
+                        <CheckBox
+                            android:id="@+id/cBoxConsumablesLink"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Списывать расходник при обновлении" />
+
                         <LinearLayout
+                            android:id="@+id/consumblesLinkVisible"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="horizontal">
 
-                            <CheckBox
-                                android:id="@+id/cBoxTest"
+                            <ImageButton
+                                android:id="@+id/btnLeftConsubmbles"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/left" />
+
+                            <TextView
+                                android:id="@+id/tvConsumblesLink"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
                                 android:layout_weight="1"
-                                android:freezesText="false"
-                                android:text="Применять убывающий тест" />
+                                android:gravity="center"
+                                android:text="TextView" />
+
+                            <ImageButton
+                                android:id="@+id/btnRightConsumbles"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/right" />
                         </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
+                            android:layout_marginTop="5dp"
                             android:orientation="horizontal">
 
                             <Button

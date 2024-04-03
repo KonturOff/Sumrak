@@ -7,13 +7,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.Player
 import com.example.sumrak.R
 import com.example.sumrak.databinding.MaketBattleEquipmentRecBinding
+import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBViewModel
 import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItem
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItemManager
 
 
 class EquipmentBItemAdapter(
-    private val equipmentViewModel: EquipmentViewModel,
+    private val equipmentBViewModel: EquipmentBViewModel,
 //    private val lifecycleOwner: LifecycleOwner,
     private val battleFragment: equipmentRollClick
 ) : RecyclerView.Adapter<EquipmentBItemAdapter.EquipmentBItemViewHolder>() {
@@ -25,7 +26,7 @@ class EquipmentBItemAdapter(
     }
 
     init {
-        equipmentViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
+        //equipmentViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
         equipmentItemManager.setBattleAdapter(this)
     }
 
@@ -46,7 +47,7 @@ class EquipmentBItemAdapter(
 //        holder.bind(item, equipmentViewModel)//, lifecycleOwner)
         holder.bind(
             item,
-            equipmentViewModel,
+            equipmentBViewModel,
 //            lifecycleOwner,
             battleFragment
         )
@@ -60,7 +61,7 @@ class EquipmentBItemAdapter(
         val viewBinding = MaketBattleEquipmentRecBinding.bind(itemView)
         fun bind(
             item: EquipmentItem,
-            equipmentViewModel: EquipmentViewModel,
+            equipmentBViewModel: EquipmentBViewModel,
 //            lifecycleOwner: LifecycleOwner,
             battleFragment: equipmentRollClick
         ) {
@@ -68,16 +69,22 @@ class EquipmentBItemAdapter(
                 if (item.charge == 0){
                     btnUseEquipmentB.isEnabled = false
                 }
+                if (item.consumablesLink > 0){
+                    if (equipmentBViewModel.getValueConsumablesToId(item.consumablesLink)==0){
+                        btnReplaceEquipmentB.isEnabled = false
+                    }
+                }
+
                 tvNameEquipmentB.text = item.name
                 tvChangeEquipmentB.text = "(${item.charge}/${item.maxCharge}) : ${item.step}"
                 colorTestB.setBackgroundResource(getColor(item.test))
 
-                btnReplaceEquipmentB.setOnClickListener { equipmentViewModel.replaceChangeEquipment(item.id) }
+                btnReplaceEquipmentB.setOnClickListener { equipmentBViewModel.replaceChangeEquipment(item.id) }
                 btnUseEquipmentB.setOnClickListener {
                     if (item.test){
                         battleFragment.rollEquipmentTest("Убывающий Тест ${item.name}", item.charge)
                     }
-                    equipmentViewModel.useEquipmentChange(item.id)
+                    equipmentBViewModel.useEquipmentChange(item.id)
                 }
             }
         }

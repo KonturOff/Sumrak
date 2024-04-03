@@ -10,6 +10,7 @@ import com.example.sumrak.data.inventory.consumables.ConsumablesDbEntity
 import com.example.sumrak.data.inventory.consumables.ConsumablesRepository
 import com.example.sumrak.ui.inventory.recycler.consumables.item.ConsumablesItemManager
 import com.example.sumrak.ui.inventory.recycler.consumables.item.ConsumablesItem
+import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItemManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -19,6 +20,7 @@ import kotlinx.coroutines.runBlocking
 class ConsumablesViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: ConsumablesRepository
     private val consumablesItemManager = ConsumablesItemManager.getInstance()
+    private val equipmentManager = EquipmentItemManager.getInstance()
 
 
     private var viewVisible = true
@@ -68,7 +70,7 @@ class ConsumablesViewModel(application: Application) : AndroidViewModel(applicat
 
     fun addItem(item: ConsumablesDbEntity) {
         val id = addConsumables(item).toInt()
-        consumablesItemManager.addItem(ConsumablesItem(id, item.idPlayer, item.name, item.value))
+        consumablesItemManager.addItem(ConsumablesItem(id, item.idPlayer, item.name, item.value, false))
 
     }
 
@@ -82,14 +84,18 @@ class ConsumablesViewModel(application: Application) : AndroidViewModel(applicat
 
         if (count == -1){
             if (item.value!=0){
-                val upItem = ConsumablesItem(item.id, item.idPlayer, item.name, item.value + count)
+                val upItem = ConsumablesItem(item.id, item.idPlayer, item.name, item.value + count, false)
                 consumablesItemManager.updateItem(upItem, id)
             }
         }
         else{
-            val upItem = ConsumablesItem(item.id, item.idPlayer, item.name, item.value + count)
+            val upItem = ConsumablesItem(item.id, item.idPlayer, item.name, item.value + count, false)
             consumablesItemManager.updateItem(upItem, id)
         }
+    }
+
+    fun checkLinkToIdConsum(id: Int) : Boolean{
+        return equipmentManager.checkLinkToIdConsum(id)
     }
 
     init {

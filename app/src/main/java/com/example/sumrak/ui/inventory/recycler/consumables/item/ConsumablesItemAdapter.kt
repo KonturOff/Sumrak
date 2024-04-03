@@ -3,6 +3,7 @@ package com.example.sumrak.ui.inventory.recycler.consumables.item
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.R
 import com.example.sumrak.databinding.MaketInventoryConsumblesRecBinding
@@ -52,6 +53,8 @@ class ConsumablesItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
         viewModel: ConsumablesViewModel
     ) {
         viewBinding.apply {
+
+            linkMode(viewModel.checkLinkToIdConsum(item.id))
             nameConsumblesItem.text = item.name
             valueConsumdlesItem.text = item.value.toString()
 
@@ -78,5 +81,17 @@ class ConsumablesItemViewHolder(itemView: View) : RecyclerView.ViewHolder(itemVi
                 )
             }
         }
+    }
+
+    fun linkMode(mode : Boolean){
+        if (mode){
+            viewBinding.imLink.isVisible = true
+            viewBinding.btnDeleteConsumbles.isVisible = false
+        }
+        else{
+            viewBinding.imLink.isVisible = false
+            viewBinding.btnDeleteConsumbles.isVisible = true
+        }
+
     }
 }

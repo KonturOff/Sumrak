@@ -20,13 +20,15 @@ data class ConsumablesDbEntity(
     @PrimaryKey(autoGenerate = true) val id : Int? = null,
     val idPlayer: Int,
     val name : String,
-    val value : Int
+    val value : Int,
+    val link : Boolean
 ) {
     fun toConsumablesItem() : ConsumablesItem = ConsumablesItem(
             id = id!!,
             idPlayer = idPlayer,
             name = name,
-            value = value
+            value = value,
+            link = link
         )
 
 }

@@ -59,6 +59,41 @@ class ConsumablesItemManager private constructor() {
         consumablesItemList.clear()
     }
 
+    fun getValueToConsumablesId(id: Int): Int{
+        return getItemToId(id).value
+    }
+    fun useConsumablesLinkEquipent(id: Int){
+        if (id > 0){
+            val pos = getPositionToId(id)
+            consumablesItemList[pos].value--
+            consumablesItemAdapter?.notifyDataSetChanged()
+        }
+    }
+
+    fun controlConsumablesToId(id: Int) : Boolean{
+        var result = false
+        if (getPositionToId(id)!=-1){
+            result = true
+        }
+        return result
+    }
+
+    fun replaceConsumablesView(){
+        consumablesItemAdapter?.notifyDataSetChanged()
+    }
+
+    fun getLastConsumablesItemId(): Int {
+        return getItem(consumablesItemList.size-1).id
+    }
+
+    fun nextConsumblesItemId(id: Int, step : Int) : Int{
+        val pos = getPositionToId(id)
+        var newPos = pos + step
+        if (newPos == -1 ) newPos = consumablesItemList.size-1
+        if (newPos == consumablesItemList.size) newPos = 0
+        return getItem(newPos).id
+    }
+
     companion object {
         private val instance = ConsumablesItemManager()
 

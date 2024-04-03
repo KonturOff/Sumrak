@@ -67,6 +67,19 @@ class EquipmentAdapter(
                 setMode(it)
             }
 
+            viewModel.liveIdItemLink.observe(lifecycleOwner) {
+                if (it>0){
+                    viewBinding.btnReplaceEquipment.isEnabled = viewModel.getValueConsumablesToId(it) > 0
+                    viewBinding.btnRightConsumbles.isVisible = true
+                    viewBinding.btnLeftConsubmbles.isVisible = true
+                }
+                else if (it ==0){
+                    viewBinding.btnRightConsumbles.isVisible = false
+                    viewBinding.btnLeftConsubmbles.isVisible = false
+                }
+                consumablesLinkMode(viewModel, it)
+            }
+
             viewModel.equipmentItem.observe(lifecycleOwner) {
                 viewBinding.apply {
                     editNameEquipment.setText(it.name)
@@ -80,6 +93,16 @@ class EquipmentAdapter(
                     btnAddRepairEquipment.isEnabled = it.charge < it.maxCharge
                     btnUseEquipment.isEnabled = it.charge > 0
                     btnReplaceEquipment.isEnabled = it.charge < it.maxCharge
+                    if (it.maxCharge==0 && it.step ==0){
+                        editMaxCharge.text.clear()
+                        editStep.text.clear()
+                    }
+                    if (it.consumablesLink>0){
+                        btnReplaceEquipment.isEnabled = viewModel.getValueConsumablesToId(it.consumablesLink) > 0
+                    }
+                    consumablesLinkMode(viewModel, it.consumablesLink)
+
+
                 }
             }
 
@@ -139,6 +162,11 @@ class EquipmentAdapter(
                         inventoryFragment
                     )
                 }
+                cBoxConsumablesLink.setOnCheckedChangeListener { buttonView, isChecked ->
+                    viewModel.setModeLink(isChecked)
+                }
+                btnLeftConsubmbles.setOnClickListener { viewModel.stepConsumablesItemLink(-1) }
+                btnRightConsumbles.setOnClickListener { viewModel.stepConsumablesItemLink(1) }
             }
         }
 
@@ -153,40 +181,72 @@ class EquipmentAdapter(
             viewModel.useEquipmentChange(viewModel.activeIdItemRepair)
         }
 
-        private fun saveEquipment(viewModel: EquipmentViewModel) {
-            try {
+        private fun consumablesLinkMode(viewModel: EquipmentViewModel, id: Int){
+            if (id >= 0){
                 viewBinding.apply {
-                    val name = editNameEquipment.text.toString()
-                    val charge = editMaxCharge.text.toString().toInt()
-                    val step = editStep.text.toString().toInt()
-                    val test = cBoxTest.isChecked
-
-                    if (viewModel.activeIdItemSettings == 0) {
-                        viewModel.addEquipmentItem(name, charge, step, test)
-                    } else {
-                        viewModel.updateEquipmentItem(
-                            EquipmentItem(
-                                id = viewModel.activeIdItemSettings,
-                                idPlayer = Player.getInstance().getIdActivePlayer(),
-                                name = name,
-                                charge = charge,
-                                maxCharge = charge,
-                                step = step,
-                                test = test
-                            )
-                        )
-                    }
-
-                    viewModel.setMode(0, 0)
+                    cBoxConsumablesLink.isChecked = true
+                    consumblesLinkVisible.isVisible = true
+                    tvConsumblesLink.text = viewModel.getConsumablesToId(id)
                 }
             }
-            catch (e: Exception) {
+            else{
+                viewBinding.cBoxConsumablesLink.isChecked = false
+                viewBinding.consumblesLinkVisible.isVisible = false
+            }
+        }
+
+        private fun saveEquipment(viewModel: EquipmentViewModel) {
+            val consumablesLink = if (viewModel.activeIdItemLink != 0) {
+                viewModel.activeIdItemLink
+            } else -1
+
+            if (viewModel.controlConsumablesToId() || viewModel.activeIdItemLink == -1){
+                try {
+                    viewBinding.apply {
+                        val name = editNameEquipment.text.toString()
+                        val charge = editMaxCharge.text.toString().toInt()
+                        val step = editStep.text.toString().toInt()
+                        val test = cBoxTest.isChecked
+
+
+
+                        if (viewModel.activeIdItemSettings == 0) {
+                            viewModel.addEquipmentItem(name, charge, step, test, consumablesLink)
+                        } else {
+                            viewModel.updateEquipmentItem(
+                                EquipmentItem(
+                                    id = viewModel.activeIdItemSettings,
+                                    idPlayer = Player.getInstance().getIdActivePlayer(),
+                                    name = name,
+                                    charge = charge,
+                                    maxCharge = charge,
+                                    step = step,
+                                    test = test,
+                                    consumablesLink = consumablesLink
+                                )
+                            )
+                        }
+
+                        viewModel.setMode(0, 0)
+                    }
+                }
+                catch (e: Exception) {
+                    Snackbar.make(
+                        viewBinding.root,
+                        "Не заполнены значения Заряда и/или Степень убывания!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            else{
                 Snackbar.make(
                     viewBinding.root,
-                    "Не заполнены значения Заряда и/или Степень убывания!",
+                    "Выбранный рассходник не существует!",
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
+
+
 
         }
 

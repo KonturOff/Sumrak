@@ -118,7 +118,7 @@ class ResultRoll : Fragment() {
 
     //режим проверки Характеристик
     private fun checkValue(mode: String){
-        val player = position.let { HistoryRollManager.getInstance().getItem(it).player }!!
+        val player = position.let { HistoryRollManager.getInstance().getItem(it).player }
         modeTwo()
         viewBinding?.checkResult?.text = mode
         when(mode){

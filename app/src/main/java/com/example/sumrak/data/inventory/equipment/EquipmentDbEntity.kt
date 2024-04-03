@@ -22,7 +22,8 @@ data class EquipmentDbEntity(
     var charge: Int,
     val maxCharge: Int,
     val step: Int,
-    val test: Boolean
+    val test: Boolean,
+    val consumablesLink: Int
 ) {
 
     fun toEquipmentItem():EquipmentItem = EquipmentItem(
@@ -32,6 +33,7 @@ data class EquipmentDbEntity(
         charge = charge,
         maxCharge = maxCharge,
         step = step,
-        test = test
+        test = test,
+        consumablesLink = consumablesLink
     )
 }

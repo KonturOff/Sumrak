@@ -46,7 +46,7 @@ class EquipmentItemManager private constructor(){
     }
 
     fun getItemToId(id: Int): EquipmentItem{
-        var result = EquipmentItem(0,0,"",0,0,0,false)
+        var result = EquipmentItem(0,0,"",0,0,0,false, 0)
         for (i in 0..<equipmentItemList.size){
             if(id == equipmentItemList[i].id){
                 result = equipmentItemList[i]
@@ -77,6 +77,17 @@ class EquipmentItemManager private constructor(){
 
     fun getItemCount() : Int{
         return equipmentItemList.size
+    }
+
+    fun checkLinkToIdConsum(id: Int): Boolean{
+        var result = false
+        for (i in 0..<equipmentItemList.size){
+            if (equipmentItemList[i].consumablesLink == id){
+                result = true
+                break
+            }
+        }
+        return result
     }
 
 

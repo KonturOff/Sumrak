@@ -14,6 +14,7 @@ import com.example.sumrak.databinding.FragmentBattleBinding
 import com.example.sumrak.ui.battle.recycler.damage.Damage
 import com.example.sumrak.ui.battle.recycler.damage.DamageAdapter
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentB
+import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBViewModel
 import com.example.sumrak.ui.battle.recycler.equipment.item.EquipmentBItemAdapter
 import com.example.sumrak.ui.battle.recycler.information.Information
 import com.example.sumrak.ui.battle.recycler.initiative.Initiative
@@ -30,7 +31,7 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
     private lateinit var viewBinding: FragmentBattleBinding
     private lateinit var myInterface: Interface
     private lateinit var viewModel: BattleViewModel
-    private lateinit var equipmentViewModel: EquipmentViewModel
+    private lateinit var equipmentBViewModel: EquipmentBViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -44,17 +45,17 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
 
         viewBinding = FragmentBattleBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this).get(BattleViewModel::class.java)
-        equipmentViewModel = ViewModelProvider(this).get(EquipmentViewModel::class.java)
+        equipmentBViewModel = ViewModelProvider(this).get(EquipmentBViewModel::class.java)
 
         val battleManager = BattleManager.getInstance()
         //ВРЕМЕННОЕ РЕШЕНИЕ
         loadBattleView(battleManager)
 
-        //equipmentViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
+        equipmentBViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
 
         val layoutManager = LinearLayoutManager(context)
         viewBinding.recBattle.layoutManager = layoutManager
@@ -71,7 +72,7 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
                 requireContext(),
                 viewModel ,
                 this,
-                equipmentViewModel
+                equipmentBViewModel
             )
         viewBinding.recBattle.adapter = battleAdapter
 
@@ -80,10 +81,6 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
         itemTouchHelper.attachToRecyclerView(viewBinding.recBattle)
 
         return viewBinding.root
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
     }
 
     private fun loadBattleView(battleManager: BattleManager) {

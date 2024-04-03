@@ -12,7 +12,7 @@ import com.example.sumrak.Player
 import com.example.sumrak.databinding.FragmentCalculatorBinding
 import com.example.sumrak.ui.calculator.CalculatorViewModel
 
-class CalculatorFragment() : Fragment(), View.OnTouchListener {
+class CalculatorFragment : Fragment(), View.OnTouchListener {
 
     companion object {
         fun newInstance() = CalculatorFragment()

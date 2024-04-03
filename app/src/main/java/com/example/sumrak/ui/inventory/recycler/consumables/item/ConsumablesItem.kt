@@ -6,12 +6,14 @@ data class ConsumablesItem(
     val id: Int,
     val idPlayer: Int,
     val name : String,
-    val value : Int
+    var value : Int,
+    val link : Boolean
 ){
  fun toConsumablesDbEntity(): ConsumablesDbEntity = ConsumablesDbEntity(
      id = id,
      idPlayer = idPlayer,
      name = name,
-     value = value
+     value = value,
+     link = link
  )
 }

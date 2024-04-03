@@ -8,6 +8,8 @@ import com.example.sumrak.data.DataBase
 import com.example.sumrak.data.inventory.equipment.EquipmentDbEntity
 import com.example.sumrak.data.inventory.equipment.EquipmentRepository
 import com.example.sumrak.Player
+import com.example.sumrak.data.inventory.consumables.ConsumablesRepository
+import com.example.sumrak.ui.inventory.recycler.consumables.item.ConsumablesItemManager
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItem
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItemManager
 import kotlinx.coroutines.CoroutineScope
@@ -19,12 +21,16 @@ import kotlinx.coroutines.runBlocking
 class EquipmentViewModel(application: Application) : AndroidViewModel(application) {
 
     private val equipmentManager = EquipmentItemManager.getInstance()
+    private val consumablesManager = ConsumablesItemManager.getInstance()
 
     private val repository: EquipmentRepository
+    private val repositoryCons: ConsumablesRepository
 
     val equipmentItem = MutableLiveData<EquipmentItem>()
     var activeIdItemSettings = 0
     var activeIdItemRepair = 0
+    var activeIdItemLink = -1
+    val liveIdItemLink = MutableLiveData<Int>()
     val modeSettings = MutableLiveData<Int>()
 
     // TODO runBlocking - опасная команда, лучше искать альтернативы
@@ -64,19 +70,21 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun addEquipmentItem(name : String, change : Int, step : Int, test : Boolean){
-        val id = addEquipmentDb(EquipmentDbEntity(0, Player.getInstance().getIdActivePlayer(), name, change, change, step, test)).toInt()
-        equipmentManager.addItem(EquipmentItem(id, Player.getInstance().getIdActivePlayer(), name, change, change, step, test))
+    fun addEquipmentItem(name: String, change: Int, step: Int, test: Boolean, consumablesLink: Int){
+        val id = addEquipmentDb(EquipmentDbEntity(0, Player.getInstance().getIdActivePlayer(), name, change, change, step, test, consumablesLink)).toInt()
+        equipmentManager.addItem(EquipmentItem(id, Player.getInstance().getIdActivePlayer(), name, change, change, step, test, consumablesLink))
+        consumablesManager.replaceConsumablesView()
     }
 
     fun updateEquipmentItem(equipmentItem: EquipmentItem){
         updateEquipmentDb(equipmentItem.toEquipmentDbEntity())
         equipmentManager.updateItem(equipmentItem)
+        consumablesManager.replaceConsumablesView()
     }
 
     fun updateChargeEquipment(id: Int, change: Int){
         val item = equipmentManager.getItemToId(id)
-        item.charge = item.charge + change
+        item.charge += change
         if (item.charge<0) item.charge = 0
         equipmentManager.updateItem(item)
         updatechargeEquipmentDb(id, item.charge)
@@ -87,8 +95,10 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
         return equipmentManager.getItemToId(activeIdItemRepair)
     }
 
+
     fun replaceChangeEquipment(id: Int){
         val item = equipmentManager.getItemToId(id)
+        useConsyumablesToSaveBD(item.consumablesLink)
         item.charge = item.maxCharge
         equipmentManager.updateItem(item)
         updatechargeEquipmentDb(id, item.charge)
@@ -104,6 +114,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
         deleteEquipmentDb(id)
         equipmentManager.deleteItemToId(id)
         setMode(0,0)
+        consumablesManager.replaceConsumablesView()
     }
 
     fun setMode(mode: Int, id: Int){
@@ -111,7 +122,7 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
             modeSettings.postValue(mode)
             activeIdItemSettings = 0
             activeIdItemRepair = 0
-            equipmentItem.postValue(EquipmentItem(0,0,"",0,0,0,false))
+            equipmentItem.postValue(EquipmentItem(0,0,"",0,0,0,false, -1))
         }
         else{
             if (mode==3){
@@ -145,10 +156,64 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    fun controlConsumablesToId() : Boolean{
+        return consumablesManager.controlConsumablesToId(activeIdItemLink)
+    }
+
+    fun getValueConsumablesToId(id: Int) : Int{
+        return consumablesManager.getValueToConsumablesId(id)
+    }
+
+    fun useConsyumablesToSaveBD(id: Int){
+        consumablesManager.useConsumablesLinkEquipent(id)
+        val value = getValueConsumablesToId(id)
+
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryCons.updateValueConsumablesTuples(id, value)
+        }
+    }
+
+    fun setModeLink(mode: Boolean){
+        val item = equipmentManager.getItemToId(activeIdItemSettings)
+        activeIdItemLink = item.consumablesLink
+
+        if (mode){
+            if (consumablesManager.getItemCount()>0){
+                if (activeIdItemLink < 1){
+                    activeIdItemLink = consumablesManager.getLastConsumablesItemId()
+                }
+            }
+            else activeIdItemLink = 0
+        }
+        else{
+            activeIdItemLink = -1
+        }
+        liveIdItemLink.postValue(activeIdItemLink)
+
+    }
+
+    fun getConsumablesToId(id: Int) : String{
+        if (id == 0){
+            return "Отсутсвуют Расходники"
+        }
+        return "${consumablesManager.getItemToId(id).name} Количество: ${consumablesManager.getItemToId(id).value}"
+    }
+
+    fun stepConsumablesItemLink(step: Int){
+        val item = equipmentManager.getItemToId(activeIdItemSettings)
+        val newId = consumablesManager.nextConsumblesItemId(activeIdItemLink, step)
+        item.consumablesLink = newId
+        activeIdItemLink = newId
+        liveIdItemLink.postValue(activeIdItemLink)
+    }
+
 
     init {
         val daoEquipmentDb = DataBase.getDb(application).getEquipmentDao()
         repository = EquipmentRepository(daoEquipmentDb)
+
+        val daoConsumablesDb = DataBase.getDb(application).getConsumablesDao()
+        repositoryCons = ConsumablesRepository(daoConsumablesDb)
     }
 
 

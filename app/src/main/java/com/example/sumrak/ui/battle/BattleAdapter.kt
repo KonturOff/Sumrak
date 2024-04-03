@@ -7,9 +7,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.R
 import com.example.sumrak.ui.battle.recycler.damage.DamageAdapter
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBAdapter
+import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBViewModel
 import com.example.sumrak.ui.battle.recycler.information.InformationAdapter
 import com.example.sumrak.ui.battle.recycler.initiative.InititiveAdapter
-import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 
 
 class BattleAdapter(
@@ -18,7 +18,7 @@ class BattleAdapter(
     private val context: Context,
     private val battleViewModel: BattleViewModel,
     private val battleFragment: BattleFragment,
-    private val equipmentViewModel: EquipmentViewModel
+    private val equipmentBViewModel: EquipmentBViewModel
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -60,7 +60,7 @@ class BattleAdapter(
 //                    lifecycleOwner,
                     context = context,
                     battleFragment = battleFragment,
-                    equipmentViewModel = equipmentViewModel
+                    equipmentBViewModel = equipmentBViewModel
                 ).onCreateViewHolder(parent)
             else -> throw UnsupportedOperationException("ViewType not supported")
         }
@@ -103,7 +103,7 @@ class BattleAdapter(
 //                        lifecycleOwner,
                         context = context,
                         battleFragment = battleFragment,
-                        equipmentViewModel = equipmentViewModel
+                        equipmentBViewModel = equipmentBViewModel
                     )
         }
     }

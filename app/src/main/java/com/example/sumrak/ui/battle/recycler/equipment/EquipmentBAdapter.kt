@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sumrak.Player
 import com.example.sumrak.R
 import com.example.sumrak.databinding.MaketBattleEquipmentBinding
 import com.example.sumrak.ui.battle.BattleFragment
@@ -20,7 +19,7 @@ class EquipmentBAdapter(
 //    private val lifecycleOwner: LifecycleOwner,
     private val context: Context,
     private val battleFragment: BattleFragment,
-    private val equipmentViewModel: EquipmentViewModel
+    private val equipmentBViewModel: EquipmentBViewModel
 ) : DelegateAdapterB<EquipmentB, EquipmentBAdapter.EquipmentBViewHolder, BattleViewModel>() {
 
 
@@ -30,7 +29,7 @@ class EquipmentBAdapter(
         viewHolder.viewBinding.rvBEquipment.layoutManager = LinearLayoutManager(context)
 //        viewHolder.viewBinding.rvBEquipment.adapter = EquipmentBItemAdapter(equipmentViewModel)//, lifecycleOwner)
         viewHolder.viewBinding.rvBEquipment.adapter = EquipmentBItemAdapter(
-            equipmentViewModel,
+            equipmentBViewModel,
 //            lifecycleOwner,
             battleFragment
         )
@@ -47,7 +46,7 @@ class EquipmentBAdapter(
 //            lifecycleOwner,
             context = context,
             battleFragment = battleFragment,
-            equipmentViewModel = equipmentViewModel
+            equipmentBViewModel = equipmentBViewModel
         )
     }
 
@@ -60,20 +59,22 @@ class EquipmentBAdapter(
 //            lifecycleOwner: LifecycleOwner,
             context: Context,
             battleFragment: BattleFragment,
-            equipmentViewModel: EquipmentViewModel
+            equipmentBViewModel: EquipmentBViewModel
         ) {
-            equipmentViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
+            //equipmentViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
             viewBinding.apply {
                 rvBEquipment.layoutManager = LinearLayoutManager(context)
 //                rvBEquipment.adapter = EquipmentBItemAdapter(equipmentViewModel)//,lifecycleOwner)
                 rvBEquipment.adapter = EquipmentBItemAdapter(
-                    equipmentViewModel,
+                    equipmentBViewModel,
 //                    lifecycleOwner,
                     battleFragment
                 )
             }
 
         }
+
+
 
     }
 }
