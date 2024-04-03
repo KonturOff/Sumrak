@@ -98,7 +98,9 @@ class EquipmentViewModel(application: Application) : AndroidViewModel(applicatio
 
     fun replaceChangeEquipment(id: Int){
         val item = equipmentManager.getItemToId(id)
-        useConsyumablesToSaveBD(item.consumablesLink)
+        if (item.consumablesLink > 0){
+            useConsyumablesToSaveBD(item.consumablesLink)
+        }
         item.charge = item.maxCharge
         equipmentManager.updateItem(item)
         updatechargeEquipmentDb(id, item.charge)
