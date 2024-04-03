@@ -10,5 +10,4 @@ data class BattleItem(
     var position: Int,
     var isExpanded: Boolean, // Состояние элемента: true - раскрыт, false - свернут
     var view : BattleList
-) {
-}
+)

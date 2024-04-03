@@ -59,6 +59,13 @@
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <ImageView
+            android:id="@+id/imLink"
+            android:layout_width="35dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            app:srcCompat="@drawable/baseline_link_24" />
+
         <ImageButton
             android:id="@+id/btnDeleteConsumbles"
             android:layout_width="wrap_content"

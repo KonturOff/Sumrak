@@ -5,9 +5,11 @@ import android.content.Context
 import android.os.Vibrator
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sumrak.ui.inventory.InventoryAdapter
 
-class BattleItemTouchHelper(private val adapter: BattleAdapter, private val context: Context) : ItemTouchHelper.Callback() {
+class BattleItemTouchHelper(
+    private val adapter: BattleAdapter,
+    context: Context
+) : ItemTouchHelper.Callback() {
     private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {

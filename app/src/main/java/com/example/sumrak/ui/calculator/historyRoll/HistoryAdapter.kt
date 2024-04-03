@@ -4,12 +4,13 @@ import android.view.View
 import android.view.ViewGroup
 
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sumrak.Lists.HistoryRoll
-import com.example.sumrak.Lists.HistoryRollManager
-import com.example.sumrak.ui.calculator.CalculatorViewModel
+import com.example.sumrak.lists.HistoryRoll
+import com.example.sumrak.lists.HistoryRollManager
 
+// TODO передавать фрагмент в конструктор какого0либо класса - очень плохая идея.
+//  Лучше использовать коллбэки или прослойки в виде интерфейсов
 class HistoryAdapter(
-    private val hirstoryCalculatorFragment: HirstoryCalculatorFragment
+    private val historyCalculatorFragment: HistoryCalculatorFragment
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val historyRollManager = HistoryRollManager.getInstance()
@@ -20,10 +21,10 @@ class HistoryAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when(viewType){
-            TYPE_CALCULATOR -> CalculatorAdaper(hirstoryCalculatorFragment).onCreateViewHolder(parent)
-            TYPE_FUSS_CHECK -> FussAdapter(hirstoryCalculatorFragment).onCreateViewHolder(parent)
-            TYPE_INITIATIVE -> InitiativeRVAdapter(hirstoryCalculatorFragment).onCreateViewHolder(parent)
-            else -> OtherAdapter(hirstoryCalculatorFragment).onCreateViewHolder(parent)
+            TYPE_CALCULATOR -> CalculatorAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
+            TYPE_FUSS_CHECK -> FussAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
+            TYPE_INITIATIVE -> InitiativeRVAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
+            else -> OtherAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
         }
     }
 
@@ -32,10 +33,10 @@ class HistoryAdapter(
         val historyRoll = historyRollManager.getItem(position)
 
         when (getItemViewType(position)) {
-            TYPE_CALCULATOR -> (holder as CalculatorAdaper.CalculatorViewHolder).bind(historyRoll, position, hirstoryCalculatorFragment)
-            TYPE_FUSS_CHECK ->(holder as FussAdapter.FussViewHolder).bind(historyRoll, position, hirstoryCalculatorFragment)
-            TYPE_INITIATIVE -> (holder as InitiativeRVAdapter.InitiativeRVViewHolder).bind(historyRoll, position, hirstoryCalculatorFragment)
-            else ->  (holder as OtherAdapter.OtherViewHolder).bind(historyRoll, position, hirstoryCalculatorFragment)
+            TYPE_CALCULATOR -> (holder as CalculatorAdapter.CalculatorViewHolder).bind(historyRoll, position, historyCalculatorFragment)
+            TYPE_FUSS_CHECK ->(holder as FussAdapter.FussViewHolder).bind(historyRoll, position, historyCalculatorFragment)
+            TYPE_INITIATIVE -> (holder as InitiativeRVAdapter.InitiativeRVViewHolder).bind(historyRoll, position, historyCalculatorFragment)
+            else ->  (holder as OtherAdapter.OtherViewHolder).bind(historyRoll, position, historyCalculatorFragment)
         }
     }
 

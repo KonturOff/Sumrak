@@ -1,13 +1,12 @@
 package com.example.sumrak.ui.inventory.recycler.effects
 
 import android.app.Application
-import android.provider.ContactsContract.Data
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.sumrak.Data.DataBase
-import com.example.sumrak.Data.inventory.effects.EffectsRepository
-import com.example.sumrak.Data.inventory.effects.TuplesEffectsCheck
+import com.example.sumrak.data.DataBase
+import com.example.sumrak.data.inventory.effects.EffectsRepository
+import com.example.sumrak.data.inventory.effects.TuplesEffectsCheck
 import com.example.sumrak.Player
 import com.example.sumrak.ui.inventory.recycler.effects.item.EffectsItem
 import com.example.sumrak.ui.inventory.recycler.effects.item.EffectsItemManager
@@ -19,10 +18,10 @@ import kotlinx.coroutines.runBlocking
 
 class EffectsViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: EffectsRepository
-    val effItemManager = EffectsItemManager.getInstance()
+    private val effItemManager = EffectsItemManager.getInstance()
 
-    var visiblev = true
-    var visibleView = MutableLiveData<Boolean>()
+    private var visiblev = true
+    private var visibleView = MutableLiveData<Boolean>()
     var index = -1
     var indexTvValue = MutableLiveData<Int>()
     var modeSettings = MutableLiveData<Int>()
@@ -40,7 +39,6 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-
     fun modeSettings(visible: Boolean) {
         if (visible){
             effectConstructor = listOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0).toMutableList()
@@ -51,9 +49,8 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-
     fun addEffect(name : String){
-        var neweffect = EffectsItem(0,
+        val newEffect = EffectsItem(0,
             Player.getInstance().getIdActivePlayer(),
             name,
             1,
@@ -71,14 +68,13 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
             effectConstructor[11]
             )
 
-        neweffect.id = runBlocking {
+        newEffect.id = runBlocking {
             val result = CoroutineScope(Dispatchers.IO).async {
-                repository.addEffects(neweffect.toEffectsDbEntity())
+                repository.addEffects(newEffect.toEffectsDbEntity())
             }
             result.await()
         }.toInt()
-        effItemManager.addItem(neweffect)
-
+        effItemManager.addItem(newEffect)
     }
 
     fun getEffectsToPlayerId(id : Int){
@@ -92,14 +88,14 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
 
     fun deleteEffect(id: Int){
         modeSettings.postValue(0)
-        effItemManager.deleteitem(id)
+        effItemManager.deleteItem(id)
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteEffectsToId(id)
         }
     }
 
     fun updateCheckEffectsToPosition(id: Int, check : Int){
-        effItemManager.updateChekItemToPosition(id, check)
+        effItemManager.updateCheckItemToPosition(id, check)
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateCheckEffects(TuplesEffectsCheck(id, check))
         }
@@ -195,8 +191,6 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
             "Бонус Силы: " -> index = 10
             "Бонус Устойчивости: " -> index = 11
             "Все Характеристики" -> index = 20
-
-
         }
         indexTvValue.postValue(index)
 

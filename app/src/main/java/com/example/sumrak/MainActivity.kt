@@ -4,23 +4,24 @@ import android.os.Bundle
 import android.view.MotionEvent
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.asLiveData
 import androidx.navigation.findNavController
 import androidx.navigation.ui.setupWithNavController
-import com.example.sumrak.Data.playerdb.PlayerDbEntity
-import com.example.sumrak.Data.playerdb.PlayerViewModel
-import com.example.sumrak.Lists.HistoryRoll
-import com.example.sumrak.Lists.HistoryRollManager
-import com.example.sumrak.Sound.Sound
+import com.example.sumrak.data.playerdb.PlayerDbEntity
+import com.example.sumrak.data.playerdb.PlayerViewModel
+import com.example.sumrak.lists.HistoryRoll
+import com.example.sumrak.lists.HistoryRollManager
+import com.example.sumrak.sound.Sound
 import com.example.sumrak.databinding.ActivityMainBinding
 import com.example.sumrak.ui.battle.BattleFragment
 import com.example.sumrak.ui.calculator.MainCalculatorFragment
 import com.example.sumrak.ui.calculator.calculator.CalculatorFragment
-import com.example.sumrak.ui.calculator.historyRoll.HirstoryCalculatorFragment
+import com.example.sumrak.ui.calculator.historyRoll.HistoryCalculatorFragment
 import com.example.sumrak.ui.home.HomeFragment
 import com.example.sumrak.ui.inventory.InventoryFragment
-import com.example.sumrak.ui.other_fragments.Result_roll
+import com.example.sumrak.ui.other_fragments.ResultRoll
 import com.example.sumrak.ui.profile.AddPlayer
 import com.example.sumrak.ui.profile.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -30,52 +31,51 @@ class MainActivity :
     AppCompatActivity(),
     CalculatorFragment.Interface,
     MainCalculatorFragment.Interface,
-    HirstoryCalculatorFragment.Interface,
+    HistoryCalculatorFragment.Interface,
     ProfileFragment.Interface,
     HomeFragment.Interface,
     BattleFragment.Interface,
     InventoryFragment.Interface,
     AddPlayer.Interface,
     View.OnTouchListener,
-    Result_roll.InterfaceResulRoll {
+    ResultRoll.InterfaceResulRoll {
 
-    private lateinit var b: ActivityMainBinding
-    private lateinit var playerViewModel : PlayerViewModel
-
-
-
+    private var viewBinding: ActivityMainBinding? = null
+    private var playerViewModel : PlayerViewModel? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        b = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(b.root)
+        viewBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(viewBinding?.root)
         playerViewModel = ViewModelProvider(this).get(PlayerViewModel::class.java)
         Sound.getInstance().loadSound(this)
         load()
 
-
-        val navView: BottomNavigationView = b.navView
+        val navView: BottomNavigationView? = viewBinding?.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
 
-        navView.setupWithNavController(navController)
+        navView?.setupWithNavController(navController)
         // получаем информацию о том какой раздел открыт, при необходимости скрываем Player Bar
         navController.addOnDestinationChangedListener { _, destination, _ ->
             when (destination.id) {
                 R.id.mainCalculatorFragment -> {
-                    //b.playerBar.visibility = View.GONE
-                    b.leftPlayer.visibility = View.GONE
-                    b.rightPlayer.visibility = View.GONE
-                    b.namePlayer.text = Player.getInstance().getRandomText()
+                    viewBinding?.apply {
+                        //playerBar.isVisible = false
+                        leftPlayer.isVisible = false
+                        rightPlayer.isVisible = false
+                        namePlayer.text = Player.getInstance().getRandomText()
+                    }
                 }
                 else -> {
-                    b.playerBar.visibility = View.VISIBLE
-                    if (Player.getInstance().getPlayerCount()>1){
-                        b.leftPlayer.visibility = View.VISIBLE
-                        b.rightPlayer.visibility = View.VISIBLE
+                    viewBinding?.apply {
+                       playerBar.isVisible = true
+                        if (Player.getInstance().getPlayerCount() > 1) {
+                            leftPlayer.isVisible = true
+                            rightPlayer.isVisible = true
+                        }
                     }
-
                 }
             }
         }
@@ -84,112 +84,110 @@ class MainActivity :
 
         }
        // Обрабатывает нажатия на панели навигации
-        navView.setOnItemSelectedListener {Menuitem ->
-            when (Menuitem.itemId){
+        navView?.setOnItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
                 R.id.mainCalculatorFragment ->{
                     navController.navigate(R.id.mainCalculatorFragment)
                 }
                 R.id.navigation_inventory ->{
                     navController.navigate(R.id.navigation_inventory)
-                    b.namePlayer.text = Player.getInstance().getNamePlayer()
+                    viewBinding?.namePlayer?.text = Player.getInstance().getNamePlayer()
                 }
                 R.id.navigation_home ->{
                     navController.navigate(R.id.navigation_home)
-                    b.namePlayer.text = Player.getInstance().getNamePlayer()
+                    viewBinding?.namePlayer?.text = Player.getInstance().getNamePlayer()
                 }
                 R.id.navigation_battle ->{
                     navController.navigate(R.id.navigation_battle)
-                    b.namePlayer.text = Player.getInstance().getNamePlayer()
+                    viewBinding?.namePlayer?.text = Player.getInstance().getNamePlayer()
                 }
                 R.id.navigation_profile -> {
                     navController.navigate(R.id.navigation_profile)
-                    b.namePlayer.text = Player.getInstance().getNamePlayer()
+                    viewBinding?.namePlayer?.text = Player.getInstance().getNamePlayer()
                 }
             }
             true
         }
         // Обрабатываем повторные нажатия на панели навигации
-        navView.setOnItemReselectedListener { item->
+        navView?.setOnItemReselectedListener { item->
             when(item.itemId){
                 R.id.navigation_profile ->{navController.navigate(R.id.navigation_profile)}
             }
         }
 
         //Тут получаем актуальные данные по Активному id игрока (лучше ничего не придумал)
-        playerViewModel.readSettings.asLiveData().observe(this){list->
+        playerViewModel?.readSettings?.asLiveData()?.observe(this) { list->
             list.forEach {
-                Player.getInstance().activPosPlayer = Player.getInstance().getPosPlayer(it.value)
-                playerViewModel.getPlayerVariableToId(it.value)
+                Player.getInstance().activePosPlayer = Player.getInstance().getPosPlayer(it.value)
+                playerViewModel?.getPlayerVariableToId(it.value)
             }
             navController.currentDestination?.id?.let { it1 -> navController.navigate(it1)
                 if (Player.getInstance().getPlayerCount()!=0){
-                    b.namePlayer.text = Player.getInstance().getNamePlayer()
+                    viewBinding?.namePlayer?.text = Player.getInstance().getNamePlayer()
 
                 }
             }
             countPlayer()
         }
 
-
-
-        b.rightPlayer.setOnClickListener {
-            playerViewModel.changeActivePlayer(1)
+        viewBinding?.apply {
+            rightPlayer.setOnClickListener {
+                playerViewModel?.changeActivePlayer(1)
+            }
+            leftPlayer.setOnClickListener {
+                playerViewModel?.changeActivePlayer(-1)
+            }
         }
-        b.leftPlayer.setOnClickListener {
-            playerViewModel.changeActivePlayer(-1)
-        }
-
-
-
     }
 
     private fun isDataSettings(): Boolean {
-        return playerViewModel.getCountSettings() != 0
+        return playerViewModel?.getCountSettings() != 0
     }
 
     private fun countPlayer() {
-        b.navView.visibility = View.VISIBLE
-        if (Player.getInstance().getPlayerCount() == 1){
-            b.playerBar.visibility = View.VISIBLE
-            b.leftPlayer.visibility = View.GONE
-            b.rightPlayer.visibility = View.GONE
+        viewBinding?.apply {
+            navView.isVisible = true
+            when(Player.getInstance().getPlayerCount()) {
+                1 -> {
+                    playerBar.isVisible = true
+                    leftPlayer.isVisible = false
+                    rightPlayer.isVisible = false
+                }
+                0 -> {
+                    playerBar.isVisible = false
+                    navView.isVisible = false
+                }
+                else -> {
+                    leftPlayer.isVisible = true
+                    rightPlayer.isVisible = true
+                }
+            }
         }
-        else if (Player.getInstance().getPlayerCount() ==0){
-            b.playerBar.visibility = View.GONE
-            b.navView.visibility = View.GONE
-        }
-        else{
-            b.leftPlayer.visibility = View.VISIBLE
-            b.rightPlayer.visibility = View.VISIBLE
-        }
-
     }
-
 
     private fun load() {
         PlayerViewModel.getInstance(application).loadData()
         //PlayerViewModel.getInstance(application).loadSettings()
     }
 
-
     override fun get_result_roll(cube: String, player: Int, mode : String, bonus: Int, position: Int?) {
-        val Result_roll = Result_roll()
-        remove_fragment_roll()
-        lateinit var result : ArrayList<String>
+        val resultRoll = ResultRoll()
+        removeFragmentRoll()
+        var result : ArrayList<String>? = null
         // Если передается позиция, значит это рерол, и мы меняем переданый результат на новый
         if (position != null){
-            val get_reroll_cube = HistoryRollManager.getInstance().getItem(position)
-            result = Player.roll_cube(get_reroll_cube.cube)
-            var param = Player.getInstance().getPlayerParametr(player, mode)
-            if (get_reroll_cube.mode == "Проверка Уклонения" || get_reroll_cube.mode == "Проверка Парирования"|| get_reroll_cube.mode.contains("Убывающий Тест") ){
-                param = get_reroll_cube.parameter
+            val getRerollCube = HistoryRollManager.getInstance().getItem(position)
+            result = Player.rollCube(getRerollCube.cube)
+            var param = Player.getInstance().getPlayerParameter(player, mode)
+            if (getRerollCube.mode == "Проверка Уклонения" || getRerollCube.mode == "Проверка Парирования"|| getRerollCube.mode.contains("Убывающий Тест") ){
+                param = getRerollCube.parameter
             }
-            HistoryRollManager.getInstance().updateItem(position, HistoryRoll(result[0],result[1],result[2],result[3], player, mode, param, get_reroll_cube.value, get_reroll_cube.bonus))
+            HistoryRollManager.getInstance().updateItem(position, HistoryRoll(result[0],result[1],result[2],result[3], player, mode, param, getRerollCube.value, getRerollCube.bonus))
         }
         //Если позиция не передана, значит это обычный бросок, записываем результат как новый
         else {
             var value = 0
-            result = Player.roll_cube(cube)
+            result = Player.rollCube(cube)
             if (mode == "Проверка Инициативы") {
                 when (result[1].toInt()) {
                     1 -> value = 8
@@ -197,18 +195,30 @@ class MainActivity :
                     else -> value = 4
                 }
             }
-            var param = Player.getInstance().getPlayerParametr(player, mode)
+            var param = Player.getInstance().getPlayerParameter(player, mode)
             if (mode== "Проверка Уклонения"){
-                param = Player.getInstance().playerEntity.dodge
+                param = Player.getInstance().playerEntity?.dodge ?: 0
             }
             if (mode == "Проверка Парирования"){
-                param = Player.getInstance().playerEntity.parrying
+                param = Player.getInstance().playerEntity?.parrying ?: 0
             }
             if (mode.contains("Убывающий Тест")){
                 param = bonus
             }
 
-            HistoryRollManager.getInstance().addItem(HistoryRoll(result[0],result[1],result[2],result[3], player, mode, param, value,0))
+            HistoryRollManager.getInstance().addItem(
+                HistoryRoll(
+                    result[0],
+                    result[1],
+                    result[2],
+                    result[3],
+                    player,
+                    mode,
+                    param,
+                    value,
+                    0
+                )
+            )
         }
 
         Sound.getInstance().playSound(result[0], result[1])
@@ -220,29 +230,27 @@ class MainActivity :
         bundle.putString("text_roll", result[2])
         bundle.putString("color", result[3])
         bundle.putString("mode", mode)
-        if (position!=null){
+
+        if (position!=null) {
             bundle.putInt("position", position)
+        } else {
+            bundle.putInt("position", 0)
         }
-        else{bundle.putInt("position", 0)}
 
-
-
-        Result_roll.arguments = bundle
+        resultRoll.arguments = bundle
         supportFragmentManager.beginTransaction()
-            .replace(R.id.conteiner_fragment_roll, Result_roll)
+            .replace(R.id.conteiner_fragment_roll, resultRoll)
             .commit()
 
     }
 
-
-
     override fun touch_screen() {
-        remove_fragment_roll()
-
+        removeFragmentRoll()
     }
 
 
     // Наверное нахуй не нужна
+    // TODO похоже, что реально нахуй не нужна
     override fun onTouch(v: View?, event: MotionEvent?): Boolean {
         when (event?.action) {
             MotionEvent.ACTION_DOWN -> {
@@ -254,14 +262,14 @@ class MainActivity :
             MotionEvent.ACTION_UP -> {
                 // Обработка отпускания пальца с экрана
                 // удаляем фрагмент "Результат броска"
-                remove_fragment_roll()
+                removeFragmentRoll()
             }
         }
         return true
     }
 
     //Проверяем есть ли активный фрагмент в контейнере, если есть - удаляем
-    private fun remove_fragment_roll(){
+    private fun removeFragmentRoll(){
         val oldFragment = supportFragmentManager.findFragmentById(R.id.conteiner_fragment_roll)
         oldFragment?.let {
             supportFragmentManager.beginTransaction()
@@ -271,17 +279,13 @@ class MainActivity :
     }
 
     //Убираем Бар при входе в редактор персонажа
-    override fun edit_player() {
-        b.playerBar.visibility = View.GONE
+    override fun editPlayer() {
+        viewBinding?.playerBar?.isVisible = false
     }
 
 
 
-    override fun save_player(player: PlayerDbEntity) {
-        playerViewModel.addPlayer(player)
+    override fun savePlayer(player: PlayerDbEntity) {
+        playerViewModel?.addPlayer(player)
     }
-
-
-
-
 }

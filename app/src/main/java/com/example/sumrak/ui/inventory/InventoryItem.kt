@@ -1,6 +1,6 @@
 package com.example.sumrak.ui.inventory
 
-import com.example.sumrak.Data.inventory.inventoryItem.InventoryItemEntity
+import com.example.sumrak.data.inventory.inventoryItem.InventoryItemEntity
 import com.example.sumrak.ui.inventory.recycler.InventoryList
 
 
@@ -12,15 +12,12 @@ data class InventoryItem(
     var isExpanded: Boolean, // Состояние элемента: true - раскрыт, false - свернут
     var view : InventoryList
 
-)
-{
-
-
+) {
     fun toInventoryItemEntity() : InventoryItemEntity = InventoryItemEntity(
         id = id,
         idPlayer = idPlayer,
         type = type,
         position = position,
         isExpanded = isExpanded
-        )
+    )
 }

@@ -12,8 +12,8 @@ import com.example.sumrak.ui.inventory.recycler.armor.Armor
 import com.example.sumrak.ui.inventory.recycler.armor.ArmorViewModel
 import com.example.sumrak.ui.inventory.recycler.arsenal.Arsenal
 import com.example.sumrak.ui.inventory.recycler.consumables.Consumbles
-import com.example.sumrak.ui.inventory.recycler.consumables.ConsumblesAdapter
-import com.example.sumrak.ui.inventory.recycler.consumables.ConsumblesViewModel
+import com.example.sumrak.ui.inventory.recycler.consumables.ConsumablesAdapter
+import com.example.sumrak.ui.inventory.recycler.consumables.ConsumablesViewModel
 import com.example.sumrak.ui.inventory.recycler.effects.Effects
 import com.example.sumrak.ui.inventory.recycler.effects.EffectsAdapter
 import com.example.sumrak.ui.inventory.recycler.effects.EffectsViewModel
@@ -30,15 +30,11 @@ class InventoryAdapter(
     private val inventoryFragment: InventoryFragment
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-
-
     fun onItemMove(fromPosition: Int, toPosition: Int) {
         inventoryManager.items.add(toPosition, inventoryManager.items.removeAt(fromPosition))
         notifyItemMoved(fromPosition, toPosition)
         inventoryViewModel.updateItemsToInventoryList()
-
     }
-
 
     override fun getItemViewType(position: Int): Int {
         return inventoryManager.getItem(position).view.viewType
@@ -49,7 +45,7 @@ class InventoryAdapter(
             R.layout.maket_inventory_effects -> EffectsAdapter(viewModels.getValue(viewType) as EffectsViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
             R.layout.maket_inventory_arsenal -> ArsenalAdapter().onCreateViewHolder(parent)
             R.layout.maket_inventory_armor -> ArmorAdapter(viewModels.getValue(viewType) as ArmorViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
-            R.layout.maket_inventory_consumables -> ConsumblesAdapter(viewModels.getValue(viewType) as ConsumblesViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
+            R.layout.maket_inventory_consumables -> ConsumablesAdapter(viewModels.getValue(viewType) as ConsumablesViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
             R.layout.maket_inventory_equipment -> EquipmentAdapter(viewModels.getValue(viewType) as EquipmentViewModel, lifecycleOwner, context, inventoryViewModel, inventoryFragment).onCreateViewHolder(parent)
             else -> throw UnsupportedOperationException("ViewType not supported")
         }
@@ -61,7 +57,7 @@ class InventoryAdapter(
             R.layout.maket_inventory_effects -> (holder as EffectsAdapter.EffectsViewHolder).bind(
                 items.view as Effects,
                 viewModels.getValue(items.view.viewType) as EffectsViewModel,
-                lifecycleOwner,
+//                lifecycleOwner,
                 context,
                 inventoryViewModel
             )
@@ -73,18 +69,20 @@ class InventoryAdapter(
                 context,
                 inventoryViewModel
             )
-            R.layout.maket_inventory_consumables -> (holder as ConsumblesAdapter.ConsumblesViewHolder).bind(
+            R.layout.maket_inventory_consumables -> (holder as ConsumablesAdapter.ConsumablesViewHolder).bind(
                 items.view as Consumbles,
-                viewModels.getValue(items.view.viewType) as ConsumblesViewModel,
-                lifecycleOwner,
+                viewModels.getValue(items.view.viewType) as ConsumablesViewModel,
+//                lifecycleOwner,
                 context,
                 inventoryViewModel
             )
             R.layout.maket_inventory_equipment -> (holder as EquipmentAdapter.EquipmentViewHolder).bind(
                 items.view as Equipment,
                 viewModels.getValue(items.view.viewType) as EquipmentViewModel,
-                lifecycleOwner,
-                context, inventoryViewModel, inventoryFragment
+//                lifecycleOwner,
+                context,
+                inventoryViewModel,
+                inventoryFragment
             )
         }
 

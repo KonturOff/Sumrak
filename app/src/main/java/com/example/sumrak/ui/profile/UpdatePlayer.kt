@@ -8,8 +8,8 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
-import com.example.sumrak.Data.playerdb.PlayerDbEntity
-import com.example.sumrak.Data.playerdb.PlayerViewModel
+import com.example.sumrak.data.playerdb.PlayerDbEntity
+import com.example.sumrak.data.playerdb.PlayerViewModel
 import com.example.sumrak.Player
 import com.example.sumrak.R
 import com.example.sumrak.databinding.FragmentUpdatePlayerBinding
@@ -17,24 +17,16 @@ import com.google.android.material.snackbar.Snackbar
 
 class UpdatePlayer : Fragment() {
 
-    private lateinit var b: FragmentUpdatePlayerBinding
-    private lateinit var navController: NavController
-    private lateinit var playerViewModel : PlayerViewModel
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
+    private var viewBinding: FragmentUpdatePlayerBinding? = null
+    private var navController: NavController? = null
+    private var playerViewModel : PlayerViewModel? = null
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-        b = FragmentUpdatePlayerBinding.inflate(layoutInflater)
-
-        return b.root
+        viewBinding = FragmentUpdatePlayerBinding.inflate(layoutInflater)
+        return viewBinding?.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,57 +35,65 @@ class UpdatePlayer : Fragment() {
         navController = Navigation.findNavController(view)
         playerViewModel = ViewModelProvider(this).get(PlayerViewModel::class.java)
 
-        b.btnBack.setOnClickListener { navController.navigate(R.id.action_updatePlayer_to_navigation_profile)}
+        viewBinding?.apply {
+            btnBack.setOnClickListener { navController?.navigate(R.id.action_updatePlayer_to_navigation_profile) }
 
-        val player = playerViewModel.getPlayerToId(Player.getInstance().getIdActivePlayer())
-        b.editNamePlayer.setText(player.name_player)
-        b.editDb.setText(player.db.toString())
-        b.editBb.setText(player.bb.toString())
-        b.editPower.setText(player.power.toString())
-        b.editDexterity.setText(player.dexterity.toString())
-        b.editVolition.setText(player.volition.toString())
-        b.editEndurance.setText(player.endurance.toString())
-        b.editIntelect.setText(player.intelect.toString())
-        b.editInsihgt.setText(player.insihgt.toString())
-        b.editObservation.setText(player.observation.toString())
-        b.editChsarisma.setText(player.chsarisma.toString())
-        b.editHP.setText(player.max_hp.toString())
-        b.editXP.setText(player.xp.toString())
-        b.editInfluence.setText(player.influence.toString())
-        b.editFate.setText(player.max_fate.toString())
+            val player = playerViewModel?.getPlayerToId(Player.getInstance().getIdActivePlayer())
+            editNamePlayer.setText(player?.namePlayer)
+            editDb.setText(player?.db.toString())
+            editBb.setText(player?.bb.toString())
+            editPower.setText(player?.power.toString())
+            editDexterity.setText(player?.dexterity.toString())
+            editVolition.setText(player?.volition.toString())
+            editEndurance.setText(player?.endurance.toString())
+            editIntelect.setText(player?.intelect.toString())
+            editInsihgt.setText(player?.insihgt.toString())
+            editObservation.setText(player?.observation.toString())
+            editChsarisma.setText(player?.chsarisma.toString())
+            editHP.setText(player?.maxHp.toString())
+            editXP.setText(player?.xp.toString())
+            editInfluence.setText(player?.influence.toString())
+            editFate.setText(player?.maxFate.toString())
 
-        b.saveStats.setOnClickListener {
-            try {
-                val player = PlayerDbEntity(
-                    Player.getInstance().getActivePlayer().id,
-                    b.editNamePlayer.text.toString(),
-                    b.editDb.text.toString().toInt(),
-                    b.editBb.text.toString().toInt(),
-                    b.editPower.text.toString().toInt(),
-                    b.editDexterity.text.toString().toInt(),
-                    b.editVolition.text.toString().toInt(),
-                    b.editEndurance.text.toString().toInt(),
-                    b.editIntelect.text.toString().toInt(),
-                    b.editInsihgt.text.toString().toInt(),
-                    b.editObservation.text.toString().toInt(),
-                    b.editChsarisma.text.toString().toInt(),
-                    b.editHP.text.toString().toInt(),
-                    b.editFate.text.toString().toInt(),
-                    b.editInfluence.text.toString().toInt(),
-                    b.editXP.text.toString().toInt(),
-                    Player.getInstance().getActivePlayer().active_armor,
-                    Player.getInstance().getActivePlayer().active_arsenal)
+            saveStats.setOnClickListener {
+                try {
+                    val player = PlayerDbEntity(
+                        Player.getInstance().getActivePlayer().id,
+                        editNamePlayer.text.toString(),
+                        editDb.text.toString().toInt(),
+                        editBb.text.toString().toInt(),
+                        editPower.text.toString().toInt(),
+                        editDexterity.text.toString().toInt(),
+                        editVolition.text.toString().toInt(),
+                        editEndurance.text.toString().toInt(),
+                        editIntelect.text.toString().toInt(),
+                        editInsihgt.text.toString().toInt(),
+                        editObservation.text.toString().toInt(),
+                        editChsarisma.text.toString().toInt(),
+                        editHP.text.toString().toInt(),
+                        editFate.text.toString().toInt(),
+                        editInfluence.text.toString().toInt(),
+                        editXP.text.toString().toInt(),
+                        Player.getInstance().getActivePlayer().activeArmor,
+                        Player.getInstance().getActivePlayer().activeArsenal
+                    )
 
-                playerViewModel.updatePlayer(player)
-                playerViewModel.setIdActivePlayer(Player.getInstance().getActivePlayer().id!!)
-                navController.navigate(R.id.navigation_home)
-            }
-            catch (e: Exception){
-                Snackbar.make(b.root, "Для сохранения изменений необходимо заполнить все поля!", Snackbar.LENGTH_SHORT).show()
+                    playerViewModel?.updatePlayer(player)
+                    playerViewModel?.setIdActivePlayer(Player.getInstance().getActivePlayer().id!!)
+                    navController?.navigate(R.id.navigation_home)
+                } catch (e: Exception) {
+                    viewBinding?.let { view ->
+                        Snackbar
+                            .make(
+                                view.root,
+                                "Для сохранения изменений необходимо заполнить все поля!",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                    }
 
+                }
             }
         }
-
     }
 
     //fun hp():Int{

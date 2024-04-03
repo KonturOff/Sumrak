@@ -1,6 +1,6 @@
 package com.example.sumrak.ui.inventory.recycler.equipment.item
 
-import com.example.sumrak.Data.inventory.equipment.EquipmentDbEntity
+import com.example.sumrak.data.inventory.equipment.EquipmentDbEntity
 
 data class EquipmentItem(
     val id : Int,
@@ -9,15 +9,17 @@ data class EquipmentItem(
     var charge: Int,
     val maxCharge: Int,
     val step: Int,
-    val test: Boolean
+    val test: Boolean,
+    var consumablesLink: Int
 ) {
-    fun ToEquipmentDbEntity() : EquipmentDbEntity = EquipmentDbEntity(
+    fun toEquipmentDbEntity() : EquipmentDbEntity = EquipmentDbEntity(
         id = id,
         idPlayer = idPlayer,
         name = name,
         charge = charge,
         maxCharge = maxCharge,
         step = step,
-        test = test
+        test = test,
+        consumablesLink = consumablesLink
     )
 }

@@ -4,13 +4,14 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.sumrak.Data.DataBase
-import com.example.sumrak.Data.inventory.inventoryItem.InventoryItemRepository
+import com.example.sumrak.data.DataBase
+import com.example.sumrak.data.inventory.inventoryItem.InventoryItemRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
 class InventoryViewModel(application: Application) : AndroidViewModel(application) {
+
     private val repository: InventoryItemRepository
     private val inventoryManager = InventoryManager.getInstance()
 
@@ -44,14 +45,14 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun updateVisbleView(name: String){
+    fun updateVisibleView(name: String){
         inventoryManager.toggleItemState(name)
         val item = inventoryManager.getItemToName(name)
         getVisibleView(name)
         updateVisibleViewToBd(item.id, item.isExpanded)
     }
 
-    fun updateVisibleViewToBd(id : Int, isExpanded:Boolean){
+    private fun updateVisibleViewToBd(id : Int, isExpanded:Boolean){
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateVisibleToId(id, isExpanded)
         }
@@ -67,8 +68,6 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
 
         }
     }
-
-
 
 
     init {

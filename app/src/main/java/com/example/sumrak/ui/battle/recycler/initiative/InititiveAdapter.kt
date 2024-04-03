@@ -1,11 +1,10 @@
 package com.example.sumrak.ui.battle.recycler.initiative
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.Player
 import com.example.sumrak.R
@@ -16,15 +15,13 @@ import com.example.sumrak.ui.battle.recycler.DelegateAdapterB
 class InititiveAdapter(
     private val battleViewModel: BattleViewModel,
     private val lifecycleOwner: LifecycleOwner,
-    private val context: Context,
+//    private val context: Context,
     private val buttonClickListener: OnButtonClickListener
 ): DelegateAdapterB<Initiative, InititiveAdapter.InitiativeViewHolder, BattleViewModel>() {
-
 
     interface OnButtonClickListener {
         fun rollInitiativeActivePlayer()
         fun rollInitiativeAllPlayers()
-
     }
 
 
@@ -34,7 +31,13 @@ class InititiveAdapter(
     }
 
     override fun onBindViewHolder(holder: InitiativeViewHolder, item: Initiative) {
-        holder.bind(item, battleViewModel, lifecycleOwner, context, buttonClickListener)
+        holder.bind(
+//            item,
+            viewModel = battleViewModel,
+//            lifecycleOwner,
+//            context,
+//            buttonClickListener
+        )
     }
 
     class InitiativeViewHolder(
@@ -43,45 +46,43 @@ class InititiveAdapter(
         lifecycleOwner: LifecycleOwner,
         private val buttonClickListener: OnButtonClickListener
     ) : RecyclerView.ViewHolder(itemView) {
-        val b = MaketBattleInitiativeBinding.bind(itemView)
+        private val viewBinding = MaketBattleInitiativeBinding.bind(itemView)
 
         init {
             viewModel.getInitiativePlayer(Player.getInstance().getIdActivePlayer())
-            viewModel.initiativeV.observe(lifecycleOwner, Observer {
-                b.tvStep.text = it.step.toString()
-                b.tvResultRoll.text = it.resultRoll.toString()
-                b.tvResultInitiative.text = it.resultInitiative.toString()
-            })
-            viewModel.initiativeVisible.observe(lifecycleOwner, Observer {
-                if (it){
-                    b.initiativeModeVis.visibility = View.VISIBLE
+            viewModel.initiativeV.observe(lifecycleOwner) {
+                viewBinding.apply {
+                    tvStep.text = it.step.toString()
+                    tvResultRoll.text = it.resultRoll.toString()
+                    tvResultInitiative.text = it.resultInitiative.toString()
                 }
-                else b.initiativeModeVis.visibility = View.GONE
-            })
+            }
+            viewModel.initiativeVisible.observe(lifecycleOwner) {
+                viewBinding.initiativeModeVis.isVisible = it
+            }
         }
 
         fun bind(
-            item: Initiative,
+//            item: Initiative,
             viewModel: BattleViewModel,
-            lifecycleOwner: LifecycleOwner,
-            context: Context,
-            buttonClickListener: OnButtonClickListener
-
-
+//            lifecycleOwner: LifecycleOwner,
+//            context: Context,
+//            buttonClickListener: OnButtonClickListener
             ) {
+            viewBinding.apply {
+                btnRollAllPers.isEnabled = Player.getInstance().getPlayerCount() != 1
+                btnRollActivePers.setOnClickListener {
+                    this@InitiativeViewHolder.buttonClickListener.rollInitiativeActivePlayer()
+                    viewModel.getInitiativePlayer(Player.getInstance().getIdActivePlayer())
+                }
+                btnRollAllPers.setOnClickListener {
+                    this@InitiativeViewHolder.buttonClickListener.rollInitiativeAllPlayers()
+                    viewModel.getInitiativePlayer(Player.getInstance().getIdActivePlayer())
+                }
 
-            b.btnRollAllPers.isEnabled = Player.getInstance().getPlayerCount() != 1
-            b.btnRollActivePers.setOnClickListener {
-                this.buttonClickListener.rollInitiativeActivePlayer()
-                viewModel.getInitiativePlayer(Player.getInstance().getIdActivePlayer())
+                btnAddStep.setOnClickListener { viewModel.updateStepInitiative(1) }
+                btnRemStep.setOnClickListener { viewModel.updateStepInitiative(-1) }
             }
-            b.btnRollAllPers.setOnClickListener {
-                this.buttonClickListener.rollInitiativeAllPlayers()
-                viewModel.getInitiativePlayer(Player.getInstance().getIdActivePlayer())
-            }
-
-            b.btnAddStep.setOnClickListener { viewModel.updateStepInitiative(1) }
-            b.btnRemStep.setOnClickListener { viewModel.updateStepInitiative(-1) }
         }
 
     }

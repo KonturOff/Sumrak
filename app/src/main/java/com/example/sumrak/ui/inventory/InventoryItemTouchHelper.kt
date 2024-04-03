@@ -7,7 +7,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
 
-class InventoryItemTouchHelper(private val adapter: InventoryAdapter, private val context: Context) : ItemTouchHelper.Callback() {
+class InventoryItemTouchHelper(
+    private val adapter: InventoryAdapter,
+    context: Context
+) : ItemTouchHelper.Callback() {
     private val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
     override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
@@ -19,7 +22,6 @@ class InventoryItemTouchHelper(private val adapter: InventoryAdapter, private va
         adapter.onItemMove(viewHolder.adapterPosition, target.adapterPosition)
         return true
     }
-
 
     override fun onSelectedChanged(viewHolder: RecyclerView.ViewHolder?, actionState: Int) {
         if (actionState == ItemTouchHelper.ACTION_STATE_DRAG) {

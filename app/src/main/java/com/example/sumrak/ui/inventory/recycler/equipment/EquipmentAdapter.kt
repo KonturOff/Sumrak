@@ -4,8 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.Player
@@ -29,75 +29,145 @@ class EquipmentAdapter(
 ) : DelegateAdapter<Equipment, EquipmentAdapter.EquipmentViewHolder, EquipmentViewModel>() {
     lateinit var item: EquipmentItem
 
-    override fun onCreateViewHolder(parent: ViewGroup): EquipmentAdapter.EquipmentViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.maket_inventory_equipment, parent, false)
-        return EquipmentViewHolder(view, viewModel, lifecycleOwner, context, inventoryViewModel)
+    override fun onCreateViewHolder(parent: ViewGroup): EquipmentViewHolder {
+        val view = LayoutInflater
+            .from(parent.context)
+            .inflate(R.layout.maket_inventory_equipment, parent, false)
+        return EquipmentViewHolder(
+            view, 
+            viewModel, 
+            lifecycleOwner, 
+//            context, 
+            inventoryViewModel
+        )
     }
 
-    override fun onBindViewHolder(holder: EquipmentAdapter.EquipmentViewHolder, item: Equipment) {
-        holder.bind(item, viewModel, lifecycleOwner, context, inventoryViewModel, inventoryFragment)
+    override fun onBindViewHolder(holder: EquipmentViewHolder, item: Equipment) {
+        holder.bind(
+            item, 
+            viewModel, 
+//            lifecycleOwner, 
+            context, 
+            inventoryViewModel, 
+            inventoryFragment
+        )
     }
 
     class EquipmentViewHolder(
         itemView: View,
         viewModel: EquipmentViewModel,
         lifecycleOwner: LifecycleOwner,
-        context: Context,
+//        context: Context,
         inventoryViewModel: InventoryViewModel
     ) : RecyclerView.ViewHolder(itemView) {
-        val b = MaketInventoryEquipmentBinding.bind(itemView)
+        private val viewBinding = MaketInventoryEquipmentBinding.bind(itemView)
 
         init {
-            viewModel.modeSettings.observe(lifecycleOwner, Observer {
+            viewModel.modeSettings.observe(lifecycleOwner) {
                 setMode(it)
-            })
+            }
 
-            viewModel.equipmentItem.observe(lifecycleOwner, Observer {
-                b.editNameEquipment.setText(it.name)
-                b.editMaxCharge.setText(it.maxCharge.toString())
-                b.editStep.setText(it.step.toString())
-                b.cBoxTest.isChecked = it.test
-                b.tvNameEqipmentRp.text = it.name
-                b.tvRepairValueEquipment.text = it.charge.toString()
-                b.pbRepairEquipment.max = it.maxCharge
-                b.pbRepairEquipment.setProgress(it.charge, true)
-                b.btnAddRepairEquipment.isEnabled = it.charge < it.maxCharge
-                b.btnUseEquipment.isEnabled = it.charge > 0
-                b.btnReplaceEquipment.isEnabled = it.charge < it.maxCharge
-            })
-
-            inventoryViewModel.equipmentVisibility.observe(lifecycleOwner, Observer {
-                if (it){
-                    b.equipmentVisible.visibility = View.VISIBLE
+            viewModel.liveIdItemLink.observe(lifecycleOwner) {
+                if (it>0){
+                    viewBinding.btnReplaceEquipment.isEnabled = viewModel.getValueConsumablesToId(it) > 0
+                    viewBinding.btnRightConsumbles.isVisible = true
+                    viewBinding.btnLeftConsubmbles.isVisible = true
                 }
-                else b.equipmentVisible.visibility = View.GONE
-            })
+                else if (it ==0){
+                    viewBinding.btnRightConsumbles.isVisible = false
+                    viewBinding.btnLeftConsubmbles.isVisible = false
+                }
+                consumablesLinkMode(viewModel, it)
+            }
+
+            viewModel.equipmentItem.observe(lifecycleOwner) {
+                viewBinding.apply {
+                    editNameEquipment.setText(it.name)
+                    editMaxCharge.setText(it.maxCharge.toString())
+                    editStep.setText(it.step.toString())
+                    cBoxTest.isChecked = it.test
+                    tvNameEqipmentRp.text = it.name
+                    tvRepairValueEquipment.text = it.charge.toString()
+                    pbRepairEquipment.max = it.maxCharge
+                    pbRepairEquipment.setProgress(it.charge, true)
+                    btnAddRepairEquipment.isEnabled = it.charge < it.maxCharge
+                    btnUseEquipment.isEnabled = it.charge > 0
+                    btnReplaceEquipment.isEnabled = it.charge < it.maxCharge
+                    if (it.maxCharge==0 && it.step ==0){
+                        editMaxCharge.text.clear()
+                        editStep.text.clear()
+                    }
+                    if (it.consumablesLink>0){
+                        btnReplaceEquipment.isEnabled = viewModel.getValueConsumablesToId(it.consumablesLink) > 0
+                    }
+                    consumablesLinkMode(viewModel, it.consumablesLink)
+
+
+                }
+            }
+
+            inventoryViewModel.equipmentVisibility.observe(lifecycleOwner) {
+                viewBinding.equipmentVisible.isVisible = it
+            }
         }
 
         fun bind(
             item: Equipment,
             viewModel: EquipmentViewModel,
-            lifecycleOwner: LifecycleOwner,
+//            lifecycleOwner: LifecycleOwner,
             context: Context,
             inventoryViewModel: InventoryViewModel,
             inventoryFragment: InventoryFragment
         ) {
             inventoryViewModel.getVisibleView(item.name)
+            viewBinding.apply {
+                equipmentRecView.layoutManager = LinearLayoutManager(context)
+                equipmentRecView.adapter = EquipmentItemAdapter(viewModel)
 
-            b.equipmentRecView.layoutManager = LinearLayoutManager(context)
-            b.equipmentRecView.adapter = EquipmentItemAdapter(viewModel)
+                tvEquipment.setOnClickListener {
+                    inventoryViewModel.updateVisibleView(
+                        item.name
+                    )
+                }
 
-            b.tvEquipment.setOnClickListener { inventoryViewModel.updateVisbleView(item.name) }
+                btnAddEquipment.setOnClickListener { viewModel.setMode(1, 0) }
 
-            b.btnAddEquipment.setOnClickListener { viewModel.setMode(1, 0) }
-
-            b.btnEsc.setOnClickListener { viewModel.setMode(0, 0) }
-            b.btnSaveEquipment.setOnClickListener { saveEquipment(viewModel)}
-            b.btnDeleteEquipment.setOnClickListener { viewModel.deleteEquipmentItem(viewModel.activeIdItemSettings) }
-            b.btnAddRepairEquipment.setOnClickListener { viewModel.updateChargeEquipment(viewModel.activeIdItemRepair, 1) }
-            b.btnRemRepairEquipment.setOnClickListener { viewModel.updateChargeEquipment(viewModel.activeIdItemRepair, -1) }
-            b.btnReplaceEquipment.setOnClickListener { viewModel.replaceChangeEquipment(viewModel.activeIdItemRepair) }
-            b.btnUseEquipment.setOnClickListener { useEquipment(viewModel, inventoryFragment)}
+                btnEsc.setOnClickListener { viewModel.setMode(0, 0) }
+                btnSaveEquipment.setOnClickListener { saveEquipment(viewModel) }
+                btnDeleteEquipment.setOnClickListener {
+                    viewModel.deleteEquipmentItem(
+                        viewModel.activeIdItemSettings
+                    )
+                }
+                btnAddRepairEquipment.setOnClickListener {
+                    viewModel.updateChargeEquipment(
+                        viewModel.activeIdItemRepair,
+                        1
+                    )
+                }
+                btnRemRepairEquipment.setOnClickListener {
+                    viewModel.updateChargeEquipment(
+                        viewModel.activeIdItemRepair,
+                        -1
+                    )
+                }
+                btnReplaceEquipment.setOnClickListener {
+                    viewModel.replaceChangeEquipment(
+                        viewModel.activeIdItemRepair
+                    )
+                }
+                btnUseEquipment.setOnClickListener {
+                    useEquipment(
+                        viewModel,
+                        inventoryFragment
+                    )
+                }
+                cBoxConsumablesLink.setOnCheckedChangeListener { buttonView, isChecked ->
+                    viewModel.setModeLink(isChecked)
+                }
+                btnLeftConsubmbles.setOnClickListener { viewModel.stepConsumablesItemLink(-1) }
+                btnRightConsumbles.setOnClickListener { viewModel.stepConsumablesItemLink(1) }
+            }
         }
 
         private fun useEquipment(
@@ -111,75 +181,111 @@ class EquipmentAdapter(
             viewModel.useEquipmentChange(viewModel.activeIdItemRepair)
         }
 
-        private fun saveEquipment(viewModel: EquipmentViewModel) {
-            try {
-                val name = b.editNameEquipment.text.toString()
-                val charge = b.editMaxCharge.text.toString().toInt()
-                val step = b.editStep.text.toString().toInt()
-                val test = b.cBoxTest.isChecked
-
-                if (viewModel.activeIdItemSettings==0){
-                    viewModel.addEquipmentItem(name, charge, step, test)
+        private fun consumablesLinkMode(viewModel: EquipmentViewModel, id: Int){
+            if (id >= 0){
+                viewBinding.apply {
+                    cBoxConsumablesLink.isChecked = true
+                    consumblesLinkVisible.isVisible = true
+                    tvConsumblesLink.text = viewModel.getConsumablesToId(id)
                 }
-                else{
-                    viewModel.updateEquipmentItem(EquipmentItem(
-                        id = viewModel.activeIdItemSettings,
-                        idPlayer = Player.getInstance().getIdActivePlayer(),
-                        name = name,
-                        charge = charge,
-                        maxCharge = charge,
-                        step = step,
-                        test = test
-                    ))
-                }
-
-                viewModel.setMode(0, 0)
             }
-            catch (e: Exception) {
+            else{
+                viewBinding.cBoxConsumablesLink.isChecked = false
+                viewBinding.consumblesLinkVisible.isVisible = false
+            }
+        }
+
+        private fun saveEquipment(viewModel: EquipmentViewModel) {
+            val consumablesLink = if (viewModel.activeIdItemLink != 0) {
+                viewModel.activeIdItemLink
+            } else -1
+
+            if (viewModel.controlConsumablesToId() || viewModel.activeIdItemLink == -1){
+                try {
+                    viewBinding.apply {
+                        val name = editNameEquipment.text.toString()
+                        val charge = editMaxCharge.text.toString().toInt()
+                        val step = editStep.text.toString().toInt()
+                        val test = cBoxTest.isChecked
+
+
+
+                        if (viewModel.activeIdItemSettings == 0) {
+                            viewModel.addEquipmentItem(name, charge, step, test, consumablesLink)
+                        } else {
+                            viewModel.updateEquipmentItem(
+                                EquipmentItem(
+                                    id = viewModel.activeIdItemSettings,
+                                    idPlayer = Player.getInstance().getIdActivePlayer(),
+                                    name = name,
+                                    charge = charge,
+                                    maxCharge = charge,
+                                    step = step,
+                                    test = test,
+                                    consumablesLink = consumablesLink
+                                )
+                            )
+                        }
+
+                        viewModel.setMode(0, 0)
+                    }
+                }
+                catch (e: Exception) {
+                    Snackbar.make(
+                        viewBinding.root,
+                        "Не заполнены значения Заряда и/или Степень убывания!",
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            else{
                 Snackbar.make(
-                    b.root,
-                    "Не заполнены значения Заряда и/или Степень убывания!",
+                    viewBinding.root,
+                    "Выбранный рассходник не существует!",
                     Snackbar.LENGTH_SHORT
                 ).show()
             }
 
+
+
         }
 
+        private fun setMode(mode: Int) {
+            viewBinding.apply {
+                when (mode) {
+                    4 -> {
+                        tvSettingsEquipment.text = "Управление Зарядом"
+                        settingsEquipment.isVisible = false
+                        repairEquipment.isVisible = true
+                        addModeEquipment.isVisible = true
+                        btnAddEquipment.isVisible = false
+                    }
 
-        private fun setMode(mode: Int){
-            when(mode){
-                4 -> {
-                    b.tvSettingsEquipment.text = "Управление Зарядом"
-                    b.settingsEquipment.visibility = View.GONE
-                    b.repairEquipment.visibility = View.VISIBLE
-                    b.addModeEquipment.visibility = View.VISIBLE
-                    b.btnAddEquipment.visibility = View.GONE
-                }
-                3 -> {
-                    b.tvSettingsEquipment.text = "Редактировать Снаряжение"
-                    b.settingsEquipment.visibility = View.VISIBLE
-                    b.repairEquipment.visibility = View.GONE
-                    b.addModeEquipment.visibility = View.VISIBLE
-                    b.btnAddEquipment.visibility = View.GONE
-                    b.btnDeleteEquipment.visibility = View.VISIBLE
+                    3 -> {
+                        tvSettingsEquipment.text = "Редактировать Снаряжение"
+                        settingsEquipment.isVisible = true
+                        repairEquipment.isVisible = false
+                        addModeEquipment.isVisible = true
+                        btnAddEquipment.isVisible = false
+                        btnDeleteEquipment.isVisible = true
+                    }
 
-                }
-                1 -> {
-                    b.tvSettingsEquipment.text = "Добавить снаряжение"
-                    b.repairEquipment.visibility = View.GONE
-                    b.addModeEquipment.visibility = View.VISIBLE
-                    b.settingsEquipment.visibility = View.VISIBLE
-                    b.btnAddEquipment.visibility = View.GONE
-                    b.btnDeleteEquipment.visibility = View.GONE
-                }
-                else -> {
-                    b.repairEquipment.visibility = View.GONE
-                    b.addModeEquipment.visibility = View.GONE
-                    b.btnAddEquipment.visibility = View.VISIBLE
+                    1 -> {
+                        tvSettingsEquipment.text = "Добавить снаряжение"
+                        repairEquipment.isVisible = false
+                        addModeEquipment.isVisible = true
+                        settingsEquipment.isVisible = true
+                        btnAddEquipment.isVisible = false
+                        btnDeleteEquipment.isVisible = false
+                    }
+
+                    else -> {
+                        repairEquipment.isVisible = false
+                        addModeEquipment.isVisible = false
+                        btnAddEquipment.isVisible = true
+                    }
                 }
             }
         }
-
-
     }
 }

@@ -1,8 +1,5 @@
 package com.example.sumrak.ui.inventory.recycler.effects.item
 
-
-
-
 class EffectsItemManager private constructor(){
 
     private val effectsItemList = ArrayList<EffectsItem>()
@@ -18,7 +15,7 @@ class EffectsItemManager private constructor(){
         effectsItemAdapter?.notifyItemInserted(effectsItemList.size)
     }
 
-    fun deleteitem(id: Int){
+    fun deleteItem(id: Int){
         val position = getItemPositionToId(id)
         if (position >= 0 && position < effectsItemList.size) {
             effectsItemList.removeAt(position)
@@ -32,7 +29,7 @@ class EffectsItemManager private constructor(){
         effectsItemAdapter?.notifyItemChanged(position)
     }
 
-    fun updateChekItemToPosition(id: Int, check : Int){
+    fun updateCheckItemToPosition(id: Int, check : Int){
         val position = getItemPositionToId(id)
         effectsItemList[position].isActive = check
     }
@@ -68,8 +65,6 @@ class EffectsItemManager private constructor(){
     fun getItemCount():Int{
         return effectsItemList.size
     }
-
-
 
     companion object {
         private val instance = EffectsItemManager()

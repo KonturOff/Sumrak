@@ -1,12 +1,10 @@
 package com.example.sumrak.ui.battle.recycler.information
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.Player
 import com.example.sumrak.R
@@ -19,7 +17,7 @@ import com.example.sumrak.ui.battle.recycler.information.InformationAdapter.*
 class InformationAdapter(
     private val battleViewModel: BattleViewModel,
     private val lifecycleOwner: LifecycleOwner,
-    private val context: Context
+//    private val context: Context
 ) : DelegateAdapterB<Information, InformationViewHolder, BattleViewModel>() {
 
 
@@ -29,7 +27,12 @@ class InformationAdapter(
     }
 
     override fun onBindViewHolder(holder: InformationViewHolder, item: Information) {
-        holder.bind(item, battleViewModel, lifecycleOwner, context)
+        holder.bind(
+//            item,
+//            battleViewModel,
+//            lifecycleOwner,
+//            context
+        )
     }
 
     class InformationViewHolder(
@@ -37,51 +40,50 @@ class InformationAdapter(
         viewModel: BattleViewModel,
         lifecycleOwner: LifecycleOwner
     ) : RecyclerView.ViewHolder(itemView){
-        val b = MaketBattleInformationBinding.bind(itemView)
+        private val viewBinding = MaketBattleInformationBinding.bind(itemView)
 
         init {
-            b.tvBonusEndur.text = Player.getInstance().getBonusEndurance().toString()
-            b.tvBonusPow.text = Player.getInstance().getBonusPower().toString()
+            viewBinding.apply {
+                tvBonusEndur.text = Player.getInstance().getBonusEndurance().toString()
+                tvBonusPow.text = Player.getInstance().getBonusPower().toString()
 
-            viewModel.playerV.observe(lifecycleOwner, Observer {
-                b.tvHpPlayer.text = it.hp.toString()
-                b.pbHpPlayer.max = Player.getInstance().getActivePlayer().max_hp
-                b.pbHpPlayer.setProgress(it.hp, true)
-            })
-
-            viewModel.armorV.observe(lifecycleOwner, Observer {
-                if (it.name==""){
-                    b.tvNameArmor.text = "Ну что, ты, название поленился записать?"
-                }
-                else b.tvNameArmor.text = it.name
-                if (it.id!=0){
-                    b.pbArmorPlayer.visibility = View.VISIBLE
-                    b.armorVisibile.visibility = View.VISIBLE
-                    b.tvClassArmor.text = it.classArmor
-                    b.tvParamsArmor.text = "${it.params} (${it.endurance}/${it.enduranceMax})"
-                    b.tvFeaturesArmor.text = it.features
-                    b.pbArmorPlayer.max = it.enduranceMax
-                    b.pbArmorPlayer.setProgress(it.endurance, true)
-                }
-                else{
-                    b.pbArmorPlayer.visibility = View.GONE
-                    b.armorVisibile.visibility = View.GONE
+                viewModel.playerV.observe(lifecycleOwner) {
+                    tvHpPlayer.text = it.hp.toString()
+                    pbHpPlayer.max = Player.getInstance().getActivePlayer().maxHp
+                    pbHpPlayer.setProgress(it.hp, true)
                 }
 
-            })
+                viewModel.armorV.observe(lifecycleOwner) {
+                    if (it.name == "") {
+                        tvNameArmor.text = "Ну что, ты, название поленился записать?"
+                    } else tvNameArmor.text = it.name
+                    if (it.id != 0) {
+                        pbArmorPlayer.isVisible = true
+                        armorVisibile.isVisible = true
+                        tvClassArmor.text = it.classArmor
+                        tvParamsArmor.text =
+                            "${it.params} (${it.endurance}/${it.enduranceMax})"
+                        tvFeaturesArmor.text = it.features
+                        pbArmorPlayer.max = it.enduranceMax
+                        pbArmorPlayer.setProgress(it.endurance, true)
+                    } else {
+                        pbArmorPlayer.isVisible = false
+                        armorVisibile.isVisible = false
+                    }
+
+                }
+            }
         }
 
 
+        // TODO а зачем нужен этот метод?
         fun bind(
-            information: Information,
-            viewModel: BattleViewModel,
-            lifecycleOwner: LifecycleOwner,
-            context: Context
+//            information: Information,
+//            viewModel: BattleViewModel,
+//            lifecycleOwner: LifecycleOwner,
+//            context: Context
         ) {
 
         }
-
-
-
     }
 }

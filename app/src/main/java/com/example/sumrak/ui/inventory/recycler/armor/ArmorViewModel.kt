@@ -4,9 +4,9 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.sumrak.Data.DataBase
-import com.example.sumrak.Data.inventory.armor.ArmorRepository
-import com.example.sumrak.Data.playerdb.PlayerReposiroty
+import com.example.sumrak.data.DataBase
+import com.example.sumrak.data.inventory.armor.ArmorRepository
+import com.example.sumrak.data.playerdb.PlayerRepository
 import com.example.sumrak.Player
 import com.example.sumrak.ui.inventory.recycler.armor.item.ArmorItem
 import com.example.sumrak.ui.inventory.recycler.armor.item.ArmorItemManager
@@ -17,55 +17,58 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 
 class ArmorViewModel(application: Application) : AndroidViewModel(application) {
-    private val repositoryPlayer: PlayerReposiroty
+    private val repositoryPlayer: PlayerRepository
     private val repository: ArmorRepository
     private val armorItemManager = ArmorItemManager.getInstance()
 
     val selectedNoArmor = MutableLiveData<Boolean>()
     val modeSettings = MutableLiveData<Int>()
-    val visibleView = MutableLiveData<Boolean>()
+    private val visibleView = MutableLiveData<Boolean>()
     val repairProgress = MutableLiveData<Int>()
-    var activeItemRepair = -1
-    var activeItem = -1
+    private var activeItemRepair = -1
+    private var activeItem = -1
     var visible = true
     var armorItem = ArmorItem(0, 0, "", "", 0, 0,0,"")
 
-    fun addArmor(name: String, params: Int, endurance : Int, features : String){
-        armorItem.idPlayer = Player.getInstance().getIdActivePlayer()
-        armorItem.name = name
-        armorItem.params = params
-        armorItem.endurance = endurance
-        armorItem.enduranceMax = endurance
-        armorItem.features = features
-        armorItem.id = runBlocking {
-            val result = CoroutineScope(Dispatchers.IO).async{
-                repository.addArmor(armorItem.toArmorDbEntity())
+    fun addArmor(name: String, params: Int, endurance : Int, features : String) {
+        armorItem.apply {
+            this.idPlayer = Player.getInstance().getIdActivePlayer()
+            this.name = name
+            this.params = params
+            this.endurance = endurance
+            this.enduranceMax = endurance
+            this.features = features
+            this.id = runBlocking {
+                val result = CoroutineScope(Dispatchers.IO).async {
+                    repository.addArmor(toArmorDbEntity())
+                }
+                result.await()
+            }.toInt()
+            armorItemManager.addItem(armorItem)
+        }
+        modeAddArmor(false)
+    }
+
+    fun updateArmor(name: String, params: Int, endurance : Int, features : String) {
+        armorItem.apply {
+            if (this.endurance > endurance) {
+                this.endurance = endurance
+            } else if (this.endurance == this.enduranceMax) {
+                this.endurance = endurance
             }
-            result.await()
-        }.toInt()
-        armorItemManager.addItem(armorItem)
+            this.name = name
+            this.params = params
+            this.enduranceMax = endurance
+            this.features = features
+            updateArmorToBd(armorItem)
+            armorItemManager.updateArmor(armorItem, this.id)
+        }
         modeAddArmor(false)
     }
 
-    fun updateArmor(name: String, params: Int, endurance : Int, features : String){
-        if (armorItem.endurance > endurance){
-            armorItem.endurance = endurance
-        }
-        else if (armorItem.endurance == armorItem.enduranceMax){
-            armorItem.endurance = endurance
-        }
-        armorItem.name = name
-        armorItem.params = params
-        armorItem.enduranceMax = endurance
-        armorItem.features = features
-        updateArmorToBd(armorItem)
-        armorItemManager.updateArmor(armorItem, armorItem.id)
-        modeAddArmor(false)
-    }
-
-    fun updateArmorToBd (armorItemm : ArmorItem){
+    private fun updateArmorToBd (armorItem : ArmorItem){
         viewModelScope.launch(Dispatchers.IO) {
-            repository.updateArmor(armorItemm.toArmorDbEntity())
+            repository.updateArmor(armorItem.toArmorDbEntity())
         }
     }
 
@@ -75,7 +78,7 @@ class ArmorViewModel(application: Application) : AndroidViewModel(application) {
                 armorItem.endurance++
             }
         }
-        else{
+        else {
             if (armorItem.endurance > 0){
                 armorItem.endurance--
             }
@@ -89,7 +92,7 @@ class ArmorViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deleteArmor(){
         deleteArmorToBd(armorItem.id)
-        if (armorItem.id == Player.getInstance().getActivePlayer().active_armor){
+        if (armorItem.id == Player.getInstance().getActivePlayer().activeArmor){
             selectedNoArmor.postValue(true)
             val idPlayer = Player.getInstance().getActivePlayer().id
             viewModelScope.launch(Dispatchers.IO) {
@@ -101,7 +104,7 @@ class ArmorViewModel(application: Application) : AndroidViewModel(application) {
 
     }
 
-    fun deleteArmorToBd(id: Int){
+    private fun deleteArmorToBd(id: Int){
         viewModelScope.launch(Dispatchers.IO) {
             repository.deleteArmorToId(id)
         }
@@ -114,9 +117,7 @@ class ArmorViewModel(application: Application) : AndroidViewModel(application) {
             repository.getArmorListToPlayer(id).forEach {
                 armorItemManager.loarArmorToPlayer(it.toArmorItem())
             }
-
         }
-
     }
 
     fun setActiveArmorToPlayer(position : Int){
@@ -183,7 +184,7 @@ class ArmorViewModel(application: Application) : AndroidViewModel(application) {
         repository = ArmorRepository(daoArmorDb)
 
         val daoPlayerDb = DataBase.getDb(application).getPlayerDao()
-        repositoryPlayer = PlayerReposiroty(daoPlayerDb)
+        repositoryPlayer = PlayerRepository(daoPlayerDb)
     }
 
     companion object{
