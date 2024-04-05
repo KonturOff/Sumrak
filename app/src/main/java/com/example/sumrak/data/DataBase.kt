@@ -6,6 +6,8 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.sumrak.data.inventory.armor.ArmorDbEntity
 import com.example.sumrak.data.inventory.armor.DaoArmorDb
+import com.example.sumrak.data.inventory.arsenal.ArsenalDbEntity
+import com.example.sumrak.data.inventory.arsenal.DaoArsenalDb
 import com.example.sumrak.data.inventory.consumables.ConsumablesDbEntity
 import com.example.sumrak.data.inventory.consumables.DaoConsumablesDb
 import com.example.sumrak.data.inventory.effects.DaoEffectsDb
@@ -29,7 +31,8 @@ import com.example.sumrak.data.settings.SettingsDbEntity
         ArmorDbEntity::class,
         ConsumablesDbEntity::class,
         EffectsDbEntity::class,
-        EquipmentDbEntity::class
+        EquipmentDbEntity::class,
+        ArsenalDbEntity::class
                ],
     version = 1,
     exportSchema = false
@@ -41,6 +44,7 @@ abstract class DataBase : RoomDatabase() {
     abstract fun getConsumablesDao(): DaoConsumablesDb
     abstract fun getEffectsDao() : DaoEffectsDb
     abstract fun getEquipmentDao() : DaoEquipmentDb
+    abstract fun getArsenalDao() : DaoArsenalDb
 
     companion object{
         @Volatile

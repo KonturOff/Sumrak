@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.get
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sumrak.Player
@@ -16,6 +17,7 @@ import com.example.sumrak.databinding.FragmentInventoryBinding
 import com.example.sumrak.ui.inventory.recycler.armor.Armor
 import com.example.sumrak.ui.inventory.recycler.armor.ArmorViewModel
 import com.example.sumrak.ui.inventory.recycler.arsenal.Arsenal
+import com.example.sumrak.ui.inventory.recycler.arsenal.ArsenalViewModel
 import com.example.sumrak.ui.inventory.recycler.consumables.Consumbles
 import com.example.sumrak.ui.inventory.recycler.consumables.ConsumablesViewModel
 import com.example.sumrak.ui.inventory.recycler.effects.Effects
@@ -32,6 +34,7 @@ class InventoryFragment : Fragment() {
     private lateinit var armorViewModel: ArmorViewModel
     private lateinit var inventoryViewModel: InventoryViewModel
     private lateinit var equipmentViewModel : EquipmentViewModel
+    private lateinit var arsenalViewModel: ArsenalViewModel
 
     private var myInterface : Interface? = null
 
@@ -73,30 +76,20 @@ class InventoryFragment : Fragment() {
         armorViewModel = ViewModelProvider(this).get(ArmorViewModel::class.java)
         inventoryViewModel = ViewModelProvider(this).get(InventoryViewModel::class.java)
         equipmentViewModel = ViewModelProvider(this).get(EquipmentViewModel::class.java)
+        arsenalViewModel = ViewModelProvider(this).get(ArsenalViewModel::class.java)
 
         load(idPlayer)
 
 
-        val items = listOf(
-            Effects(),
-            Arsenal(),
-            Consumbles(),
-            Armor()
-            // Добавьте другие элементы по мере необходимости
-        )
+
         val viewModels: Map<Int, ViewModel> = mapOf(
             R.layout.maket_inventory_effects to effectsViewModel,
-            //R.layout.maket_inventory_arsenal to arsenalViewModel,
+            R.layout.maket_inventory_arsenal to arsenalViewModel,
             R.layout.maket_inventory_consumables to consumablesViewModel,
             R.layout.maket_inventory_armor to armorViewModel,
             R.layout.maket_inventory_equipment to equipmentViewModel
         )
-        //val viewModels: Map<String, ViewModel> = mapOf(
-        //    "Эффекты" to effectsViewModel,
-        //    //R.layout.maket_inventory_arsenal to arsenalViewModel,
-        //    "Расходники" to consumblesViewModel,
-        //    "Броня" to armorViewModel
-        //)
+
         // Создание и установка адаптера с передачей списка элементов и Map с ViewModel
         val inventoryAdapter = InventoryAdapter(inventoryManager, viewModels, viewLifecycleOwner, requireContext(), inventoryViewModel, this)
         viewBinding?.recyclerInventory?.adapter = inventoryAdapter
@@ -118,6 +111,7 @@ class InventoryFragment : Fragment() {
         armorViewModel.getArmorToPlayer(idPlayer)
         inventoryViewModel.getInventoryItemToPlayer(idPlayer)
         equipmentViewModel.getEquipmentToIdPlayer(idPlayer)
+        arsenalViewModel.getArsenalToIdPlayer(idPlayer)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

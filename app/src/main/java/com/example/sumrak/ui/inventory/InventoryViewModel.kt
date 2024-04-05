@@ -19,6 +19,7 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
     val consumablesVisibility = MutableLiveData<Boolean>()
     val armorVisibility = MutableLiveData<Boolean>()
     val equipmentVisibility = MutableLiveData<Boolean>()
+    val arsenalVisibility = MutableLiveData<Boolean>()
 
     fun addInventoryView(inventoryItem: InventoryItem){
         viewModelScope.launch(Dispatchers.IO) {
@@ -65,6 +66,7 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
             "Расходники" -> consumablesVisibility.postValue(visible)
             "Броня" -> armorVisibility.postValue(visible)
             "Снаряжение" -> equipmentVisibility.postValue(visible)
+            "Арсенал" -> arsenalVisibility.postValue(visible)
 
         }
     }

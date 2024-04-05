@@ -25,6 +25,11 @@ data class UpdateArmorIdPlayerTuples(
     val active_armor : Int
 )
 
+data class UpdateArsenalIdPlayerTuples(
+    val id: Int,
+    val active_arsenal : Int
+)
+
 data class UpdateDodgeParryingTuples(
     val id: Int,
     val dodge : Int,

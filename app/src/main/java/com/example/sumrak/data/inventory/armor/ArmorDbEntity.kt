@@ -6,7 +6,8 @@ import androidx.room.PrimaryKey
 import com.example.sumrak.data.playerdb.PlayerDbEntity
 import com.example.sumrak.ui.inventory.recycler.armor.item.ArmorItem
 
-@Entity(tableName = "Armor",
+@Entity(
+    tableName = "Armor",
     foreignKeys = [ForeignKey(
         entity = PlayerDbEntity::class,
         parentColumns = ["id"],

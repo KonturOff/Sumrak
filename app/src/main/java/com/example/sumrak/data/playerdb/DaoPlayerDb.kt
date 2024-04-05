@@ -47,6 +47,9 @@ interface DaoPlayerDb {
     @Update(entity = PlayerDbEntity::class)
     suspend fun updateArmorIdPlayer(updateArmorIdPlayerTuples: UpdateArmorIdPlayerTuples)
 
+    @Update(entity = PlayerDbEntity::class)
+    suspend fun updateArsenalIdPlayer(updateArsenalIdPlayerTuples: UpdateArsenalIdPlayerTuples)
+
     @Query("SELECT player.*, " +
             "SUM(effect.db) AS total_db, " +
             "SUM(effect.bb) AS total_bb, " +

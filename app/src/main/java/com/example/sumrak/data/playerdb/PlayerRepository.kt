@@ -57,6 +57,12 @@ class PlayerRepository(
         )
     }
 
+    suspend fun updateArsenalIdPlayer(id: Int, arsenalId : Int){
+        daoPlayerDb.updateArsenalIdPlayer(
+            UpdateArsenalIdPlayerTuples(id, arsenalId)
+        )
+    }
+
     suspend fun updateDodgeParryingPlayer(id: Int, dodge: Int, parrying : Int){
         daoPlayerDb.updateDodgeParryingPlayer(
             UpdateDodgeParryingTuples(id, dodge, parrying)

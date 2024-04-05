@@ -11,6 +11,7 @@ import com.example.sumrak.ui.inventory.recycler.arsenal.ArsenalAdapter
 import com.example.sumrak.ui.inventory.recycler.armor.Armor
 import com.example.sumrak.ui.inventory.recycler.armor.ArmorViewModel
 import com.example.sumrak.ui.inventory.recycler.arsenal.Arsenal
+import com.example.sumrak.ui.inventory.recycler.arsenal.ArsenalViewModel
 import com.example.sumrak.ui.inventory.recycler.consumables.Consumbles
 import com.example.sumrak.ui.inventory.recycler.consumables.ConsumablesAdapter
 import com.example.sumrak.ui.inventory.recycler.consumables.ConsumablesViewModel
@@ -43,7 +44,7 @@ class InventoryAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
             R.layout.maket_inventory_effects -> EffectsAdapter(viewModels.getValue(viewType) as EffectsViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
-            R.layout.maket_inventory_arsenal -> ArsenalAdapter().onCreateViewHolder(parent)
+            R.layout.maket_inventory_arsenal -> ArsenalAdapter(viewModels.getValue(viewType) as ArsenalViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
             R.layout.maket_inventory_armor -> ArmorAdapter(viewModels.getValue(viewType) as ArmorViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
             R.layout.maket_inventory_consumables -> ConsumablesAdapter(viewModels.getValue(viewType) as ConsumablesViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
             R.layout.maket_inventory_equipment -> EquipmentAdapter(viewModels.getValue(viewType) as EquipmentViewModel, lifecycleOwner, context, inventoryViewModel, inventoryFragment).onCreateViewHolder(parent)
@@ -61,7 +62,13 @@ class InventoryAdapter(
                 context,
                 inventoryViewModel
             )
-            R.layout.maket_inventory_arsenal -> (holder as ArsenalAdapter.ArsenalViewHolder).bind(items.view as Arsenal)
+            R.layout.maket_inventory_arsenal -> (holder as ArsenalAdapter.ArsenalViewHolder).bind(
+                items.view as Arsenal,
+                viewModels.getValue(items.view.viewType) as ArsenalViewModel,
+                lifecycleOwner,
+                context,
+                inventoryViewModel
+            )
             R.layout.maket_inventory_armor -> (holder as ArmorAdapter.ArmorViewHolder).bind(
                 items.view as Armor,
                 viewModels.getValue(items.view.viewType) as ArmorViewModel,

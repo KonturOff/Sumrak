@@ -1,18 +1,512 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/textView23"
-        android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:background="@color/d6"
-        android:gravity="center"
-        android:text="Арсенал"
-        android:textSize="34sp"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        app:cardCornerRadius="7dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvArsenal"
+                android:layout_width="match_parent"
+                android:layout_height="30dp"
+                android:background="#7986CB"
+                android:gravity="center|left"
+                android:text="  Арсенал"
+                android:textSize="20sp" />
+
+            <LinearLayout
+                android:id="@+id/arsenalVisibility"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/arsenalRecView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+                <ImageButton
+                    android:id="@+id/btnAddArsenal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:srcCompat="@drawable/add" />
+
+                <LinearLayout
+                    android:id="@+id/addArsenalMode"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#E8EAF6"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="#C5CAE9"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/btnEscSettingsArsenal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:srcCompat="@drawable/clear" />
+
+                        <TextView
+                            android:id="@+id/tvModeSettingsArsenal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:text="Добавить Оружие"
+                            android:textSize="16sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/settingsArsenal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="vertical"
+                        tools:visibility="gone">
+
+                        <TextView
+                            android:id="@+id/textView54"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Тип оружия:"
+                            android:textSize="16sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <RadioGroup
+                                android:id="@+id/rBtnGTypeArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:orientation="horizontal">
+
+                                <RadioButton
+                                    android:id="@+id/rBtnBBType"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Ближ. Бой" />
+
+                                <RadioButton
+                                    android:id="@+id/rBtnDBType"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Дальн. Бой" />
+                            </RadioGroup>
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView55"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Название: "
+                                android:textSize="16sp" />
+
+                            <EditText
+                                android:id="@+id/editNameArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="10"
+                                android:hint="Название Оружия"
+                                android:inputType="text" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView56"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Урон:" />
+
+                            <TextView
+                                android:id="@+id/textView57"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="X = " />
+
+                            <EditText
+                                android:id="@+id/editDamageX"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="2"
+                                android:inputType="number" />
+
+                            <TextView
+                                android:id="@+id/textView58"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="Y = " />
+
+                            <EditText
+                                android:id="@+id/editDamageY"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="2"
+                                android:inputType="number" />
+
+                            <TextView
+                                android:id="@+id/textView59"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="Z = " />
+
+                            <EditText
+                                android:id="@+id/editDamageZ"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="2"
+                                android:inputType="number" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/textView60"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:text="Пример: X*dY + Z"
+                            android:textColor="@color/d12" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView61"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Пробитие: " />
+
+                            <EditText
+                                android:id="@+id/editPenetrationArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="2"
+                                android:inputType="number" />
+
+                            <TextView
+                                android:id="@+id/textView62"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="Кол-во действий: " />
+
+                            <EditText
+                                android:id="@+id/editStepArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="2"
+                                android:inputType="number" />
+
+                            <TextView
+                                android:id="@+id/textView63"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="Очередь: " />
+
+                            <EditText
+                                android:id="@+id/editChangeArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="2"
+                                android:inputType="number"
+                                android:text="0" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/settingsDBArsenal"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView64"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Патрон в обойме: " />
+
+                            <EditText
+                                android:id="@+id/editPatronsArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="2"
+                                android:inputType="number" />
+
+                            <TextView
+                                android:id="@+id/textView65"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:gravity="right"
+                                android:text="Дальность: " />
+
+                            <EditText
+                                android:id="@+id/editDistanseArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ems="2"
+                                android:inputType="number"
+                                android:text="0" />
+
+                            <TextView
+                                android:id="@+id/textView66"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/textView67"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1"
+                                android:gravity="center|left"
+                                android:text="Коэф. Убывающего теста" />
+
+                            <ImageButton
+                                android:id="@+id/btnRemValueTest"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/remove" />
+
+                            <TextView
+                                android:id="@+id/tvValueTestArsenal"
+                                android:layout_width="25dp"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:text="4"
+                                android:textSize="20sp" />
+
+                            <ImageButton
+                                android:id="@+id/btnAddValueTest"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                app:srcCompat="@drawable/add" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="2" />
+                        </LinearLayout>
+
+                        <CheckBox
+                            android:id="@+id/cBoxChekBPowerArsenal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Применять Бонус силы" />
+
+                        <CheckBox
+                            android:id="@+id/cBoxPairedArsenal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="Свойство &quot;Спареное оружие&quot;" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_weight="1"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btnDeleteArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableEnd="@drawable/delete"
+                                android:text="Удалить" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                            <Button
+                                android:id="@+id/btnSaveArsenal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginRight="5dp"
+                                android:drawableEnd="@drawable/check"
+                                android:text="Сохранить" />
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/repairArsenal"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:orientation="vertical"
+                        android:visibility="gone"
+                        tools:visibility="visible">
+
+                        <RadioGroup
+                            android:id="@+id/rBtnGClips"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rBtnClip1"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Обойма №1" />
+
+                            <RadioButton
+                                android:id="@+id/rBtnClip2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Обойма №2" />
+
+                            <RadioButton
+                                android:id="@+id/rBtnClip3"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Обойма №3" />
+                        </RadioGroup>
+
+                        <TextView
+                            android:id="@+id/tvPatronsActiveClip"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="4/10" />
+
+                        <ProgressBar
+                            android:id="@+id/pBarPatrons"
+                            style="?android:attr/progressBarStyleHorizontal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="15dp"
+                            android:layout_marginRight="15dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btnReplenishActiveClip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="пополнить" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                            <Button
+                                android:id="@+id/btnRavageActiveClip"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="опустошить" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/btnRefresh"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableEnd="@drawable/autorenew"
+                                android:text="перезарядить" />
+
+                            <Space
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1" />
+
+                            <Button
+                                android:id="@+id/btnReplenishAll"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:drawableEnd="@drawable/download"
+                                android:text="пополнить все" />
+
+                        </LinearLayout>
+
+                        <Space
+                            android:layout_width="match_parent"
+                            android:layout_height="5dp" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
