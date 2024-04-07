@@ -16,8 +16,36 @@ class HistoryRollManager private constructor() {
         historyAdapter?.notifyItemInserted(0)
     }
 
+    fun getLastRollHitToIdPlayer(idPlayer: Int):HistoryRoll?{
+        var result :HistoryRoll? = null
+        for (i in historyRollList.indices){
+            if (historyRollList[i].mode == "Проверка Попадания" && historyRollList[i].player == idPlayer){
+                result = historyRollList[i]
+                break
+            }
+        }
+        return result
+    }
+
+    private fun getPositionLastHitToIdPlayer(idPlayer: Int): Int {
+        var position = 0
+        for (i in historyRollList.indices){
+            if (historyRollList[i].mode == "Проверка Попадания" && historyRollList[i].player == idPlayer){
+                position = i
+                break
+            }
+        }
+        return position
+    }
+    fun updateValueHitToIdPlayer(idPlayer: Int, value : Int){
+        val position = getPositionLastHitToIdPlayer(idPlayer)
+        historyRollList[position].value = value
+        historyAdapter?.notifyItemChanged(position)
+    }
+
+
     fun getLastRollIniToIdPlayer(idPlayer: Int): HistoryRoll{
-        var result = HistoryRoll("d20","0","","",idPlayer,"не найдено", 0, 0, 0)
+        var result = HistoryRoll("d20","0","","",idPlayer,"не найдено", 0, 0,0, 0, null)
         for (i in historyRollList.indices){
             if (historyRollList[i].mode == "Проверка Инициативы" && historyRollList[i].player == idPlayer){
                 result = historyRollList[i]
@@ -41,6 +69,8 @@ class HistoryRollManager private constructor() {
         historyRollList[position].value = value
         historyAdapter?.notifyItemChanged(position)
     }
+
+
 
     fun removeItem(historyRoll: HistoryRoll) {
         val index = historyRollList.indexOf(historyRoll)

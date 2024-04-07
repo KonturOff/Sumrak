@@ -11,6 +11,7 @@ import com.example.sumrak.R
 import com.example.sumrak.databinding.MaketBattleInformationBinding
 import com.example.sumrak.ui.battle.BattleViewModel
 import com.example.sumrak.ui.battle.recycler.DelegateAdapterB
+import com.example.sumrak.ui.battle.recycler.atack.AttackViewModel
 import com.example.sumrak.ui.battle.recycler.information.InformationAdapter.*
 
 
@@ -26,7 +27,11 @@ class InformationAdapter(
         return InformationViewHolder(view, battleViewModel, lifecycleOwner)
     }
 
-    override fun onBindViewHolder(holder: InformationViewHolder, item: Information) {
+    override fun onBindViewHolder(
+        holder: InformationViewHolder,
+        item: Information,
+        attackViewModel: AttackViewModel
+    ) {
         holder.bind(
 //            item,
 //            battleViewModel,

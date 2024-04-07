@@ -5,6 +5,9 @@ import android.view.ViewGroup
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.R
+import com.example.sumrak.ui.battle.recycler.atack.Attack
+import com.example.sumrak.ui.battle.recycler.atack.AttackAdapter
+import com.example.sumrak.ui.battle.recycler.atack.AttackViewModel
 import com.example.sumrak.ui.battle.recycler.damage.DamageAdapter
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBAdapter
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBViewModel
@@ -18,7 +21,8 @@ class BattleAdapter(
     private val context: Context,
     private val battleViewModel: BattleViewModel,
     private val battleFragment: BattleFragment,
-    private val equipmentBViewModel: EquipmentBViewModel
+    private val equipmentBViewModel: EquipmentBViewModel,
+    private val attackViewModel: AttackViewModel
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     fun onItemMove(fromPosition: Int, toPosition: Int) {
@@ -62,6 +66,13 @@ class BattleAdapter(
                     battleFragment = battleFragment,
                     equipmentBViewModel = equipmentBViewModel
                 ).onCreateViewHolder(parent)
+            R.layout.maket_battle_arsenal -> AttackAdapter(
+                battleViewModel,
+                lifecycleOwner,
+                context,
+                battleFragment,
+                attackViewModel
+            ).onCreateViewHolder(parent)
             else -> throw UnsupportedOperationException("ViewType not supported")
         }
     }
@@ -104,6 +115,15 @@ class BattleAdapter(
                         context = context,
                         battleFragment = battleFragment,
                         equipmentBViewModel = equipmentBViewModel
+                    )
+            R.layout.maket_battle_arsenal ->
+                (holder as AttackAdapter.AttackViewHolder)
+                    .bind(
+                        item.view as Attack,
+                        battleViewModel,
+                        context,
+                        battleFragment,
+                        attackViewModel
                     )
         }
     }

@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.sumrak.data.playerdb.PlayerViewModel
 import com.example.sumrak.Player
 import com.example.sumrak.databinding.FragmentHomeBinding
+import com.example.sumrak.ui.inventory.recycler.arsenal.item.ArsenalItem
 
 class HomeFragment : Fragment() {
 
@@ -24,7 +25,7 @@ class HomeFragment : Fragment() {
     }
 
     interface Interface{
-        fun get_result_roll(text: String, player: Int, mode : String, param: Int, position: Int?)
+        fun get_result_roll(text: String, player: Int, mode : String, param: Int, change : Int, bonus: Int, position: Int?, weapon: ArsenalItem?)
         fun touch_screen()
     }
     // This property is only valid between onCreateView and
@@ -83,6 +84,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Дальнего боя",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -92,6 +96,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Ближнего боя",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -101,6 +108,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Силы",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -110,6 +120,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Ловкости",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -119,6 +132,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Воли",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -128,6 +144,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Стойкости",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -137,6 +156,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Интелекта",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -146,6 +168,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Сообразительности",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -155,6 +180,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Наблюдательности",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -164,6 +192,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Харизмы",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }
@@ -176,6 +207,9 @@ class HomeFragment : Fragment() {
                     Player.getInstance().getIdActivePlayer(),
                     "Проверка Суеты",
                     0,
+                    0,
+                    0,
+                    null,
                     null
                 )
             }

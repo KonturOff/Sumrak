@@ -21,6 +21,7 @@ import com.example.sumrak.ui.calculator.calculator.CalculatorFragment
 import com.example.sumrak.ui.calculator.historyRoll.HistoryCalculatorFragment
 import com.example.sumrak.ui.home.HomeFragment
 import com.example.sumrak.ui.inventory.InventoryFragment
+import com.example.sumrak.ui.inventory.recycler.arsenal.item.ArsenalItem
 import com.example.sumrak.ui.other_fragments.ResultRoll
 import com.example.sumrak.ui.profile.AddPlayer
 import com.example.sumrak.ui.profile.ProfileFragment
@@ -170,24 +171,20 @@ class MainActivity :
         //PlayerViewModel.getInstance(application).loadSettings()
     }
 
-    override fun get_result_roll(cube: String, player: Int, mode : String, bonus: Int, position: Int?) {
+    override fun get_result_roll(cube: String, player: Int, mode : String, paramPlayer: Int, change:Int, bonus: Int, position: Int?, weapon: ArsenalItem?) {
         val resultRoll = ResultRoll()
         removeFragmentRoll()
         var result : ArrayList<String>? = null
         // Если передается позиция, значит это рерол, и мы меняем переданый результат на новый
         if (position != null){
+            var value = 0
             val getRerollCube = HistoryRollManager.getInstance().getItem(position)
             result = Player.rollCube(getRerollCube.cube)
             var param = Player.getInstance().getPlayerParameter(player, mode)
-            if (getRerollCube.mode == "Проверка Уклонения" || getRerollCube.mode == "Проверка Парирования"|| getRerollCube.mode.contains("Убывающий Тест") ){
-                param = getRerollCube.parameter
+            if (mode == "Проверка Попадания"){
+                param = Player.getInstance().getParamPlayerToClassArsenal(weapon!!.classArsenal, weapon.idPlayer)
+                value = Player.getInstance().getSuccessfulHit(result[1].toInt(), param, bonus, change, weapon!!.valueTest, weapon.paired)
             }
-            HistoryRollManager.getInstance().updateItem(position, HistoryRoll(result[0],result[1],result[2],result[3], player, mode, param, getRerollCube.value, getRerollCube.bonus))
-        }
-        //Если позиция не передана, значит это обычный бросок, записываем результат как новый
-        else {
-            var value = 0
-            result = Player.rollCube(cube)
             if (mode == "Проверка Инициативы") {
                 when (result[1].toInt()) {
                     1 -> value = 8
@@ -195,7 +192,27 @@ class MainActivity :
                     else -> value = 4
                 }
             }
+            if (getRerollCube.mode == "Проверка Уклонения" || getRerollCube.mode == "Проверка Парирования"|| getRerollCube.mode.contains("Убывающий Тест") ){
+                param = getRerollCube.parameter
+            }
+            HistoryRollManager.getInstance().updateItem(position, HistoryRoll(result[0],result[1],result[2],result[3], player, mode, param, getRerollCube.change, value, getRerollCube.bonus, getRerollCube.weapon))
+        }
+        //Если позиция не передана, значит это обычный бросок, записываем результат как новый
+        else {
+            var value = 0
             var param = Player.getInstance().getPlayerParameter(player, mode)
+            result = Player.rollCube(cube)
+            if (mode == "Проверка Попадания"){
+                param = Player.getInstance().getParamPlayerToClassArsenal(weapon!!.classArsenal, weapon.idPlayer)
+                value = Player.getInstance().getSuccessfulHit(result[1].toInt(), param, bonus, change, weapon!!.valueTest, weapon.paired)
+            }
+            if (mode == "Проверка Инициативы") {
+                when (result[1].toInt()) {
+                    1 -> value = 8
+                    20 -> value = 2
+                    else -> value = 4
+                }
+            }
             if (mode== "Проверка Уклонения"){
                 param = Player.getInstance().playerEntity?.dodge ?: 0
             }
@@ -203,7 +220,7 @@ class MainActivity :
                 param = Player.getInstance().playerEntity?.parrying ?: 0
             }
             if (mode.contains("Убывающий Тест")){
-                param = bonus
+                param = paramPlayer
             }
 
             HistoryRollManager.getInstance().addItem(
@@ -215,8 +232,10 @@ class MainActivity :
                     player,
                     mode,
                     param,
+                    change,
                     value,
-                    0
+                    bonus,
+                    weapon
                 )
             )
         }

@@ -18,6 +18,7 @@ import com.example.sumrak.ui.inventory.recycler.armor.Armor
 import com.example.sumrak.ui.inventory.recycler.armor.ArmorViewModel
 import com.example.sumrak.ui.inventory.recycler.arsenal.Arsenal
 import com.example.sumrak.ui.inventory.recycler.arsenal.ArsenalViewModel
+import com.example.sumrak.ui.inventory.recycler.arsenal.item.ArsenalItem
 import com.example.sumrak.ui.inventory.recycler.consumables.Consumbles
 import com.example.sumrak.ui.inventory.recycler.consumables.ConsumablesViewModel
 import com.example.sumrak.ui.inventory.recycler.effects.Effects
@@ -53,7 +54,7 @@ class InventoryFragment : Fragment() {
     }
 
     interface Interface{
-        fun get_result_roll(text: String, player: Int, mode : String, param: Int,position: Int?)
+        fun get_result_roll(text: String, player: Int, mode : String, param: Int, change:Int, bonus: Int, position: Int?, weapon :ArsenalItem?)
     }
 
     private var viewModel: InventoryViewModel? = null
@@ -102,7 +103,7 @@ class InventoryFragment : Fragment() {
     }
 
     fun useEquipment(mode: String, param : Int){
-        myInterface?.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), mode, param,null)
+        myInterface?.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), mode, param, 0,0, null, null)
     }
 
     private fun load(idPlayer: Int) {

@@ -32,6 +32,30 @@ class BattleViewModel(application: Application) : AndroidViewModel(application) 
     val initiativeV = MutableLiveData<InitiativeItem>()
     private var initiative : InitiativeItem? = null
     val initiativeVisible = MutableLiveData<Boolean>()
+    private var hits : Int? = null
+    val hitsV = MutableLiveData<Int>()
+    val hitsVisible = MutableLiveData<Boolean>()
+
+    fun getNumberHitsPlayer(id: Int){
+        if (historyRollManager.getLastRollHitToIdPlayer(id)!= null){
+            val hit = historyRollManager.getLastRollHitToIdPlayer(id)!!.value
+            hits = hit
+            hitsV.postValue(hit)
+            hitsVisible.postValue(true)
+        }
+        else{
+            hitsVisible.postValue(false)
+        }
+    }
+
+    fun updateValueHitToidPlayer(step: Int){
+        if (historyRollManager.getLastRollHitToIdPlayer(Player.getInstance().getIdActivePlayer())!= null){
+            val idPlayer = Player.getInstance().getIdActivePlayer()
+            hits = hits!! + step
+            hitsV.postValue(hits!!)
+            historyRollManager.updateValueHitToIdPlayer(idPlayer, hits!!)
+        }
+    }
 
     fun getInitiativePlayer(id: Int) {
         initiative = historyRollManager.getLastRollIniToIdPlayer(id).toInitiativeItem()
@@ -47,11 +71,13 @@ class BattleViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun updateStepInitiative(step : Int) {
-        initiative?.let {
-            it.step = it.step + step
-            initiativeV.postValue(it)
-            val pos = historyRollManager.getPositionLastIniToIdPlayer(it.idPlayer)
-            historyRollManager.updateStepIniToPos(pos, it.step)
+        if (historyRollManager.getLastRollIniToIdPlayer(Player.getInstance().getIdActivePlayer()).mode != "не найдено"){
+            initiative?.let {
+                it.step = it.step + step
+                initiativeV.postValue(it)
+                val pos = historyRollManager.getPositionLastIniToIdPlayer(it.idPlayer)
+                historyRollManager.updateStepIniToPos(pos, it.step)
+            }
         }
     }
 

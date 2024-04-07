@@ -48,6 +48,10 @@ class OtherAdapter(
                     textPersCheck.text = "Убывающий Тест"
                     textResultCube.text = "Предмет: " + historyRoll.mode.substring(14)
                 }
+                else if (historyRoll.mode == "Проверка Уклонения" || historyRoll.mode == "Проверка Парирования"){
+                    textParametr.text = "Критерий успеха: ${historyRoll.parameter}"
+                    textPersCheck.text = historyRoll.mode
+                }
                 else{
                     textParametr.text= ""
                     textPersCheck.text = historyRoll.mode

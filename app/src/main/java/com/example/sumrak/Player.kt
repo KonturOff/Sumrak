@@ -120,6 +120,40 @@ class Player private constructor(){
         }
     }
 
+    fun getSuccessfulHit(summRoll : Int, paramPers: Int, bonus: Int,  change: Int, valueTest: Int, parrying: Boolean): Int {
+        var stepen = paramPers + bonus - summRoll
+        var successfulHit = 0
+        if (summRoll!=1){
+            while(stepen>=0){
+                successfulHit++
+                stepen-=valueTest
+            }
+            if (summRoll == 2){
+                successfulHit += 2
+            }
+            if (successfulHit > change){
+                successfulHit = change
+            }
+        }
+        else{
+            successfulHit = change
+        }
+        if (parrying){
+            successfulHit *= 2
+        }
+        return successfulHit
+    }
+
+    fun getParamPlayerToClassArsenal(classArsenal: Int, idPlayer: Int): Int {
+        val player = getPlayerToId(idPlayer)
+        if (classArsenal==1){
+            return player.bb
+        }
+        else{
+            return player.db
+        }
+    }
+
     fun getRandomText() : String{
         val list = listOf("Кубодроч не создавай", "Ну сейчас точно единица!", "Критический кто?",
             "Важно не то, как часто ты кидаешь единицы, а то как долго ты выдерживаешь двадцатки",

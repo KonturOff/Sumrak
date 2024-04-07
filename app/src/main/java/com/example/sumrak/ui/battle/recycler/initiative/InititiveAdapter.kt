@@ -11,6 +11,7 @@ import com.example.sumrak.R
 import com.example.sumrak.databinding.MaketBattleInitiativeBinding
 import com.example.sumrak.ui.battle.BattleViewModel
 import com.example.sumrak.ui.battle.recycler.DelegateAdapterB
+import com.example.sumrak.ui.battle.recycler.atack.AttackViewModel
 
 class InititiveAdapter(
     private val battleViewModel: BattleViewModel,
@@ -30,7 +31,11 @@ class InititiveAdapter(
         return InitiativeViewHolder(view, battleViewModel, lifecycleOwner, buttonClickListener)
     }
 
-    override fun onBindViewHolder(holder: InitiativeViewHolder, item: Initiative) {
+    override fun onBindViewHolder(
+        holder: InitiativeViewHolder,
+        item: Initiative,
+        attackViewModel: AttackViewModel
+    ) {
         holder.bind(
 //            item,
             viewModel = battleViewModel,

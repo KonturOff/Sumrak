@@ -51,29 +51,37 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/text_cube"
+                    android:id="@+id/text_name_pers"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="d23"
+                    android:layout_weight="1"
+                    android:text="Name"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
 
                 <TextView
-                    android:id="@+id/text_result_cube"
+                    android:id="@+id/text_parametr_weapon"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="top"
-                    android:text="resultcube"
+                    android:text="Пистолет Страж"
                     android:textColor="@color/white" />
 
                 <TextView
-                    android:id="@+id/textView51"
+                    android:id="@+id/text_value_damage"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="4dp"
-                    android:text="Свободный бросок"
+                    android:gravity="bottom"
+                    android:text="Количество попаданий: 12"
                     android:textColor="@color/white" />
+
+                <TextView
+                    android:id="@+id/text_pers_check"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="4dp"
+                    android:text="Проверка попадания + 5"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
 
             </LinearLayout>
 

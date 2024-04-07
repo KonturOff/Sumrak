@@ -24,6 +24,8 @@ class HistoryAdapter(
             TYPE_CALCULATOR -> CalculatorAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
             TYPE_FUSS_CHECK -> FussAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
             TYPE_INITIATIVE -> InitiativeRVAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
+            TYPE_HIT -> HitAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
+            TYPE_DAMAGE -> DamageAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
             else -> OtherAdapter(historyCalculatorFragment).onCreateViewHolder(parent)
         }
     }
@@ -36,6 +38,8 @@ class HistoryAdapter(
             TYPE_CALCULATOR -> (holder as CalculatorAdapter.CalculatorViewHolder).bind(historyRoll, position, historyCalculatorFragment)
             TYPE_FUSS_CHECK ->(holder as FussAdapter.FussViewHolder).bind(historyRoll, position, historyCalculatorFragment)
             TYPE_INITIATIVE -> (holder as InitiativeRVAdapter.InitiativeRVViewHolder).bind(historyRoll, position, historyCalculatorFragment)
+            TYPE_HIT -> (holder as HitAdapter.HitViewHolder).bind(historyRoll, position, historyCalculatorFragment)
+            TYPE_DAMAGE -> (holder as DamageAdapter.DamageViewHolder).bind(historyRoll, position, historyCalculatorFragment)
             else ->  (holder as OtherAdapter.OtherViewHolder).bind(historyRoll, position, historyCalculatorFragment)
         }
     }
@@ -50,6 +54,8 @@ class HistoryAdapter(
             "Калькулятор" -> TYPE_CALCULATOR
             "Проверка Суеты" -> TYPE_FUSS_CHECK
             "Проверка Инициативы" -> TYPE_INITIATIVE
+            "Проверка Попадания" -> TYPE_HIT
+            "Расчет Урона" -> TYPE_DAMAGE
             else -> TYPE_DEFAULT
         }
     }
@@ -59,6 +65,8 @@ class HistoryAdapter(
         private const val TYPE_CALCULATOR = 1
         private const val TYPE_FUSS_CHECK = 2
         private const val TYPE_INITIATIVE = 3
+        private const val TYPE_HIT = 4
+        private const val TYPE_DAMAGE = 5
     }
 
 

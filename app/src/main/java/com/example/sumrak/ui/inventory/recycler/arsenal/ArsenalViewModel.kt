@@ -58,7 +58,7 @@ class ArsenalViewModel(application: Application) : AndroidViewModel(application)
 
     fun getArsenalToIdPlayer(id: Int){
         arsenalItemManager.clearList()
-        arsenalItemManager.addItem(ArsenalItem(0, id, 1, "Без оружия", 1, 5, 0, 0, 1, 0 ,0, 0, 0, 0, 0, 4,true, false))
+        arsenalItemManager.addItem(ArsenalItem(0, id, 1, "Без оружия", 1, 5, 0, 0, 1, 0 ,0, 0, 0, 0, 0, 4,true, false, ""))
         viewModelScope.launch(Dispatchers.IO) {
             repository.getArsenalToIdPlayer(id).forEach {
                 arsenalItemManager.addItem(it.toArsenalItem())
@@ -97,7 +97,7 @@ class ArsenalViewModel(application: Application) : AndroidViewModel(application)
                 modeSettings.postValue(mode)
             }
             1 -> {arsenalItem.postValue(ArsenalItem(0,0,0,"",1, 5,0,0,0,0,0,
-                0, 0, 0, 0, 4, false, false))
+                0, 0, 0, 0, 4, false, false, ""))
                 activeIdSettings = 0
                 activeIdRepair = 0
                 modeSettings.postValue(mode)

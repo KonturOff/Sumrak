@@ -23,7 +23,7 @@ class ArsenalAdapter(
     private val lifecycleOwner: LifecycleOwner,
     private val context: Context,
     private val inventoryViewModel: InventoryViewModel
-) : DelegateAdapter<Arsenal, ArsenalAdapter.ArsenalViewHolder, Any?>() {
+) : DelegateAdapter<Arsenal, ArsenalAdapter.ArsenalViewHolder, ArsenalViewModel>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup): ArsenalViewHolder {
@@ -78,6 +78,7 @@ class ArsenalAdapter(
                     tvValueTestArsenal.text = it.valueTest.toString()
                     cBoxChekBPowerArsenal.isChecked = it.bonusPower
                     cBoxPairedArsenal.isChecked = it.paired
+                    editFeaturesArsenal.setText(it.features)
                     clips = mutableListOf(it.maxPatrons, it.clip1, it.clip2, it.clip3)
                     setModeRepair(activeClips)
                     setTypeSettings(it.classArsenal)
@@ -171,7 +172,8 @@ class ArsenalAdapter(
                                 distanse = editDistanseArsenal.text.toString().toInt(),
                                 valueTest = tvValueTestArsenal.text.toString().toInt(),
                                 bonusPower = cBoxChekBPowerArsenal.isChecked,
-                                paired = cBoxPairedArsenal.isChecked
+                                paired = cBoxPairedArsenal.isChecked,
+                                features = editFeaturesArsenal.text.toString()
                             )
                             viewModel.updateArsenalItem(item)
                         }
@@ -194,7 +196,8 @@ class ArsenalAdapter(
                                 distanse = editDistanseArsenal.text.toString().toInt(),
                                 valueTest = tvValueTestArsenal.text.toString().toInt(),
                                 bonusPower = cBoxChekBPowerArsenal.isChecked,
-                                paired = cBoxPairedArsenal.isChecked
+                                paired = cBoxPairedArsenal.isChecked,
+                                features = editFeaturesArsenal.text.toString()
                             )
                             viewModel.addArsenalItem(item)
                         }
@@ -226,6 +229,8 @@ class ArsenalAdapter(
                         btnDeleteArsenal.isVisible = false
                         rBtnDBType.isVisible = true
                         rBtnBBType.isVisible = true
+                        repairArsenal.isVisible = false
+                        settingsArsenal.isVisible = true
                     }
                     2 -> {
                         tvModeSettingsArsenal.text = "Редактировать Оружие"
@@ -297,7 +302,6 @@ class ArsenalAdapter(
 
         private fun refreshArsenalClips(viewModel: ArsenalViewModel){
             clips.sortDescending()
-            println(clips)
             viewModel.ravageClipsToArsenal(itemId, clips[1], clips[2], clips[3])
         }
 

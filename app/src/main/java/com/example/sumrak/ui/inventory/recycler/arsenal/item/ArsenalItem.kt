@@ -12,7 +12,7 @@ data class ArsenalItem(
     val damageZ: Int,
     val penetration: Int,
     val step: Int,
-    val change: Int,
+    var change: Int,
     val maxPatrons: Int,
     var clip1: Int,
     var clip2: Int,
@@ -20,7 +20,8 @@ data class ArsenalItem(
     val distanse: Int,
     val valueTest: Int,
     val bonusPower: Boolean,
-    val paired: Boolean
+    val paired: Boolean,
+    val features : String
 ) {
 
     fun toArsenalDbEntity() : ArsenalDbEntity = ArsenalDbEntity(
@@ -41,6 +42,7 @@ data class ArsenalItem(
         distanse = distanse,
         valueTest = valueTest,
         bonusPower = bonusPower,
-        paired = paired
+        paired = paired,
+        features = features
     )
 }

@@ -11,6 +11,9 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sumrak.Player
 import com.example.sumrak.databinding.FragmentBattleBinding
+import com.example.sumrak.ui.battle.recycler.atack.Attack
+import com.example.sumrak.ui.battle.recycler.atack.AttackAdapter
+import com.example.sumrak.ui.battle.recycler.atack.AttackViewModel
 import com.example.sumrak.ui.battle.recycler.damage.Damage
 import com.example.sumrak.ui.battle.recycler.damage.DamageAdapter
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentB
@@ -19,9 +22,16 @@ import com.example.sumrak.ui.battle.recycler.equipment.item.EquipmentBItemAdapte
 import com.example.sumrak.ui.battle.recycler.information.Information
 import com.example.sumrak.ui.battle.recycler.initiative.Initiative
 import com.example.sumrak.ui.battle.recycler.initiative.InititiveAdapter
+import com.example.sumrak.ui.inventory.recycler.arsenal.item.ArsenalItem
 import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 
-class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, DamageAdapter.ButtonClick, EquipmentBItemAdapter.equipmentRollClick {
+class BattleFragment :
+    Fragment(),
+    InititiveAdapter.OnButtonClickListener,
+    DamageAdapter.ButtonClick,
+    EquipmentBItemAdapter.equipmentRollClick,
+    AttackAdapter.attackClick
+{
 
 
     companion object {
@@ -32,6 +42,7 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
     private lateinit var myInterface: Interface
     private lateinit var viewModel: BattleViewModel
     private lateinit var equipmentBViewModel: EquipmentBViewModel
+    private lateinit var attackViewModel: AttackViewModel
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -39,7 +50,7 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
     }
 
     interface Interface{
-        fun get_result_roll(text: String, player: Int, mode : String, param: Int, position: Int?)
+        fun get_result_roll(text: String, player: Int, mode : String, param: Int, chenge: Int, bonus:Int,  position: Int?, weapon: ArsenalItem?)
     }
 
     override fun onCreateView(
@@ -50,6 +61,7 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
         viewBinding = FragmentBattleBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this).get(BattleViewModel::class.java)
         equipmentBViewModel = ViewModelProvider(this).get(EquipmentBViewModel::class.java)
+        attackViewModel = ViewModelProvider(this).get(AttackViewModel::class.java)
 
         val battleManager = BattleManager.getInstance()
         //ВРЕМЕННОЕ РЕШЕНИЕ
@@ -72,7 +84,8 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
                 requireContext(),
                 viewModel ,
                 this,
-                equipmentBViewModel
+                equipmentBViewModel,
+                attackViewModel
             )
         viewBinding.recBattle.adapter = battleAdapter
 
@@ -89,29 +102,38 @@ class BattleFragment : Fragment(), InititiveAdapter.OnButtonClickListener, Damag
         battleManager.addItem(BattleItem(1,1,"Получение Урона", 1,true, Damage()))
         battleManager.addItem(BattleItem(1,1,"Инициатива", 2,true, Initiative()))
         battleManager.addItem(BattleItem(1,1,"Снаряжение", 3,true, EquipmentB()))
+        battleManager.addItem(BattleItem(1,1,"Атака", 1, true, Attack()))
 
     }
 
     override fun rollInitiativeActivePlayer() {
-        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(),"Проверка Инициативы", 0, null)
+        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(),"Проверка Инициативы", 0,0, 0,null, null)
     }
 
     override fun rollInitiativeAllPlayers() {
         for (i in Player.getInstance().getIdPlayerToPlayerList()){
-            myInterface.get_result_roll("d20", i,"Проверка Инициативы", 0,null)
+            myInterface.get_result_roll("d20", i,"Проверка Инициативы", 0,0,0,null, null)
         }
     }
 
     override fun rollDodgeActivePlayer(){
-        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), "Проверка Уклонения", 0,null)
+        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), "Проверка Уклонения", 0,0,0,null, null)
     }
 
     override fun rollParryingActivePlayer(){
-        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), "Проверка Парирования", 0,null)
+        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), "Проверка Парирования", 0,0,0,null, null)
     }
 
     override fun rollEquipmentTest(mode: String, param: Int) {
-        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), mode, param, null)
+        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), mode, param,0, 0,null, null)
+    }
+
+    override fun rollHit(chenge: Int, bonusHit: Int, weapon: ArsenalItem) {
+        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), "Проверка Попадания", 0, chenge, bonusHit,null, weapon)
+    }
+
+    override fun rollDamage(cube : String,  weapon: ArsenalItem) {
+        myInterface.get_result_roll(cube, Player.getInstance().getIdActivePlayer(), "Расчет Урона", 0, 0, 0,null, weapon)
     }
 
 }

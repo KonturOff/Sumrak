@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.sumrak.data.DataBase
 import com.example.sumrak.data.inventory.consumables.ConsumablesRepository
 import com.example.sumrak.data.inventory.equipment.EquipmentRepository
+import com.example.sumrak.ui.battle.recycler.equipment.item.EquipmentBItemManager
 import com.example.sumrak.ui.inventory.recycler.consumables.item.ConsumablesItemManager
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItem
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItemManager
@@ -15,7 +16,7 @@ import kotlinx.coroutines.launch
 
 
 class EquipmentBViewModel(application: Application) : AndroidViewModel(application) {
-    private val equipmentManager = EquipmentItemManager.getInstance()
+    private val equipmentManager = EquipmentBItemManager.getInstance()
     private val consumablesManager = ConsumablesItemManager.getInstance()
 
     private val repository: EquipmentRepository
@@ -45,7 +46,7 @@ class EquipmentBViewModel(application: Application) : AndroidViewModel(applicati
 
 
 
-    fun updateChargeEquipment(id: Int, change: Int){
+    private fun updateChargeEquipment(id: Int, change: Int){
         val item = equipmentManager.getItemToId(id)
         item.charge += change
         if (item.charge<0) item.charge = 0
@@ -57,7 +58,9 @@ class EquipmentBViewModel(application: Application) : AndroidViewModel(applicati
 
     fun replaceChangeEquipment(id: Int){
         val item = equipmentManager.getItemToId(id)
-        useConsyumablesToSaveBD(item.consumablesLink)
+        if (item.consumablesLink > 0){
+            useConsyumablesToSaveBD(item.consumablesLink)
+        }
         item.charge = item.maxCharge
         equipmentManager.updateItem(item)
         updatechargeEquipmentDb(id, item.charge)

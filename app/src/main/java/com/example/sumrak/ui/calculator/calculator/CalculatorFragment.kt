@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import com.example.sumrak.Player
 import com.example.sumrak.databinding.FragmentCalculatorBinding
 import com.example.sumrak.ui.calculator.CalculatorViewModel
+import com.example.sumrak.ui.inventory.recycler.arsenal.item.ArsenalItem
 
 class CalculatorFragment : Fragment(), View.OnTouchListener {
 
@@ -27,7 +28,7 @@ class CalculatorFragment : Fragment(), View.OnTouchListener {
     }
     // Инициализируем интерфейс для работы с Активити
     interface Interface{
-        fun get_result_roll(text: String, player: Int, mode : String, param : Int, position: Int?)
+        fun get_result_roll(text: String, player: Int, mode : String, param : Int, change:Int, bonus: Int, position: Int?, weapon: ArsenalItem?)
         fun touch_screen()
     }
 
@@ -77,7 +78,7 @@ class CalculatorFragment : Fragment(), View.OnTouchListener {
                     if (tvDisplay.text.endsWith("+") || tvDisplay.text.endsWith("-")){
                         tvDisplay.text = tvDisplay.text.dropLast(1)
                     }
-                    myInterface.get_result_roll(tvDisplay.text.toString(), Player.getInstance().getIdActivePlayer(),"Калькулятор", 0,null)
+                    myInterface.get_result_roll(tvDisplay.text.toString(), Player.getInstance().getIdActivePlayer(),"Калькулятор", 0, 0,0,null, null)
                 }
             }
             btnDelete.setOnClickListener { viewModel.deleteSymdol() }

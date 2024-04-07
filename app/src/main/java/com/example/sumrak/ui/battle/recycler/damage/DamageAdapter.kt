@@ -12,6 +12,7 @@ import com.example.sumrak.R
 import com.example.sumrak.databinding.MaketBattleDamageBinding
 import com.example.sumrak.ui.battle.BattleViewModel
 import com.example.sumrak.ui.battle.recycler.DelegateAdapterB
+import com.example.sumrak.ui.battle.recycler.atack.AttackViewModel
 
 
 class DamageAdapter(
@@ -32,7 +33,11 @@ class DamageAdapter(
         return DamageViewHolder(view, battleViewModel, lifecycleOwner, battleFragment)
     }
 
-    override fun onBindViewHolder(holder: DamageViewHolder, item: Damage) {
+    override fun onBindViewHolder(
+        holder: DamageViewHolder,
+        item: Damage,
+        attackViewModel: AttackViewModel
+    ) {
         //holder.bind(item, battleViewModel, lifecycleOwner, context, battleFragment)
         holder.bind(
             battleViewModel = battleViewModel,

@@ -11,8 +11,8 @@ import com.example.sumrak.databinding.MaketBattleEquipmentBinding
 import com.example.sumrak.ui.battle.BattleFragment
 import com.example.sumrak.ui.battle.BattleViewModel
 import com.example.sumrak.ui.battle.recycler.DelegateAdapterB
+import com.example.sumrak.ui.battle.recycler.atack.AttackViewModel
 import com.example.sumrak.ui.battle.recycler.equipment.item.EquipmentBItemAdapter
-import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 
 class EquipmentBAdapter(
 //    private val battleViewModel: BattleViewModel,
@@ -38,7 +38,8 @@ class EquipmentBAdapter(
 
     override fun onBindViewHolder(
         holder: EquipmentBViewHolder,
-        item: EquipmentB
+        item: EquipmentB,
+        attackViewModel: AttackViewModel
     ) {
         holder.bind(
 //            item,

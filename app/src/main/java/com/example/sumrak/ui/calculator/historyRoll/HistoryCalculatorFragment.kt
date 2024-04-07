@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sumrak.lists.HistoryRollManager
 import com.example.sumrak.databinding.FragmentHirstoryCalculatorBinding
+import com.example.sumrak.ui.inventory.recycler.arsenal.item.ArsenalItem
 
 
 class HistoryCalculatorFragment : Fragment(), HistoryCalculatorClickListener {
@@ -24,7 +25,7 @@ class HistoryCalculatorFragment : Fragment(), HistoryCalculatorClickListener {
 
     // Инициализируем интерфейс для работы с Активити
     interface Interface{
-        fun get_result_roll(cube: String, player: Int, mode : String, param : Int, position: Int?)
+        fun get_result_roll(cube: String, player: Int, mode : String, param : Int, change: Int, bonus: Int, position: Int?, weapon: ArsenalItem?)
     }
 
     override fun onCreateView(
@@ -57,6 +58,10 @@ class HistoryCalculatorFragment : Fragment(), HistoryCalculatorClickListener {
     override fun onRecyclerViewItemClick(position: Int) {
         val player = HistoryRollManager.getInstance().getItem(position).player
         val mode = HistoryRollManager.getInstance().getItem(position).mode
-        myInterfaceHistoryCalculatorFragment?.get_result_roll("0", player,mode,0,position)
+        val param = HistoryRollManager.getInstance().getItem(position).parameter
+        val weapon = HistoryRollManager.getInstance().getItem(position).weapon
+        val bonus = HistoryRollManager.getInstance().getItem(position).bonus
+        val change = HistoryRollManager.getInstance().getItem(position).change
+        myInterfaceHistoryCalculatorFragment?.get_result_roll("0", player,mode,param,change, bonus, position, weapon)
     }
 }

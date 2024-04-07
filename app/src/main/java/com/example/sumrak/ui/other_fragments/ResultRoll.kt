@@ -68,6 +68,8 @@ class ResultRoll : Fragment() {
             "Калькулятор" -> modeOne()
             "Проверка Суеты" -> checkFuss()
             "Проверка Инициативы" -> initiativeMode()
+            "Расчет Урона" -> damageMode()
+            "Проверка Попадания" -> hitMode()
             else -> checkValue(mode)
         }
 
@@ -100,6 +102,30 @@ class ResultRoll : Fragment() {
                 }
 
             }
+        }
+    }
+
+    //Проверка попадания
+    private fun hitMode(){
+        modeTwo()
+        val item = HistoryRollManager.getInstance().getItem(position)
+        viewBinding?.apply {
+            resultSumRoll.text = item.resultRoll
+            checkResult.text = item.weapon!!.name
+            rateResult.text = "Кол-во попаданий: ${item.value}"
+            checkValueHit(item.resultRoll, item.parameter, item.bonus)
+        }
+    }
+
+    //Расчет Урона
+    private fun damageMode(){
+        modeTwo()
+        val item = HistoryRollManager.getInstance().getItem(position)
+        viewBinding?.apply {
+            resultSumRoll.text = item.resultRoll
+            resultValue.text = "${item.cube} : ${item.textRoll}"
+            checkResult.text = item.mode
+            rateResult.text = item.weapon?.name
         }
     }
 
@@ -168,6 +194,26 @@ class ResultRoll : Fragment() {
                     rateResult.text =
                         "Степени провала: " + (HistoryRollManager.getInstance()
                             .getItem(position).resultRoll.toInt() - value)
+                }
+            }
+        }
+    }
+
+    //еще 1 режим проверки Характеристик для проверки попадания, послал куда подальше переписывание старого под новые задачи
+    private fun checkValueHit(resultRoll: String, parametrPlayer: Int, bonus : Int){
+        viewBinding?.apply {
+            if (resultRoll == "1"){
+                resultValue.text = "КРИТИЧЕСКИЙ УСПЕХ!"
+            }
+            else if (resultRoll == "20"){
+                resultValue.text = "КРИТИЧЕСКИЙ ПРОВАЛ"
+            }
+            else{
+                if (resultRoll.toInt() < parametrPlayer + bonus){
+                    resultValue.text = "Успех"
+                }
+                else{
+                    resultValue.text = "Провал"
                 }
             }
         }

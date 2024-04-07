@@ -1,8 +1,11 @@
 package com.example.sumrak.data.inventory.arsenal
 
+import kotlinx.coroutines.flow.Flow
+
 class ArsenalRepository(
     private val daoArsenalDb: DaoArsenalDb
 ) {
+    val readActiveWeapon : Flow<ArsenalDbEntity> = daoArsenalDb.getActiveWeapon()
 
     suspend fun addArsenalItem(arsenalDbEntity: ArsenalDbEntity) : Long{
         return daoArsenalDb.addArsenalItem(arsenalDbEntity)

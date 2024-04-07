@@ -34,7 +34,8 @@ data class ArsenalDbEntity(
     val distanse: Int,
     val valueTest : Int,
     val bonusPower: Boolean,
-    val paired : Boolean
+    val paired : Boolean,
+    val features : String
 )
 
 {
@@ -56,6 +57,7 @@ data class ArsenalDbEntity(
         distanse = distanse,
         valueTest = valueTest,
         bonusPower = bonusPower,
-        paired = paired
+        paired = paired,
+        features = features
     )
 }

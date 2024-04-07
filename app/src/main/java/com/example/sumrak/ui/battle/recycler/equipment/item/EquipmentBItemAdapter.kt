@@ -4,13 +4,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.sumrak.Player
 import com.example.sumrak.R
 import com.example.sumrak.databinding.MaketBattleEquipmentRecBinding
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBViewModel
-import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItem
-import com.example.sumrak.ui.inventory.recycler.equipment.item.EquipmentItemManager
 
 
 class EquipmentBItemAdapter(
@@ -19,14 +16,13 @@ class EquipmentBItemAdapter(
     private val battleFragment: equipmentRollClick
 ) : RecyclerView.Adapter<EquipmentBItemAdapter.EquipmentBItemViewHolder>() {
 
-    private val equipmentItemManager = EquipmentItemManager.getInstance()
+    private val equipmentItemManager = EquipmentBItemManager.getInstance()
 
     interface equipmentRollClick{
         fun rollEquipmentTest(mode: String, param : Int)
     }
 
     init {
-        //equipmentViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
         equipmentItemManager.setBattleAdapter(this)
     }
 
@@ -66,9 +62,7 @@ class EquipmentBItemAdapter(
             battleFragment: equipmentRollClick
         ) {
             viewBinding.apply {
-                if (item.charge == 0){
-                    btnUseEquipmentB.isEnabled = false
-                }
+                btnUseEquipmentB.isEnabled = item.charge != 0
                 if (item.consumablesLink > 0){
                     if (equipmentBViewModel.getValueConsumablesToId(item.consumablesLink)==0){
                         btnReplaceEquipmentB.isEnabled = false
