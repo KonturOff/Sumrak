@@ -4,6 +4,8 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.sumrak.data.battle.BattleItemEntity
+import com.example.sumrak.data.battle.DaoBattleItem
 import com.example.sumrak.data.inventory.armor.ArmorDbEntity
 import com.example.sumrak.data.inventory.armor.DaoArmorDb
 import com.example.sumrak.data.inventory.arsenal.ArsenalDbEntity
@@ -16,6 +18,7 @@ import com.example.sumrak.data.inventory.equipment.DaoEquipmentDb
 import com.example.sumrak.data.inventory.equipment.EquipmentDbEntity
 import com.example.sumrak.data.inventory.inventoryItem.DaoInventoryItem
 import com.example.sumrak.data.inventory.inventoryItem.InventoryItemEntity
+import com.example.sumrak.data.inventory.note.NoteDbEntity
 import com.example.sumrak.data.playerdb.DaoPlayerDb
 import com.example.sumrak.data.playerdb.PlayerDbEntity
 import com.example.sumrak.data.playerdb.PlayerVariableEntity
@@ -32,7 +35,9 @@ import com.example.sumrak.data.settings.SettingsDbEntity
         ConsumablesDbEntity::class,
         EffectsDbEntity::class,
         EquipmentDbEntity::class,
-        ArsenalDbEntity::class
+        ArsenalDbEntity::class,
+        NoteDbEntity::class,
+        BattleItemEntity::class
                ],
     version = 1,
     exportSchema = false
@@ -45,6 +50,7 @@ abstract class DataBase : RoomDatabase() {
     abstract fun getEffectsDao() : DaoEffectsDb
     abstract fun getEquipmentDao() : DaoEquipmentDb
     abstract fun getArsenalDao() : DaoArsenalDb
+    abstract fun getBattleDao(): DaoBattleItem
 
     companion object{
         @Volatile

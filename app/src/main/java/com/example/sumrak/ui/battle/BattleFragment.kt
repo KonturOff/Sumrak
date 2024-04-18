@@ -11,19 +11,13 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.sumrak.Player
 import com.example.sumrak.databinding.FragmentBattleBinding
-import com.example.sumrak.ui.battle.recycler.atack.Attack
 import com.example.sumrak.ui.battle.recycler.atack.AttackAdapter
 import com.example.sumrak.ui.battle.recycler.atack.AttackViewModel
-import com.example.sumrak.ui.battle.recycler.damage.Damage
 import com.example.sumrak.ui.battle.recycler.damage.DamageAdapter
-import com.example.sumrak.ui.battle.recycler.equipment.EquipmentB
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBViewModel
 import com.example.sumrak.ui.battle.recycler.equipment.item.EquipmentBItemAdapter
-import com.example.sumrak.ui.battle.recycler.information.Information
-import com.example.sumrak.ui.battle.recycler.initiative.Initiative
 import com.example.sumrak.ui.battle.recycler.initiative.InititiveAdapter
 import com.example.sumrak.ui.inventory.recycler.arsenal.item.ArsenalItem
-import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
 
 class BattleFragment :
     Fragment(),
@@ -57,7 +51,7 @@ class BattleFragment :
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
+        val idPlayer = Player.getInstance().getIdActivePlayer()
         viewBinding = FragmentBattleBinding.inflate(layoutInflater)
         viewModel = ViewModelProvider(this).get(BattleViewModel::class.java)
         equipmentBViewModel = ViewModelProvider(this).get(EquipmentBViewModel::class.java)
@@ -65,7 +59,7 @@ class BattleFragment :
 
         val battleManager = BattleManager.getInstance()
         //ВРЕМЕННОЕ РЕШЕНИЕ
-        loadBattleView(battleManager)
+        loadBattleView(idPlayer)
 
         equipmentBViewModel.getEquipmentToIdPlayer(Player.getInstance().getIdActivePlayer())
 
@@ -96,13 +90,8 @@ class BattleFragment :
         return viewBinding.root
     }
 
-    private fun loadBattleView(battleManager: BattleManager) {
-        battleManager.clearList()
-        battleManager.addItem(BattleItem(1,1,"Информация", 0,true, Information()))
-        battleManager.addItem(BattleItem(1,1,"Получение Урона", 1,true, Damage()))
-        battleManager.addItem(BattleItem(1,1,"Инициатива", 2,true, Initiative()))
-        battleManager.addItem(BattleItem(1,1,"Снаряжение", 3,true, EquipmentB()))
-        battleManager.addItem(BattleItem(1,1,"Атака", 1, true, Attack()))
+    private fun loadBattleView(idPlayer: Int) {
+        viewModel.getBattleItemToPlayer(idPlayer)
 
     }
 

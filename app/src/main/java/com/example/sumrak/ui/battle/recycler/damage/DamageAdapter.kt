@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
+import androidx.core.view.isVisible
 import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.sumrak.R
@@ -40,6 +41,7 @@ class DamageAdapter(
     ) {
         //holder.bind(item, battleViewModel, lifecycleOwner, context, battleFragment)
         holder.bind(
+            item = item,
             battleViewModel = battleViewModel,
             context = context
         )
@@ -54,6 +56,10 @@ class DamageAdapter(
         private val viewBinding = MaketBattleDamageBinding.bind(itemView)
 
         init {
+            battleViewModel.damageVisible.observe(lifecycleOwner){
+                viewBinding.damageVisible.isVisible = it
+            }
+
             battleViewModel.playerV.observe(lifecycleOwner) {
                 viewBinding.apply {
                     tvDodgeValue.text = it.dodge.toString()
@@ -66,13 +72,16 @@ class DamageAdapter(
 
 
         fun bind(
-//            item: Damage,
+            item: Damage,
             battleViewModel: BattleViewModel,
 //            lifecycleOwner: LifecycleOwner,
             context: Context,
 //            battleFragment: ButtonClick
         ) {
             viewBinding.apply {
+                battleViewModel.getVisibleView(item.name)
+                tvDamage.setOnClickListener { battleViewModel.updateVisibleView(item.name) }
+
                 btnAddPenetration.setOnClickListener {
                     tvArmorPenetration.text =
                         (tvArmorPenetration.text.toString().toInt() + 1).toString()

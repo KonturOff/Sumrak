@@ -21,6 +21,10 @@ import com.example.sumrak.ui.inventory.recycler.effects.EffectsViewModel
 import com.example.sumrak.ui.inventory.recycler.equipment.Equipment
 import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentAdapter
 import com.example.sumrak.ui.inventory.recycler.equipment.EquipmentViewModel
+import com.example.sumrak.ui.inventory.recycler.note.Note
+import com.example.sumrak.ui.inventory.recycler.note.NoteAdapter
+import com.example.sumrak.ui.inventory.recycler.start.Start
+import com.example.sumrak.ui.inventory.recycler.start.StartAdapter
 
 class InventoryAdapter(
     private val inventoryManager: InventoryManager,
@@ -48,6 +52,8 @@ class InventoryAdapter(
             R.layout.maket_inventory_armor -> ArmorAdapter(viewModels.getValue(viewType) as ArmorViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
             R.layout.maket_inventory_consumables -> ConsumablesAdapter(viewModels.getValue(viewType) as ConsumablesViewModel, lifecycleOwner, context, inventoryViewModel).onCreateViewHolder(parent)
             R.layout.maket_inventory_equipment -> EquipmentAdapter(viewModels.getValue(viewType) as EquipmentViewModel, lifecycleOwner, context, inventoryViewModel, inventoryFragment).onCreateViewHolder(parent)
+            R.layout.maket_inventory_start -> StartAdapter(inventoryViewModel, inventoryFragment, lifecycleOwner).onCreateViewHolder(parent)
+            R.layout.maket_inventory_note -> NoteAdapter(inventoryViewModel, inventoryFragment, lifecycleOwner).onCreateViewHolder(parent)
             else -> throw UnsupportedOperationException("ViewType not supported")
         }
     }
@@ -88,6 +94,16 @@ class InventoryAdapter(
                 viewModels.getValue(items.view.viewType) as EquipmentViewModel,
 //                lifecycleOwner,
                 context,
+                inventoryViewModel,
+                inventoryFragment
+            )
+            R.layout.maket_inventory_start -> (holder as StartAdapter.StartViewHolder).bind(
+                items.view as Start,
+                inventoryViewModel,
+                inventoryFragment
+            )
+            R.layout.maket_inventory_note -> (holder as NoteAdapter.NoteViewHolder).bind(
+                items.view as Note,
                 inventoryViewModel,
                 inventoryFragment
             )

@@ -4,8 +4,10 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.sumrak.Player
 import com.example.sumrak.data.DataBase
 import com.example.sumrak.data.inventory.inventoryItem.InventoryItemRepository
+import com.example.sumrak.data.inventory.note.NoteDbEntity
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -20,10 +22,31 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
     val armorVisibility = MutableLiveData<Boolean>()
     val equipmentVisibility = MutableLiveData<Boolean>()
     val arsenalVisibility = MutableLiveData<Boolean>()
+    val noteVisibility = MutableLiveData<Boolean>()
+    val startVisibility = MutableLiveData<Boolean>()
+    val note = MutableLiveData<String>()
 
     fun addInventoryView(inventoryItem: InventoryItem){
         viewModelScope.launch(Dispatchers.IO) {
             repository.addInventoryItem(inventoryItem.toInventoryItemEntity())
+        }
+    }
+
+    fun addInventoryNote(noteDbEntity: NoteDbEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.addNotePlayer(noteDbEntity)
+        }
+    }
+
+    fun getNotePlayer(idPlayer: Int){
+        viewModelScope.launch(Dispatchers.IO) {
+            note.postValue(repository.getNotePlayer(idPlayer))
+        }
+    }
+
+    fun updateNotePlayer(noteDbEntity: NoteDbEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateNotePlayer(noteDbEntity)
         }
     }
 
@@ -67,7 +90,25 @@ class InventoryViewModel(application: Application) : AndroidViewModel(applicatio
             "Броня" -> armorVisibility.postValue(visible)
             "Снаряжение" -> equipmentVisibility.postValue(visible)
             "Арсенал" -> arsenalVisibility.postValue(visible)
+            "Старт Миссии" -> startVisibility.postValue(visible)
+            "Инвентарь" -> noteVisibility.postValue(visible)
 
+        }
+    }
+
+    fun recoverAllPers(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.recoverArsenalAllPers()
+            repository.recoverArmorAllPers()
+            repository.recoverVariableAllPers()
+        }
+    }
+
+    fun recoverActivePers(){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.recoverArsenalActivePers()
+            repository.recoverArmorActivePers()
+            repository.recoverVariableActivePers()
         }
     }
 

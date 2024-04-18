@@ -1,7 +1,7 @@
 package com.example.sumrak.ui.battle
 
+import com.example.sumrak.data.battle.BattleItemEntity
 import com.example.sumrak.ui.battle.recycler.BattleList
-import com.example.sumrak.ui.inventory.recycler.InventoryList
 
 data class BattleItem(
     val id: Int, // Уникальный идентификатор элемента
@@ -11,3 +11,12 @@ data class BattleItem(
     var isExpanded: Boolean, // Состояние элемента: true - раскрыт, false - свернут
     var view : BattleList
 )
+{
+    fun toBattleItemEntity():BattleItemEntity = BattleItemEntity(
+        id = id,
+        idPlayer = idPlayer,
+        type = type,
+        position = position,
+        isExpanded = isExpanded
+    )
+}

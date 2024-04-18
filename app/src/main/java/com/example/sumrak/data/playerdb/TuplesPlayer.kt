@@ -35,3 +35,27 @@ data class UpdateDodgeParryingTuples(
     val dodge : Int,
     val parrying: Int
 )
+
+data class UpdateInfluencePlayer(
+    val id: Int,
+    val influence: Int
+)
+
+data class  UpdateXpPlayer(
+    val id: Int,
+    val xp : Int
+)
+
+data class UpdateSoundPlayer(
+    val id: Int,
+    val sound : String
+)
+data class UpdateProfileClientTuples(
+    val id: Int,
+    val classPers: String,
+    val rank : String,
+    val bitchPlace : String,
+    val markFate : String,
+    val skills : String,
+    val profile : String
+)

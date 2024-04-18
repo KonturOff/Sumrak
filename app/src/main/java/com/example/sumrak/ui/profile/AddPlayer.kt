@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.get
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import com.example.sumrak.data.playerdb.PlayerDbEntity
@@ -15,7 +16,11 @@ import com.example.sumrak.data.playerdb.PlayerVariableEntity
 import com.example.sumrak.data.playerdb.PlayerViewModel
 import com.example.sumrak.Player
 import com.example.sumrak.R
+import com.example.sumrak.data.battle.BattleItemEntity
+import com.example.sumrak.data.inventory.note.NoteDbEntity
 import com.example.sumrak.databinding.FragmentAddPlayerBinding
+import com.example.sumrak.ui.battle.BattleViewModel
+import com.example.sumrak.ui.battle.recycler.information.Information
 import com.example.sumrak.ui.inventory.InventoryItem
 import com.example.sumrak.ui.inventory.InventoryViewModel
 import com.example.sumrak.ui.inventory.recycler.armor.Armor
@@ -23,6 +28,8 @@ import com.example.sumrak.ui.inventory.recycler.arsenal.Arsenal
 import com.example.sumrak.ui.inventory.recycler.consumables.Consumbles
 import com.example.sumrak.ui.inventory.recycler.effects.Effects
 import com.example.sumrak.ui.inventory.recycler.equipment.Equipment
+import com.example.sumrak.ui.inventory.recycler.note.Note
+import com.example.sumrak.ui.inventory.recycler.start.Start
 import com.google.android.material.snackbar.Snackbar
 import java.lang.Exception
 
@@ -34,6 +41,7 @@ class AddPlayer : Fragment() {
     private var navController: NavController? = null
     private lateinit var playerViewModel : PlayerViewModel
     private var inventoryViewModel: InventoryViewModel? = null
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -61,6 +69,7 @@ class AddPlayer : Fragment() {
             viewBinding?.btnBack?.isVisible = false
         }
         inventoryViewModel = ViewModelProvider(this).get(InventoryViewModel::class.java)
+
         playerViewModel = ViewModelProvider(this).get(PlayerViewModel::class.java)
 
         navController = Navigation.findNavController(view)
@@ -91,14 +100,23 @@ class AddPlayer : Fragment() {
                         editInfluence.text.toString().toInt(),
                         editXP.text.toString().toInt(),
                         0,
-                        0
+                        0,
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "",
+                        "Стандартные Кубы"
                     )
                     val id = playerViewModel.addPlayer(player)
                     val variable = PlayerVariableEntity(
                         id.toInt(),
                         editHP.text.toString().toInt(),
+                        editHP.text.toString().toInt(),
                         l,
                         d,
+                        editFate.text.toString().toInt(),
                         editFate.text.toString().toInt(),
                         0,
                         0
@@ -106,6 +124,11 @@ class AddPlayer : Fragment() {
                     playerViewModel.addPlayerVariable(variable)
                     playerViewModel.setIdActivePlayer(id.toInt())
                     createInventoryItem(id.toInt())
+                    createBattleItem(id.toInt())
+                    inventoryViewModel?.addInventoryNote(NoteDbEntity(
+                        id.toInt(),
+                        " "
+                    ))
 
                     navController?.navigate(R.id.navigation_home)
                 } catch (e: Exception) {
@@ -119,6 +142,55 @@ class AddPlayer : Fragment() {
                     }
                 }
             }
+        }
+    }
+    private fun createBattleItem(idPlayer: Int){
+        playerViewModel?.apply {
+            addViewBattle(
+                BattleItemEntity(
+                    0,
+                    idPlayer,
+                    "Информация",
+                    0,
+                    true
+                )
+            )
+            addViewBattle(
+                BattleItemEntity(
+                    0,
+                    idPlayer,
+                    "Получение Урона",
+                    1,
+                    true
+                )
+            )
+            addViewBattle(
+                BattleItemEntity(
+                    0,
+                    idPlayer,
+                    "Инициатива",
+                    2,
+                    true
+                )
+            )
+            addViewBattle(
+                BattleItemEntity(
+                    0,
+                    idPlayer,
+                    "Снаряжение",
+                    3,
+                    true
+                )
+            )
+            addViewBattle(
+                BattleItemEntity(
+                    0,
+                    idPlayer,
+                    "Атака",
+                    4,
+                    true
+                )
+            )
         }
     }
 
@@ -172,6 +244,26 @@ class AddPlayer : Fragment() {
                     4,
                     true,
                     Equipment()
+                )
+            )
+            addInventoryView(
+                InventoryItem(
+                    0,
+                    idPlayer,
+                    "Старт Миссии",
+                    5,
+                    true,
+                    Start()
+                )
+            )
+            addInventoryView(
+                InventoryItem(
+                    0,
+                    idPlayer,
+                    "Инвентарь",
+                    6,
+                    true,
+                    Note()
                 )
             )
         }

@@ -12,6 +12,7 @@ import com.example.sumrak.data.playerdb.PlayerDbEntity
 import com.example.sumrak.data.playerdb.PlayerViewModel
 import com.example.sumrak.Player
 import com.example.sumrak.R
+import com.example.sumrak.data.playerdb.PlayerVariableEntity
 import com.example.sumrak.databinding.FragmentUpdatePlayerBinding
 import com.google.android.material.snackbar.Snackbar
 
@@ -34,6 +35,8 @@ class UpdatePlayer : Fragment() {
 
         navController = Navigation.findNavController(view)
         playerViewModel = ViewModelProvider(this).get(PlayerViewModel::class.java)
+        playerViewModel?.getPlayerVariableToId(Player.getInstance().getIdActivePlayer())
+
 
         viewBinding?.apply {
             btnBack.setOnClickListener { navController?.navigate(R.id.action_updatePlayer_to_navigation_profile) }
@@ -57,6 +60,7 @@ class UpdatePlayer : Fragment() {
 
             saveStats.setOnClickListener {
                 try {
+                    val playerV = playerViewModel?.playerVariable
                     val player = PlayerDbEntity(
                         Player.getInstance().getActivePlayer().id,
                         editNamePlayer.text.toString(),
@@ -75,9 +79,29 @@ class UpdatePlayer : Fragment() {
                         editInfluence.text.toString().toInt(),
                         editXP.text.toString().toInt(),
                         Player.getInstance().getActivePlayer().activeArmor,
-                        Player.getInstance().getActivePlayer().activeArsenal
+                        Player.getInstance().getActivePlayer().activeArsenal,
+                        Player.getInstance().getActivePlayer().classPers,
+                        Player.getInstance().getActivePlayer().rank,
+                        Player.getInstance().getActivePlayer().bitchPlace,
+                        Player.getInstance().getActivePlayer().markFate,
+                        Player.getInstance().getActivePlayer().skills,
+                        Player.getInstance().getActivePlayer().profile,
+                        Player.getInstance().getActivePlayer().sound
                     )
 
+                    playerViewModel?.updatePlayerVariable(
+                        PlayerVariableEntity(
+                            id = playerV!!.id,
+                            hp = editHP.text.toString().toInt(),
+                            maxHp = editHP.text.toString().toInt(),
+                            light_karm = playerV.lightKarm,
+                            dark_karm = playerV.darkKarm,
+                            fate = editFate.text.toString().toInt(),
+                            maxFate = editFate.text.toString().toInt(),
+                            dodge = playerV.dodge,
+                            parrying = playerV.parrying
+                        )
+                    )
                     playerViewModel?.updatePlayer(player)
                     playerViewModel?.setIdActivePlayer(Player.getInstance().getActivePlayer().id!!)
                     navController?.navigate(R.id.navigation_home)

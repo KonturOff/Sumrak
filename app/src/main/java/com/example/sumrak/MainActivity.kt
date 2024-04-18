@@ -196,6 +196,7 @@ class MainActivity :
                 param = getRerollCube.parameter
             }
             HistoryRollManager.getInstance().updateItem(position, HistoryRoll(result[0],result[1],result[2],result[3], player, mode, param, getRerollCube.change, value, getRerollCube.bonus, getRerollCube.weapon))
+            Sound.getInstance().playSound(position)
         }
         //Если позиция не передана, значит это обычный бросок, записываем результат как новый
         else {
@@ -238,9 +239,12 @@ class MainActivity :
                     weapon
                 )
             )
+            Sound.getInstance().playSound(0)
         }
 
-        Sound.getInstance().playSound(result[0], result[1])
+        //Sound.getInstance().playSound(result[0], result[1])
+        //Sound.getInstance().playSoundT(result[0], result[2])
+
 
         val bundle = Bundle()
 

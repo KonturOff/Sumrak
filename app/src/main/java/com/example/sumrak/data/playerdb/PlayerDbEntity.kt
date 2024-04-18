@@ -25,7 +25,14 @@ data class PlayerDbEntity(
     val influence : Int,
     val xp : Int,
     val active_armor : Int,
-    val active_arsenal : Int
+    val active_arsenal : Int,
+    val classPers: String,
+    val rank : String,
+    val bitchPlace : String,
+    val markFate : String,
+    val skills : String,
+    val profile : String,
+    val sound : String
 ) {
     fun toDataPlayer() : DataPlayer = DataPlayer(
         id = id,
@@ -47,7 +54,14 @@ data class PlayerDbEntity(
         influence = influence,
         xp = xp,
         activeArmor = active_armor,
-        activeArsenal = active_arsenal
+        activeArsenal = active_arsenal,
+        classPers = classPers,
+        rank = rank,
+        bitchPlace = bitchPlace,
+        markFate = markFate,
+        skills = skills,
+        profile = profile,
+        sound = sound
     )
 
     companion object{
@@ -69,7 +83,14 @@ data class PlayerDbEntity(
             influence = dataPlayer.influence,
             xp = dataPlayer.xp,
             active_armor = dataPlayer.activeArmor,
-            active_arsenal = dataPlayer.activeArsenal
+            active_arsenal = dataPlayer.activeArsenal,
+            classPers = dataPlayer.classPers,
+            rank = dataPlayer.rank,
+            bitchPlace = dataPlayer.bitchPlace,
+            markFate = dataPlayer.markFate,
+            skills = dataPlayer.skills,
+            profile = dataPlayer.profile,
+            sound = dataPlayer.sound
         )
     }
 }

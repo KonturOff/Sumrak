@@ -10,4 +10,8 @@
     <string name="nav_profile">Досье</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string-array name="SoundSpiner">
+        <item>Стандартные Кубы</item>
+        <item>Олег Т</item>
+    </string-array>
 </resources>

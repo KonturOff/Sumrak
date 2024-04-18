@@ -57,6 +57,12 @@ class AttackAdapter(
         private var bonusDamage = 0
 
         init {
+            battleViewModel.getVisibleView("Атака")
+
+            battleViewModel.atackVisible.observe(lifecycleOwner){
+                viewBinding.atackVisibility.isVisible = it
+            }
+
             battleViewModel.getNumberHitsPlayer(Player.getInstance().getIdActivePlayer())
             battleViewModel.hitsVisible.observe(lifecycleOwner){
                 viewBinding.hitsVisible.isVisible = it
@@ -98,6 +104,9 @@ class AttackAdapter(
             viewModel: AttackViewModel
         ) {
             viewBinding.apply {
+
+                tvAtack.setOnClickListener { battleViewModel.updateVisibleView(item.name) }
+
                 tvBonusDamage.text = bonusDamage.toString()
 
                 btnRefreshArsenalB.setOnClickListener { refreshPatrons(viewModel, battleViewModel) }

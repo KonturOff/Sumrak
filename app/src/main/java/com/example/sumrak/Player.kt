@@ -1,5 +1,6 @@
 package com.example.sumrak
 
+import android.content.res.Resources
 import com.example.sumrak.lists.DataPlayer
 import com.example.sumrak.lists.PlayerVariable
 import kotlin.collections.ArrayList
@@ -116,6 +117,7 @@ class Player private constructor(){
             "Проверка Наблюдательности" -> player.observation
             "Проверка Харизмы" -> player.chsarisma
             "Проверка Инициативы" -> player.dexterity
+            "Проверка Влияния" -> player.influence
             else -> -1
         }
     }
@@ -155,6 +157,7 @@ class Player private constructor(){
     }
 
     fun getRandomText() : String{
+
         val list = listOf("Кубодроч не создавай", "Ну сейчас точно единица!", "Критический кто?",
             "Важно не то, как часто ты кидаешь единицы, а то как долго ты выдерживаешь двадцатки",
             "Рерола не будет", "Кидай инициативу, сука", "Не взывай, так не суетим будешь", "Кубы правду знают",

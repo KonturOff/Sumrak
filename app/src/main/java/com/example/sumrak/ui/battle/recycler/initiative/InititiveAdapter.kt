@@ -37,9 +37,9 @@ class InititiveAdapter(
         attackViewModel: AttackViewModel
     ) {
         holder.bind(
-//            item,
+            item,
             viewModel = battleViewModel,
-//            lifecycleOwner,
+            lifecycleOwner,
 //            context,
 //            buttonClickListener
         )
@@ -54,6 +54,10 @@ class InititiveAdapter(
         private val viewBinding = MaketBattleInitiativeBinding.bind(itemView)
 
         init {
+            viewModel.initiativeViewVisible.observe(lifecycleOwner){
+                viewBinding.initiativeVisible.isVisible = it
+            }
+
             viewModel.getInitiativePlayer(Player.getInstance().getIdActivePlayer())
             viewModel.initiativeV.observe(lifecycleOwner) {
                 viewBinding.apply {
@@ -68,13 +72,15 @@ class InititiveAdapter(
         }
 
         fun bind(
-//            item: Initiative,
+            item: Initiative,
             viewModel: BattleViewModel,
-//            lifecycleOwner: LifecycleOwner,
+            lifecycleOwner: LifecycleOwner,
 //            context: Context,
 //            buttonClickListener: OnButtonClickListener
             ) {
             viewBinding.apply {
+                viewModel.getVisibleView(item.name)
+                tvInitiative.setOnClickListener { viewModel.updateVisibleView(item.name) }
                 btnRollAllPers.isEnabled = Player.getInstance().getPlayerCount() != 1
                 btnRollActivePers.setOnClickListener {
                     this@InitiativeViewHolder.buttonClickListener.rollInitiativeActivePlayer()

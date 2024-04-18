@@ -106,6 +106,10 @@ class InventoryFragment : Fragment() {
         myInterface?.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), mode, param, 0,0, null, null)
     }
 
+    fun influenceCheck(){
+        myInterface?.get_result_roll("d20", Player.getInstance().getIdActivePlayer(), "Проверка Влияния", 0, 0, 0, null, null)
+    }
+
     private fun load(idPlayer: Int) {
         consumablesViewModel.getConsumablesToPlayerId(idPlayer)
         effectsViewModel.getEffectsToPlayerId(idPlayer)

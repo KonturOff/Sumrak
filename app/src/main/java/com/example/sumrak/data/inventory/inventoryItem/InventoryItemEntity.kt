@@ -10,6 +10,8 @@ import com.example.sumrak.ui.inventory.recycler.arsenal.Arsenal
 import com.example.sumrak.ui.inventory.recycler.consumables.Consumbles
 import com.example.sumrak.ui.inventory.recycler.effects.Effects
 import com.example.sumrak.ui.inventory.recycler.equipment.Equipment
+import com.example.sumrak.ui.inventory.recycler.note.Note
+import com.example.sumrak.ui.inventory.recycler.start.Start
 
 @Entity(tableName = "Inventory_Item",foreignKeys = [ForeignKey(
     entity = PlayerDbEntity::class,
@@ -39,6 +41,8 @@ data class InventoryItemEntity(
             "Броня" -> Armor()
             "Арсенал" -> Arsenal()
             "Снаряжение" -> Equipment()
+            "Старт Миссии" -> Start()
+            "Инвентарь" -> Note()
             else -> Effects()
         }
     )

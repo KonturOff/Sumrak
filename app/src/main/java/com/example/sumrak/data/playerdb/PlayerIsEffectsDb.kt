@@ -22,6 +22,13 @@ data class PlayerIsEffectsDb(
     val xp : Int,
     val active_armor : Int,
     val active_arsenal : Int,
+    val classPers: String,
+    val rank : String,
+    val bitchPlace : String,
+    val markFate : String,
+    val skills : String,
+    val profile : String,
+    val sound : String,
     val total_db : Int,
     val total_bb : Int,
     val total_power : Int,
@@ -33,7 +40,7 @@ data class PlayerIsEffectsDb(
     val total_observation : Int,
     val total_chsarisma : Int,
     val total_bonus_power : Int,
-    val total_bonus_endurance : Int,
+    val total_bonus_endurance : Int
 
 ) {
     fun toDataPlayer():DataPlayer = DataPlayer(
@@ -56,6 +63,13 @@ data class PlayerIsEffectsDb(
         influence = influence,
         xp = xp,
         activeArmor = active_armor,
-        activeArsenal = active_arsenal
+        activeArsenal = active_arsenal,
+        classPers = classPers,
+        rank = rank,
+        bitchPlace = bitchPlace,
+        markFate = markFate,
+        skills = skills,
+        profile = profile,
+        sound = sound
     )
 }

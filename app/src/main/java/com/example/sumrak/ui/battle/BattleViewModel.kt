@@ -10,6 +10,9 @@ import com.example.sumrak.data.playerdb.PlayerRepository
 import com.example.sumrak.lists.HistoryRollManager
 import com.example.sumrak.lists.PlayerVariable
 import com.example.sumrak.Player
+import com.example.sumrak.data.battle.BattleItemEntity
+import com.example.sumrak.data.battle.BattleRepository
+import com.example.sumrak.sound.Sound
 import com.example.sumrak.ui.battle.recycler.initiative.InitiativeItem
 import com.example.sumrak.ui.inventory.recycler.armor.item.ArmorItem
 import kotlinx.coroutines.Dispatchers
@@ -17,12 +20,19 @@ import kotlinx.coroutines.launch
 
 
 class BattleViewModel(application: Application) : AndroidViewModel(application) {
+    private val repository : BattleRepository
     private val hpReposiroty : PlayerRepository
     private val armorRepository : ArmorRepository
     private val historyRollManager = HistoryRollManager.getInstance()
+    private val battleManager = BattleManager.getInstance()
     private val bonusEndurance: Int
     private val bonusPower : Int
 
+    val infoVisible = MutableLiveData<Boolean>()
+    val damageVisible = MutableLiveData<Boolean>()
+    val initiativeViewVisible = MutableLiveData<Boolean>()
+    val equipmentBVisible = MutableLiveData<Boolean>()
+    val atackVisible = MutableLiveData<Boolean>()
 
 
     val playerV = MutableLiveData<PlayerVariable>()
@@ -35,6 +45,48 @@ class BattleViewModel(application: Application) : AndroidViewModel(application) 
     private var hits : Int? = null
     val hitsV = MutableLiveData<Int>()
     val hitsVisible = MutableLiveData<Boolean>()
+
+
+    fun getBattleItemToPlayer(idPlayer: Int){
+        battleManager.clearList()
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.getBattleItemToIdPlayer(idPlayer).forEach {
+                battleManager.addItem(it.toBattleItem())
+            }
+        }
+    }
+
+    fun updateItemsToBattleList(){
+        battleManager.updatePosition()
+        viewModelScope.launch(Dispatchers.IO) {
+            val items = battleManager.getAllItems().toList()
+            for (i in items.indices){
+                repository.updateBattleItemPosition(items[i].toBattleItemEntity())
+            }
+        }
+    }
+    fun updateVisibleView(name: String){
+        battleManager.toggleItemState(name)
+        val item = battleManager.getItemToName(name)
+        getVisibleView(name)
+        updateVisibleViewToBd(item.id, item.isExpanded)
+    }
+
+    private fun updateVisibleViewToBd(id : Int, isExpanded:Boolean){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updateVisibleToId(id, isExpanded)
+        }
+    }
+    fun getVisibleView(name : String) {
+        val visible = battleManager.getVisibleToName(name)
+        when (name) {
+            "Информация" -> infoVisible.postValue(visible)
+            "Получение Урона" -> damageVisible.postValue(visible)
+            "Инициатива" -> initiativeViewVisible.postValue(visible)
+            "Снаряжение" -> equipmentBVisible.postValue(visible)
+            "Атака" -> atackVisible.postValue(visible)
+        }
+    }
 
     fun getNumberHitsPlayer(id: Int){
         if (historyRollManager.getLastRollHitToIdPlayer(id)!= null){
@@ -165,6 +217,9 @@ class BattleViewModel(application: Application) : AndroidViewModel(application) 
                     }
                     else{
                         playerVariable?.let { playerVariable -> playerVariable.hp-- }
+                        if (playerVariable?.hp==0){
+                            Sound.getInstance().playSound0Hp(playerVariable?.id!!)
+                        }
                     }
                 }
                 damage--
@@ -190,7 +245,11 @@ class BattleViewModel(application: Application) : AndroidViewModel(application) 
         }
     }
 
+
+
     init {
+        val daoBattleItem = DataBase.getDb(application).getBattleDao()
+        repository = BattleRepository(daoBattleItem)
         val daoPlayerDb = DataBase.getDb(application).getPlayerDao()
         hpReposiroty = PlayerRepository(daoPlayerDb)
         val daoArmorDb = DataBase.getDb(application).getArmorDao()

@@ -22,7 +22,14 @@ data class DataPlayer(
     val influence: Int,
     val xp: Int,
     val activeArmor : Int,
-    val activeArsenal : Int
+    val activeArsenal : Int,
+    val classPers: String,
+    val rank : String,
+    val bitchPlace : String,
+    val markFate : String,
+    val skills : String,
+    val profile : String,
+    val sound : String
 )
 
 

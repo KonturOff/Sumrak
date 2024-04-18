@@ -9,6 +9,8 @@ import com.example.sumrak.data.settings.SettingsDbEntity
 import com.example.sumrak.lists.DataPlayer
 import com.example.sumrak.lists.PlayerVariable
 import com.example.sumrak.Player
+import com.example.sumrak.data.battle.BattleItemEntity
+import com.example.sumrak.data.battle.BattleRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
@@ -18,13 +20,14 @@ import kotlinx.coroutines.runBlocking
 
 
 class PlayerViewModel(application: Application): AndroidViewModel(application) {
+    private val repositoryBattle: BattleRepository
 
     val readSettings : Flow<List<SettingsDbEntity>>
     private val readAllPlayer : Flow<List<PlayerIsEffectsDb>>
     private val repository : PlayerRepository
     private val activeId = MutableLiveData<Int?>()
     val playerV = MutableLiveData<PlayerVariable>()
-    private var playerVariable: PlayerVariable? = null
+    var playerVariable: PlayerVariable? = null
 
     fun loadData(){
         viewModelScope.launch(Dispatchers.IO) {
@@ -124,6 +127,12 @@ class PlayerViewModel(application: Application): AndroidViewModel(application) {
         }
     }
 
+    fun updatePlayerVariable(playerVariableEntity: PlayerVariableEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.updatePlayerVariable(playerVariableEntity)
+        }
+    }
+
     fun getPlayerToId(id: Int) : DataPlayer{
         return runBlocking {
             val item = CoroutineScope(Dispatchers.IO).async {
@@ -187,8 +196,15 @@ class PlayerViewModel(application: Application): AndroidViewModel(application) {
             changeActivePlayer(-1)
         }
     }
+    fun addViewBattle(battleItemEntity: BattleItemEntity){
+        viewModelScope.launch(Dispatchers.IO) {
+            repositoryBattle.addBattleItem(battleItemEntity)
+        }
+    }
 
     init {
+        val daoBattleDb = DataBase.getDb(application).getBattleDao()
+        repositoryBattle = BattleRepository(daoBattleDb)
         val daoPlayerDb = DataBase.getDb(application).getPlayerDao()
         repository = PlayerRepository(daoPlayerDb)
         readAllPlayer = repository.readAllPlayer

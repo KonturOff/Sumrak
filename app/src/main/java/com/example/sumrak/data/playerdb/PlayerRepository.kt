@@ -63,6 +63,32 @@ class PlayerRepository(
         )
     }
 
+    suspend fun updateProfilePlayer(id: Int, classPers: String, rank: String, bitchPlace:String, markFate:String, skills: String, profile: String){
+        return daoPlayerDb.updatePlayerProfileTuples(
+            UpdateProfileClientTuples(
+                id = id,
+                classPers = classPers,
+                rank = rank,
+                bitchPlace = bitchPlace,
+                markFate = markFate,
+                skills = skills,
+                profile = profile
+        )
+        )
+    }
+
+    suspend fun updatePlayerInfluence(id: Int, influence: Int){
+        return daoPlayerDb.updatePlayerInfluenceTuples(UpdateInfluencePlayer(id, influence))
+    }
+
+    suspend fun updateXpPlayer(id: Int, xp: Int){
+        return daoPlayerDb.updatePlayerXpTuples(UpdateXpPlayer(id, xp))
+    }
+
+    suspend fun updateSoundPlayer(id: Int, sound: String){
+        return daoPlayerDb.updateSoundPlayer(UpdateSoundPlayer(id, sound))
+    }
+
     suspend fun updateDodgeParryingPlayer(id: Int, dodge: Int, parrying : Int){
         daoPlayerDb.updateDodgeParryingPlayer(
             UpdateDodgeParryingTuples(id, dodge, parrying)

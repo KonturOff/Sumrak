@@ -8,10 +8,13 @@ import com.example.sumrak.R
 import com.example.sumrak.ui.battle.recycler.atack.Attack
 import com.example.sumrak.ui.battle.recycler.atack.AttackAdapter
 import com.example.sumrak.ui.battle.recycler.atack.AttackViewModel
+import com.example.sumrak.ui.battle.recycler.damage.Damage
 import com.example.sumrak.ui.battle.recycler.damage.DamageAdapter
+import com.example.sumrak.ui.battle.recycler.equipment.EquipmentB
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBAdapter
 import com.example.sumrak.ui.battle.recycler.equipment.EquipmentBViewModel
 import com.example.sumrak.ui.battle.recycler.information.InformationAdapter
+import com.example.sumrak.ui.battle.recycler.initiative.Initiative
 import com.example.sumrak.ui.battle.recycler.initiative.InititiveAdapter
 
 
@@ -28,6 +31,7 @@ class BattleAdapter(
     fun onItemMove(fromPosition: Int, toPosition: Int) {
         battleManager.items.add(toPosition, battleManager.items.removeAt(fromPosition))
         notifyItemMoved(fromPosition, toPosition)
+        battleViewModel.updateItemsToBattleList()
     }
 
 
@@ -60,8 +64,8 @@ class BattleAdapter(
                 ).onCreateViewHolder(parent)
             R.layout.maket_inventory_equipment ->
                 EquipmentBAdapter(
-//                    battleViewModel,
-//                    lifecycleOwner,
+                    battleViewModel,
+                    lifecycleOwner,
                     context = context,
                     battleFragment = battleFragment,
                     equipmentBViewModel = equipmentBViewModel
@@ -91,7 +95,7 @@ class BattleAdapter(
             R.layout.maket_battle_damage ->
                 (holder as DamageAdapter.DamageViewHolder)
                     .bind(
-//                        item.view as Damage,
+                        item.view as Damage,
                         battleViewModel = battleViewModel,
 //                        lifecycleOwner,
                         context = context,
@@ -100,18 +104,18 @@ class BattleAdapter(
             R.layout.maket_battle_initiative ->
                 (holder as InititiveAdapter.InitiativeViewHolder)
                     .bind(
-        //                item.view as Initiative,
+                        item.view as Initiative,
                         viewModel = battleViewModel,
-        //                lifecycleOwner,
+                        lifecycleOwner,
         //                context,
         //                battleFragment
                     )
             R.layout.maket_battle_equipment ->
                 (holder as EquipmentBAdapter.EquipmentBViewHolder)
                     .bind(
-//                        item.view as EquipmentB,
-//                        battleViewModel,
-//                        lifecycleOwner,
+                        item.view as EquipmentB,
+                        battleViewModel,
+                        lifecycleOwner,
                         context = context,
                         battleFragment = battleFragment,
                         equipmentBViewModel = equipmentBViewModel

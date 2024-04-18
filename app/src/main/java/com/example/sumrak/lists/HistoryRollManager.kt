@@ -102,6 +102,32 @@ class HistoryRollManager private constructor() {
         return historyRollList.size
     }
 
+    //Проверка 2х единиц рядом
+    fun getConfirmedToPos(position: Int): Boolean{
+        if (position < 0 || position >= historyRollList.size) {
+            return false
+        }
+
+        val currentRoll = historyRollList[position]
+
+        // Проверяем соседние экземпляры
+        if (position > 0) {
+            val previousRoll = historyRollList[position - 1]
+            if (previousRoll.cube == currentRoll.cube && previousRoll.player == currentRoll.player && previousRoll.resultRoll == "1") {
+                return true
+            }
+        }
+
+        if (position < historyRollList.size - 1) {
+            val nextRoll = historyRollList[position + 1]
+            if (nextRoll.cube == currentRoll.cube && nextRoll.player == currentRoll.player && nextRoll.resultRoll == "1") {
+                return true
+            }
+        }
+
+        return false
+    }
+
     companion object {
         private val instance = HistoryRollManager()
 

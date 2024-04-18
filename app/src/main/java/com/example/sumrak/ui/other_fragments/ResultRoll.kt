@@ -158,6 +158,7 @@ class ResultRoll : Fragment() {
             "Проверка Сообразительности" -> value = Player.getInstance().getPlayerToId(player).insihgt
             "Проверка Наблюдательности" -> value = Player.getInstance().getPlayerToId(player).observation
             "Проверка Харизмы" -> value = Player.getInstance().getPlayerToId(player).chsarisma
+            "Проверка Влияния" -> value = Player.getInstance().getPlayerToId(player).influence
             "Проверка Инициативы" -> value = Player.getInstance().getPlayerToId(player).dexterity
             "Проверка Уклонения" -> value = HistoryRollManager.getInstance().getItem(position).parameter
             "Проверка Парирования" -> value = HistoryRollManager.getInstance().getItem(position).parameter
