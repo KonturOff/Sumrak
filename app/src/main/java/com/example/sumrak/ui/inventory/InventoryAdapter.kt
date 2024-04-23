@@ -85,7 +85,7 @@ class InventoryAdapter(
             R.layout.maket_inventory_consumables -> (holder as ConsumablesAdapter.ConsumablesViewHolder).bind(
                 items.view as Consumbles,
                 viewModels.getValue(items.view.viewType) as ConsumablesViewModel,
-//                lifecycleOwner,
+                lifecycleOwner,
                 context,
                 inventoryViewModel
             )

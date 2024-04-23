@@ -61,6 +61,7 @@ class HomeFragment : Fragment() {
                 hpPlayer.text = it.hp.toString()
                 tvLightKarm.text = it.lightKarm.toString()
                 tvDarkKarm.text = it.darkKarm.toString()
+                setKarmBlago(it.darkKarm, it.lightKarm)
                 remFate.text = "Очки судьбы: ${it.fate}"
                 remFate.isEnabled = it.fate > 0
                 btnRemDark.isEnabled = it.darkKarm > 0
@@ -237,6 +238,56 @@ class HomeFragment : Fragment() {
             homeFonClick.setOnClickListener { myHomeInterface?.touch_screen() }
         }
         return root
+    }
+
+    private fun setKarmBlago(darkKarm: Int, lightKarm: Int) {
+        viewBinding?.apply {
+            if (darkKarm >= lightKarm){
+                if ((darkKarm - lightKarm <= 15)&&(darkKarm>=80)&&(lightKarm>=80)){
+                    tvKarmBlago.text = "Большое Благословление Сумрака"
+                }
+                else if((darkKarm - lightKarm <= 10)&&(darkKarm>=40)&&(lightKarm>=40)){
+                    tvKarmBlago.text = "Среднее Благословление Сумрака"
+                }
+                else if ((darkKarm - lightKarm <= 5)&&(darkKarm>=20)&&(lightKarm>=20)){
+                    tvKarmBlago.text = "Малое Благословление Сумрака"
+                }
+                else if (darkKarm > 99){
+                    tvKarmBlago.text = "Большое Благословление Тьмы"
+                }
+                else if (darkKarm > 59){
+                    tvKarmBlago.text = "Среднее Благословление Тьмы"
+                }
+                else if (darkKarm > 19){
+                    tvKarmBlago.text = "Малое Благословление Тьмы"
+                }
+                else{
+                    tvKarmBlago.text = ""
+                }
+            } else{
+                if ((lightKarm - darkKarm <= 15)&&(darkKarm>=80)&&(lightKarm>=80)){
+                    tvKarmBlago.text = "Большое Благословление Сумрака"
+                }
+                else if((lightKarm - darkKarm <= 10)&&(darkKarm>=40)&&(lightKarm>=40)){
+                    tvKarmBlago.text = "Среднее Благословление Сумрака"
+                }
+                else if ((lightKarm - darkKarm <= 5)&&(darkKarm>=20)&&(lightKarm>=20)){
+                    tvKarmBlago.text = "Малое Благословление Сумрака"
+                }
+                else if (lightKarm > 99){
+                    tvKarmBlago.text = "Большое Благословление Света"
+                }
+                else if (lightKarm > 59){
+                    tvKarmBlago.text = "Среднее Благословление Света"
+                }
+                else if (lightKarm > 19){
+                    tvKarmBlago.text = "Малое Благословление Света"
+                }
+                else{
+                    tvKarmBlago.text = ""
+                }
+            }
+        }
     }
 
     private fun remFate() {

@@ -15,6 +15,7 @@ import com.example.sumrak.databinding.MaketInventoryConsumablesBinding
 import com.example.sumrak.ui.inventory.InventoryViewModel
 import com.example.sumrak.ui.inventory.recycler.DelegateAdapter
 import com.example.sumrak.ui.inventory.recycler.consumables.item.ConsumablesItemAdapter
+import com.google.android.material.snackbar.Snackbar
 
 class ConsumablesAdapter(
     private val viewModel: ConsumablesViewModel,
@@ -45,6 +46,7 @@ class ConsumablesAdapter(
             item = item,
             viewModel = viewModel,
 //            lifecycleOwner, 
+            lifecycleOwner = lifecycleOwner,
             context = context,
             inventoryViewModel = inventoryViewModel
         )
@@ -67,9 +69,10 @@ class ConsumablesAdapter(
             }
         }
         fun bind(
-            item : Consumbles,
+            item: Consumbles,
             viewModel: ConsumablesViewModel,
 //            lifecycleOwner: LifecycleOwner,
+            lifecycleOwner: LifecycleOwner,
             context: Context,
             inventoryViewModel: InventoryViewModel
         ) {
@@ -77,7 +80,7 @@ class ConsumablesAdapter(
             inventoryViewModel.getVisibleView(item.name)
             binding.apply {
                 consumablesRecView.layoutManager = LinearLayoutManager(context)
-                consumablesRecView.adapter = ConsumablesItemAdapter(viewModel)
+                consumablesRecView.adapter = ConsumablesItemAdapter(viewModel, lifecycleOwner)
                 tvConsumables.setOnClickListener { inventoryViewModel.updateVisibleView(item.name) }
 
                 addBtnConsumables.setOnClickListener {
@@ -87,16 +90,26 @@ class ConsumablesAdapter(
                     modSettings(false)
                 }
                 btnSaveConsumables.setOnClickListener {
-                    val itemEntity = ConsumablesDbEntity(
-                        null,
-                        Player.getInstance().getIdActivePlayer(),
-                        editConsumables.text.toString(),
-                        0,
-                        false
-                    )
-                    viewModel.addItem(itemEntity)
-                    editConsumables.text.clear()
-                    modSettings(false)
+                    if (editConsumables.text.length > 30){
+                        Snackbar
+                            .make(
+                                itemView,
+                                "Название не должно превышать 30 знаков!",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                    }
+                    else{
+                        val itemEntity = ConsumablesDbEntity(
+                            null,
+                            Player.getInstance().getIdActivePlayer(),
+                            editConsumables.text.toString(),
+                            0,
+                            false
+                        )
+                        viewModel.addItem(itemEntity)
+                        editConsumables.text.clear()
+                        modSettings(false)
+                    }
                 }
             }
         }

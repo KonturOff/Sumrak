@@ -97,13 +97,11 @@
                 android:text="  Отметка Судьбы: "
                 android:textSize="16sp" />
 
-            <EditText
+            <MultiAutoCompleteTextView
                 android:id="@+id/editMarkFate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Отметка"
-                android:inputType="text" />
+                android:hint="Отметка" />
 
             <LinearLayout
                 android:layout_width="match_parent"

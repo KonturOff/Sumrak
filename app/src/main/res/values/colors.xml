@@ -19,5 +19,9 @@
     <color name="gold">#FFEDBA00</color>
     <color name="sumrak_grey">#83778C</color>
     <color name="sumrak_grey50">#8083778C</color>
+    <color name="consumables200">#9FA8DA</color>
+    <color name="consumables100">#C5CAE9</color>
+
+    #C5CAE9
 
 </resources>

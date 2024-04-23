@@ -25,6 +25,7 @@ class ConsumablesViewModel(application: Application) : AndroidViewModel(applicat
 
     private var viewVisible = true
     var r = MutableLiveData<Boolean>()
+    var activeConumables = MutableLiveData<Int>()
 
     private fun addConsumables(consumablesDbEntity: ConsumablesDbEntity) : Long {
         return runBlocking {
@@ -77,6 +78,15 @@ class ConsumablesViewModel(application: Application) : AndroidViewModel(applicat
     fun deleteItem(id: Int) {
         consumablesItemManager.deleteItem(id)
         delConsumablesItem(id)
+    }
+
+    fun setActiveConsumables(id: Int){
+        if (id != activeConumables.value){
+            activeConumables.postValue(id)
+        }
+        else{
+            activeConumables.postValue(-1)
+        }
     }
 
     fun updateItem(id: Int, count : Int){

@@ -292,10 +292,15 @@
                     android:layout_weight="1" />
             </LinearLayout>
 
+            <TextView
+                android:id="@+id/tvKarmBlago"
+                android:layout_width="match_parent"
+                android:layout_height="25dp"
+                android:gravity="center" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="25dp"
                 android:orientation="horizontal">
 
                 <Button
