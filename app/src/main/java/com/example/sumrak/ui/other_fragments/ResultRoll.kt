@@ -137,7 +137,7 @@ class ResultRoll : Fragment() {
             resultSumRoll.text = item.resultRoll
             resultValue.text = ""
             checkResult.text = "Проверка Инициативы"
-            rateResult.text = "Инициатива: ${item.parameter * 2 - item.resultRoll.toInt()}"
+            rateResult.text = "Инициатива: ${item.parameter * 2 - item.resultRoll.toInt() + item.bonus}"
         }
     }
 

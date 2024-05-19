@@ -96,12 +96,12 @@ class BattleFragment :
     }
 
     override fun rollInitiativeActivePlayer() {
-        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(),"Проверка Инициативы", 0,0, 0,null, null)
+        myInterface.get_result_roll("d20", Player.getInstance().getIdActivePlayer(),"Проверка Инициативы", 0,0, Player.getInstance().getActivePlayer().bonusInitiative,null, null)
     }
 
     override fun rollInitiativeAllPlayers() {
         for (i in Player.getInstance().getIdPlayerToPlayerList()){
-            myInterface.get_result_roll("d20", i,"Проверка Инициативы", 0,0,0,null, null)
+            myInterface.get_result_roll("d20", i,"Проверка Инициативы", 0,0,Player.getInstance().getPlayerToId(i).bonusInitiative,null, null)
         }
     }
 

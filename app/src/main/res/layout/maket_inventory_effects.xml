@@ -150,8 +150,15 @@
                                 android:id="@+id/rBtnBonusPower"
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
+                                android:layout_marginTop="15dp"
                                 android:text="Бонус Силы:
 " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnBonusInitiative"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Бонус к Инициативе: " />
 
                         </RadioGroup>
 
@@ -209,6 +216,15 @@
                                 android:id="@+id/tvBonusPower"
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
+                                android:layout_marginTop="15dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvBonusInititive"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
                                 android:gravity="center|left"
                                 android:text="0"
                                 android:textSize="16sp" />
@@ -261,7 +277,14 @@
                                 android:id="@+id/rBtnBonusEndurance"
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
+                                android:layout_marginTop="15dp"
                                 android:text="Бонус Устойчивости: " />
+
+                            <RadioButton
+                                android:id="@+id/rBtnBonusReaction"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Бонус Реакции: " />
 
                         </RadioGroup>
 
@@ -317,6 +340,15 @@
 
                             <TextView
                                 android:id="@+id/tvBonusEndurance"
+                                android:layout_width="match_parent"
+                                android:layout_height="30dp"
+                                android:layout_marginTop="15dp"
+                                android:gravity="center|left"
+                                android:text="0"
+                                android:textSize="16sp" />
+
+                            <TextView
+                                android:id="@+id/tvBonusReaction"
                                 android:layout_width="match_parent"
                                 android:layout_height="30dp"
                                 android:gravity="center|left"

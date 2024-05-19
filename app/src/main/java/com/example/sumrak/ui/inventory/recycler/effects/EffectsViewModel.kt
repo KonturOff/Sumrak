@@ -25,7 +25,7 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
     var index = -1
     var indexTvValue = MutableLiveData<Int>()
     var modeSettings = MutableLiveData<Int>()
-    var effectConstructor = listOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0).toMutableList()
+    var effectConstructor = listOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0).toMutableList()
     var nameEff = ""
 
     fun tvClick(){
@@ -41,7 +41,7 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
 
     fun modeSettings(visible: Boolean) {
         if (visible){
-            effectConstructor = listOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0).toMutableList()
+            effectConstructor = listOf(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0).toMutableList()
             modeSettings.postValue(1)
         }
         else{
@@ -65,7 +65,9 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
             effectConstructor[8],
             effectConstructor[9],
             effectConstructor[10],
-            effectConstructor[11]
+            effectConstructor[11],
+            effectConstructor[12],
+            effectConstructor[13]
             )
 
         newEffect.id = runBlocking {
@@ -104,8 +106,8 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
 
     fun updateEffect(name: String){
         val newEffect = EffectsItem(
-            effectConstructor[12],
-            effectConstructor[13],
+            effectConstructor[14],
+            effectConstructor[15],
             name,
             effectConstructor[14],
             effectConstructor[0],
@@ -119,7 +121,9 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
             effectConstructor[8],
             effectConstructor[9],
             effectConstructor[10],
-            effectConstructor[11]
+            effectConstructor[11],
+            effectConstructor[12],
+            effectConstructor[13]
         )
         viewModelScope.launch(Dispatchers.IO) {
             repository.updateEffects(newEffect.toEffectsDbEntity())
@@ -128,7 +132,7 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun updateMode(id : Int){
-        if (id == effectConstructor[12]){
+        if (id == effectConstructor[14]){
             modeSettings.postValue(0)
         }
         else{
@@ -147,6 +151,8 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
                 effect.chsarisma,
                 effect.bonusPower,
                 effect.bonusEndurance,
+                effect.bonusInitiative,
+                effect.bonusReaction,
                 effect.id,
                 effect.idPlayer,
                 effect.isActive
@@ -190,6 +196,8 @@ class EffectsViewModel(application: Application) : AndroidViewModel(application)
             "Харизма: " -> index = 9
             "Бонус Силы: " -> index = 10
             "Бонус Устойчивости: " -> index = 11
+            "Бонус к Инициативе: " -> index = 12
+            "Бонус Реакции: " -> index = 13
             "Все Характеристики" -> index = 20
         }
         indexTvValue.postValue(index)

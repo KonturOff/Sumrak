@@ -39,7 +39,7 @@ class InitiativeRVAdapter(private val clickListener: HistoryCalculatorFragment) 
         }
 
         private fun getInitiative(item: HistoryRoll) : String{
-            return (item.parameter * 2 - item.resultRoll.toInt()).toString()
+            return (item.parameter * 2 - item.resultRoll.toInt() + item.bonus).toString()
         }
 
     }

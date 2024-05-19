@@ -40,7 +40,9 @@ data class PlayerIsEffectsDb(
     val total_observation : Int,
     val total_chsarisma : Int,
     val total_bonus_power : Int,
-    val total_bonus_endurance : Int
+    val total_bonus_endurance : Int,
+    val total_bonus_initiative : Int,
+    val total_bonus_reaction : Int
 
 ) {
     fun toDataPlayer():DataPlayer = DataPlayer(
@@ -58,6 +60,8 @@ data class PlayerIsEffectsDb(
         chsarisma = chsarisma + total_chsarisma,
         bonusPower = total_bonus_power,
         bonusEndurance = total_bonus_endurance,
+        bonusInitiative = total_bonus_initiative,
+        bonusReaction = total_bonus_reaction,
         maxHp = max_hp,
         maxFate = max_fate,
         influence = influence,

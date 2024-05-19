@@ -38,6 +38,7 @@ class CalculatorAdapter(
                 colorRecyclerRoll.setBackgroundResource(getColorCube(item.maxCube))
 
                 btnReroll.setOnClickListener { clickListener.onRecyclerViewItemClick(position) }
+                resultSumRoll.setOnClickListener { println(item) }
             }
         }
 

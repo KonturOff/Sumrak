@@ -321,12 +321,12 @@
                             android:orientation="horizontal">
 
                             <TextView
-                                android:id="@+id/textView67"
+                                android:id="@+id/tvHitGrade"
                                 android:layout_width="wrap_content"
                                 android:layout_height="match_parent"
                                 android:layout_weight="1"
                                 android:gravity="center|left"
-                                android:text="Коэф. Убывающего теста" />
+                                android:text="Степень очереди" />
 
                             <ImageButton
                                 android:id="@+id/btnRemValueTest"

@@ -63,7 +63,7 @@ class InititiveAdapter(
                 viewBinding.apply {
                     tvStep.text = it.step.toString()
                     tvResultRoll.text = it.resultRoll.toString()
-                    tvResultInitiative.text = it.resultInitiative.toString()
+                    tvResultInitiative.text = (it.resultInitiative + it.bonus).toString()
                 }
             }
             viewModel.initiativeVisible.observe(lifecycleOwner) {

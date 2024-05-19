@@ -70,6 +70,7 @@ class Sound {
     fun playSound(pos : Int){
         val idPlayer = historyRoll.getItem(pos).player
         val sound = Player.getInstance().getPlayerToId(idPlayer).sound
+        println(sound)
         when(sound){
             "Стандартные Кубы" -> standartSoud(pos)
             "Олег Т" -> tinkoffSound(pos)

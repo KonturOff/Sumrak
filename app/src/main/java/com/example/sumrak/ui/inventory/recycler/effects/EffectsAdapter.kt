@@ -64,7 +64,9 @@ class EffectsAdapter(
                     tvObservation,
                     tvChsarisma,
                     tvBonusPower,
-                    tvBonusEndurance
+                    tvBonusEndurance,
+                    tvBonusInititive,
+                    tvBonusReaction
                 )
 
                 viewModel.modeSettings.observe(lifecycleOwner) {
@@ -112,7 +114,9 @@ class EffectsAdapter(
                     rBtnChsarisma,
                     rBtnAllParams,
                     rBtnBonusPower,
-                    rBtnBonusEndurance
+                    rBtnBonusEndurance,
+                    rBtnBonusInitiative,
+                    rBtnBonusReaction
                 )
 
                 val tvValue = mutableListOf(
@@ -127,7 +131,9 @@ class EffectsAdapter(
                     tvObservation,
                     tvChsarisma,
                     tvBonusPower,
-                    tvBonusEndurance
+                    tvBonusEndurance,
+                    tvBonusInititive,
+                    tvBonusReaction
                 )
 
                 for (radioButton in radioButtons) {

@@ -183,11 +183,15 @@ class BattleViewModel(application: Application) : AndroidViewModel(application) 
     }
 
     fun degradeDodge(){
-        val step = when(armor?.classArmor){
-            "Легкая" -> 1
-            "Средняя" -> 2
-            "Тяжелая" -> 3
-            else -> 1
+        val reaction = Player.getInstance().getActivePlayer().bonusReaction
+        var step = when(armor?.classArmor){
+            "Легкая" -> 2 - reaction
+            "Средняя" -> 3 - reaction
+            "Тяжелая" -> 4 - reaction
+            else -> 2 - reaction
+        }
+        if (step<1){
+            step = 1
         }
         updateDodgeParrying(-step)
     }

@@ -74,7 +74,9 @@ interface DaoPlayerDb {
             "SUM(effect.observation) AS total_observation, " +
             "SUM(effect.chsarisma) AS total_chsarisma, " +
             "SUM(effect.bonusPower) AS total_bonus_power, " +
-            "SUM(effect.bonusEndurance) AS total_bonus_endurance " +
+            "SUM(effect.bonusEndurance) AS total_bonus_endurance, " +
+            "SUM(effect.bonusInitiative) AS total_bonus_initiative, " +
+            "SUM(effect.bonusReaction) AS total_bonus_reaction " +
             "FROM PlayersTab player " +
             "LEFT JOIN Effects effect ON player.id = effect.idPlayer AND effect.isActive = 1 " +
             "GROUP BY player.id")

@@ -80,6 +80,7 @@ class HomeFragment : Fragment() {
 
 
             btnDb.setOnClickListener {
+                println(Player.getInstance().getActivePlayer())
                 myHomeInterface?.get_result_roll(
                     "d20",
                     Player.getInstance().getIdActivePlayer(),

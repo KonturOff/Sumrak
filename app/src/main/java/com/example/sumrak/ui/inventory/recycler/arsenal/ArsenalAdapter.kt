@@ -313,6 +313,7 @@ class ArsenalAdapter(
                         settingsDBArsenal.isVisible = false
                         cBoxChekBPowerArsenal.isVisible = false
                         cBoxChekBPowerArsenal.isChecked = false
+                        tvHitGrade.text = "Степень Очереди"
                     }
                     1-> {
                         settingsDBArsenal.isVisible = false
@@ -320,11 +321,13 @@ class ArsenalAdapter(
                         editDistanseArsenal.setText("0")
                         cBoxChekBPowerArsenal.isVisible = true
                         cBoxChekBPowerArsenal.isChecked = true
+                        tvHitGrade.text = "Степень Вихря Ударов"
                     }
                     2->{
                         settingsDBArsenal.isVisible = true
                         cBoxChekBPowerArsenal.isVisible = false
                         cBoxChekBPowerArsenal.isChecked = false
+                        tvHitGrade.text = "Степень Очереди"
                     }
                 }
             }

@@ -78,7 +78,7 @@ class CalculatorFragment : Fragment(), View.OnTouchListener {
                     if (tvDisplay.text.endsWith("+") || tvDisplay.text.endsWith("-")){
                         tvDisplay.text = tvDisplay.text.dropLast(1)
                     }
-                    myInterface.get_result_roll(tvDisplay.text.toString(), Player.getInstance().getIdActivePlayer(),"Калькулятор", 0, 0,0,null, null)
+                    myInterface.get_result_roll(tvDisplay.text.toString(), 0,"Калькулятор", 0, 0,0,null, null)
                 }
             }
             btnDelete.setOnClickListener { viewModel.deleteSymdol() }

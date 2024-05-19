@@ -49,6 +49,8 @@ data class PlayerDbEntity(
         chsarisma = chsarisma,
         bonusPower = 0,
         bonusEndurance = 0,
+        bonusInitiative = 0,
+        bonusReaction = 0,
         maxHp = max_hp,
         maxFate = max_fate,
         influence = influence,

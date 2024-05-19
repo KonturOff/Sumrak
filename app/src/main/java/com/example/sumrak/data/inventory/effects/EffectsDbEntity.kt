@@ -31,7 +31,9 @@ data class EffectsDbEntity(
     val observation : Int,
     val chsarisma : Int,
     val bonusPower : Int,
-    val bonusEndurance : Int
+    val bonusEndurance : Int,
+    val bonusInitiative : Int,
+    val bonusReaction : Int
     ) {
 
     fun toEffectsItem() : EffectsItem = EffectsItem(
@@ -50,6 +52,8 @@ data class EffectsDbEntity(
         observation = observation,
         chsarisma = chsarisma,
         bonusPower = bonusPower,
-        bonusEndurance = bonusEndurance
+        bonusEndurance = bonusEndurance,
+        bonusInitiative = bonusInitiative,
+        bonusReaction = bonusReaction
     )
 }

@@ -17,6 +17,8 @@ data class DataPlayer(
     val chsarisma: Int,
     val bonusPower : Int,
     val bonusEndurance : Int,
+    val bonusInitiative : Int,
+    val bonusReaction : Int,
     val maxHp: Int,
     val maxFate: Int,
     val influence: Int,

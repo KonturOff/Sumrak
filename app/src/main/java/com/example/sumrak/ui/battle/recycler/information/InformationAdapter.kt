@@ -51,6 +51,10 @@ class InformationAdapter(
             viewBinding.apply {
                 tvBonusEndur.text = Player.getInstance().getBonusEndurance().toString()
                 tvBonusPow.text = Player.getInstance().getBonusPower().toString()
+                tvBonusInitiative.text = Player.getInstance().getActivePlayer().bonusInitiative.toString()
+
+
+                tvReaction.text = Player.getInstance().getActivePlayer().bonusReaction.toString()
 
                 viewModel.playerV.observe(lifecycleOwner) {
                     tvHpPlayer.text = it.hp.toString()
@@ -60,7 +64,7 @@ class InformationAdapter(
 
                 viewModel.armorV.observe(lifecycleOwner) {
                     if (it.name == "") {
-                        tvNameArmor.text = "Ну что, ты, название поленился записать?"
+                        tvNameArmor.text = "Ну что, ты название поленился придумать?"
                     } else tvNameArmor.text = it.name
                     if (it.id != 0) {
                         pbArmorPlayer.isVisible = true
@@ -75,6 +79,17 @@ class InformationAdapter(
                         pbArmorPlayer.isVisible = false
                         armorVisibile.isVisible = false
                     }
+                    val reaction = Player.getInstance().getActivePlayer().bonusReaction
+                    var step = when(it.classArmor){
+                        "Легкая" -> 2 - reaction
+                        "Средняя" -> 3 - reaction
+                        "Тяжелая" -> 4 - reaction
+                        else -> 2 - reaction
+                    }
+                    if (step<1){
+                        step = 1
+                    }
+                    tvReaction.text = step.toString()
 
                 }
             }

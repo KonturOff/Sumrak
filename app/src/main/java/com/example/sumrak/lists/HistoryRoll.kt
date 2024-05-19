@@ -22,6 +22,7 @@ data class HistoryRoll(
         idPlayer = player,
         resultRoll = resultRoll.toInt(),
         resultInitiative = parameter * 2 - resultRoll.toInt(),
+        bonus = bonus,
         step = value
     )
 }
